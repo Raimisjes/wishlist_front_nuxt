@@ -7,10 +7,10 @@ module.exports = {
   },
   extends: [
     'eslint:recommended',
-    'plugin:nuxt/recommended', // Nuxt-specific rules
-    'plugin:prettier/recommended', // Runs Prettier as an ESLint rule
+    'plugin:nuxt/recommended',
+    'plugin:prettier/recommended',
   ],
-  plugins: ['prettier'], // Enables Prettier as an ESLint plugin
+  plugins: ['prettier'],
   rules: {
     'prettier/prettier': ['error', { endOfLine: 'auto' }],
   },
