@@ -7,11 +7,32 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "lint": "eslint .",
+    "devlint": "concurrently \"npm run dev\" \"npm run lint -- --watch\""
   },
   "dependencies": {
+    "@nuxt/eslint": "^0.6.0",
+    "@nuxtjs/i18n": "^8.5.5",
+    "@pinia/nuxt": "^0.5.5",
     "nuxt": "^3.13.2",
     "vue": "latest",
-    "vue-router": "latest"
+    "vue-router": "latest",
+    "vuetify-nuxt-module": "^0.18.3"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.13.0",
+    "@nuxt/eslint-config": "^0.6.0",
+    "eslint": "^9.13.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-define-config": "^2.1.0",
+    "eslint-plugin-nuxt": "^4.0.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "eslint-plugin-vue": "^9.30.0",
+    "globals": "^15.11.0",
+    "prettier": "^3.3.3",
+    "sass": "^1.80.4",
+    "typescript-eslint": "^8.11.0",
+    "vue-eslint-parser": "^9.4.3"
   }
 }
