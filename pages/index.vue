@@ -1,3 +1,7 @@
+<script lang="ts" setup></script>
+
 <template>
-    <PageHeader />
+  <div>homepage content</div>
 </template>
+
+<style lang="scss" scoped></style>
