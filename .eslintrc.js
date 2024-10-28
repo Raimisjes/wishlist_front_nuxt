@@ -12,7 +12,6 @@ module.exports = {
   ],
   plugins: ['prettier'], // Enables Prettier as an ESLint plugin
   rules: {
-    'prettier/prettier': ['error', { endOfLine: 'auto' }], // Prettier configuration
-    // You can add more custom ESLint rules here
+    'prettier/prettier': ['error', { endOfLine: 'auto' }],
   },
 };
