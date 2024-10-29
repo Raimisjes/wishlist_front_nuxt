@@ -4,6 +4,7 @@
   <div class="container">
     <PageHeader />
     <NuxtPage />
+    <PageFooter />
   </div>
 </template>
 
