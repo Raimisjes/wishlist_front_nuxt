@@ -2,11 +2,44 @@
 export default defineNuxtConfig({
   compatibilityDate: '2024-04-03',
   devtools: { enabled: true },
-  modules: ['@nuxtjs/i18n', '@pinia/nuxt', 'vuetify-nuxt-module', '@nuxt/eslint'],
+  app: {
+    head: {
+      link: [
+        {
+          rel: 'stylesheet',
+          href: 'https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap',
+        },
+      ],
+      title: 'gftme.one',
+    },
+  },
+  modules: [
+    '@nuxtjs/i18n',
+    '@pinia/nuxt',
+    'vuetify-nuxt-module',
+    '@nuxt/eslint',
+  ],
   alias: {
-    pinia: "/node_modules/@pinia/nuxt/node_modules/pinia/dist/pinia.mjs"
+    pinia: '/node_modules/@pinia/nuxt/node_modules/pinia/dist/pinia.mjs',
   },
   i18n: {
-    vueI18n: './i18n.config.ts' // if you are using custom path, default
-  }
-})
+    vueI18n: './i18n.config.ts',
+  },
+  vuetify: {
+    moduleOptions: {},
+    vuetifyOptions: {
+      theme: {
+        defaultTheme: 'custom',
+        themes: {
+          custom: {
+            dark: false,
+            colors: {
+              primary: '#00B565',
+            },
+          },
+        },
+      },
+    },
+  },
+  css: ['~/assets/styles.scss'],
+});
