@@ -42,4 +42,9 @@ export default defineNuxtConfig({
     },
   },
   css: ['~/assets/styles.scss'],
+  postcss: {
+    plugins: {
+      autoprefixer: {},
+    },
+  },
 });

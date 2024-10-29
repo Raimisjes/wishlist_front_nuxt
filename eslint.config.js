@@ -20,9 +20,8 @@ export default defineConfig([
       prettier: prettierPlugin,
     },
     rules: {
-      ...prettierConfig.rules, // Apply Prettier rules
+      ...prettierConfig.rules,
       'prettier/prettier': ['error', { endOfLine: 'auto' }],
-      // Additional custom rules can go here
     },
     ignores: ['node_modules/', '.nuxt/', 'dist/', '.history/**'],
   },
