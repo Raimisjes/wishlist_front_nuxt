@@ -7,11 +7,21 @@ import vueEslintParser from 'vue-eslint-parser';
 
 export default defineConfig([
   {
+    ignores: [
+      'node_modules/',
+      '**/.nuxt/**',
+      'dist/',
+      '**/.history/*',
+      '**/.output/*',
+    ],
+  },
+  {
     files: ['**/*.js', '**/*.vue'],
     languageOptions: {
       parser: vueEslintParser,
       parserOptions: {
-        ecmaVersion: 2021,
+        parser: '@typescript-eslint/parser',
+        ecmaVersion: 'latest',
         sourceType: 'module',
       },
     },
@@ -23,6 +33,5 @@ export default defineConfig([
       ...prettierConfig.rules,
       'prettier/prettier': ['error', { endOfLine: 'auto' }],
     },
-    ignores: ['node_modules/', '.nuxt/', 'dist/', '.history/**'],
   },
 ]);
