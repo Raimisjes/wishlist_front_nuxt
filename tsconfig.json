@@ -12,15 +12,10 @@
     "forceConsistentCasingInFileNames": true,
     "baseUrl": ".",
     "paths": {
+      "~/*": ["./*"],
       "@/*": ["./*"]
     },
-    "types": [
-      "@types/node",
-      "@nuxtjs/i18n",
-      "vuetify",
-      "@nuxt/types",
-      "@nuxt/typescript-build"
-    ],
+    "types": ["@types/node", "@nuxtjs/i18n", "vuetify", "@pinia/nuxt"],
     "jsx": "preserve",
     "resolveJsonModule": true,
     "noEmit": true
