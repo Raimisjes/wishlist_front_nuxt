@@ -7,9 +7,11 @@ module.exports = {
   },
   extends: [
     'eslint:recommended',
+    'plugin:vue/vue3-essential',
     'plugin:nuxt/recommended',
     'plugin:prettier/recommended',
     'plugin:@typescript-eslint/recommended',
+    '@vue/eslint-config-typescript',
   ],
   plugins: ['prettier'],
   rules: {
