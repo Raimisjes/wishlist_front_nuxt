@@ -6,7 +6,7 @@
       to="/"
       :aria-label="$t('components.header.homepage')"
       class="homepage-link"
-      ><img src="@/assets/site-logo.png" alt="Logo"
+      ><img src="@/assets/images/site-logo.png" alt="Logo"
     /></NuxtLink>
     <div class="buttons-holder">
       <v-btn
