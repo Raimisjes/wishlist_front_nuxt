@@ -18,7 +18,8 @@
     "types": ["@types/node", "@nuxtjs/i18n", "vuetify", "@pinia/nuxt"],
     "jsx": "preserve",
     "resolveJsonModule": true,
-    "noEmit": true
+    "noEmit": true,
+    "useUnknownInCatchVariables": false
   },
   "include": [
     "nuxt.config.ts",
