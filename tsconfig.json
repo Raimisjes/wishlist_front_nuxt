@@ -30,6 +30,6 @@
     "components/**/*.vue",
     "layouts/**/*.vue",
     "pages/**/*.vue"
-  ],
+, "error.vue"  ],
   "exclude": ["node_modules", ".nuxt", "dist"]
 }

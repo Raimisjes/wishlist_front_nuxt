@@ -14,10 +14,14 @@ export default {
           usernameCheckPrefix: 'gftme.one/',
           usernameCheckPlaceholder: 'nickname',
         },
+        error: {
+          title: "Sorry, the page you are looking for, could not be found",
+        },
       },
       words: {
         login: 'Login',
         signup: 'Sign up',
+        back: 'Back',
       },
       errors: {
         homepage: {
