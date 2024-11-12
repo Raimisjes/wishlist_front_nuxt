@@ -37,6 +37,7 @@ export default defineNuxtConfig({
             dark: false,
             colors: {
               primary: '#00B565',
+              error: '#d12323',
             },
           },
         },

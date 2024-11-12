@@ -34,7 +34,6 @@ export const useHomepageStore = defineStore('homepage', () => {
   async function checkUsername() {
     state.usernameCheck.usernameExists = null;
 
-    const activeForm = state.usernameCheck.form;
     if (state.usernameCheck.form.isLoading) return;
 
     state.usernameCheck.form.isLoading = true;

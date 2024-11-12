@@ -2,9 +2,11 @@
 import { useI18n } from 'vue-i18n';
 import { useTemplateRef } from 'vue';
 import { useHomepageStore } from '@/stores/homepage';
+import { useRegistrationStore } from '@/stores/registration';
+import { useRouter } from 'vue-router';
 
+const router = useRouter();
 const { locale, t } = useI18n();
-
 const store = useHomepageStore();
 
 const usernameCheckFormEl = useTemplateRef('usernameCheckFormEl');
@@ -27,6 +29,11 @@ function submitForm() {
 function onInputUsername() {
   store.state.usernameCheck.usernameExists = null;
   store.state.usernameCheck.form.error = '';
+}
+function goRegister() {
+  useRegistrationStore().state.registration.form.username =
+    store.state.usernameCheck.form.username;
+  router.push('/registration');
 }
 </script>
 
@@ -62,7 +69,7 @@ function onInputUsername() {
           >
             <v-btn
               color="primary"
-              to="/registration"
+              @click="goRegister()"
               size="small"
               :title="$t('words.signup')"
               >{{ $t('words.signup') }}</v-btn

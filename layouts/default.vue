@@ -8,7 +8,7 @@
   </div>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .container {
   max-width: 1200px;
   padding: 0 15px;

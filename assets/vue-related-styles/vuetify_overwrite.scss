@@ -2,4 +2,11 @@ body {
   .v-text-field__prefix, .v-text-field__suffix {
     opacity: 1;
   }
+  .v-input.v-text-field {
+    min-height: 70px;
+
+    .v-input__control{
+      max-height: 48px;
+    }
+  }
 }

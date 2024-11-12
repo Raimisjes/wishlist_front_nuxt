@@ -3,4 +3,36 @@
 
 html {
     font-family: 'Quicksand', sans-serif;
+
+    body {
+        background-color: #f2fbf2;
+    }
 }
+
+.form-holder {
+    background-color: #f8fffd;
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow:
+      rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+      rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+    max-width: 400px;
+    width: 100%;
+    margin: auto;
+  
+    h1 {
+      text-align: center;
+      margin: 0 0 20px 0;
+    }
+    .input-holder {
+      margin: 0 0 5px;
+    }
+    .button-holder {
+      margin: 15px 0 0 0;
+    }
+    .form-error-holder {
+      color: #d12323;
+      font-size: 13px;
+      margin:  15px 0 0 0;
+    }
+  }
