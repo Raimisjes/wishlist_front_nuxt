@@ -28,6 +28,9 @@ export default {
             "By selecting I confirm that I've read and accept gftme.one",
           conditionsLabel2: 'Terms & Conditions',
         },
+        registrationSuccess: {
+          title: 'Registration was successful.',
+        }
       },
       words: {
         login: 'Login',

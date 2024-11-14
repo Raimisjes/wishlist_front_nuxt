@@ -31,8 +31,9 @@ const validationRules = {
   termsAcceptedRules: [(v: string) => !!v || t('errors.validation009')],
 };
 
-function submitForm() {
-  if (!registrationFormEl.value?.isValid) return;
+async function submitForm() {
+  let validateStatus = await registrationFormEl.value?.validate();
+  if (!validateStatus || !validateStatus.valid) return;
   store.register();
 }
 </script>
