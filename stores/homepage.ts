@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import { reactive } from 'vue';
+import { useRuntimeConfig } from 'nuxt/app';
 
 interface HomepageState {
   usernameCheck: {
@@ -20,6 +21,8 @@ interface UsernameCheckRes {
 }
 
 export const useHomepageStore = defineStore('homepage', () => {
+  const config = useRuntimeConfig();
+
   const state = reactive<HomepageState>({
     usernameCheck: {
       form: {
@@ -39,7 +42,7 @@ export const useHomepageStore = defineStore('homepage', () => {
     state.usernameCheck.form.isLoading = true;
     try {
       const response = await $fetch<UsernameCheckRes>(
-        'http://localhost:5000/user/checkusername',
+        `${config.public.API_URL}/user/checkusername`,
         {
           method: 'post',
           body: {

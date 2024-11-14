@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import { reactive } from 'vue';
 import { useRouter } from 'vue-router';
+import { useRuntimeConfig } from 'nuxt/app';
 
 interface RegistrationState {
   registration: {
@@ -22,6 +23,7 @@ interface RegistrationRes {
 
 export const useRegistrationStore = defineStore('registration', () => {
   const router = useRouter();
+  const config = useRuntimeConfig();
 
   const state = reactive<RegistrationState>({
     registration: {
@@ -45,7 +47,7 @@ export const useRegistrationStore = defineStore('registration', () => {
 
     try {
       const response = await $fetch<RegistrationRes>(
-        'http://localhost:5000/user/add',
+        `${config.public.API_URL}/user/add`,
         {
           method: 'post',
           body: {

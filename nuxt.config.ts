@@ -54,4 +54,9 @@ export default defineNuxtConfig({
     strict: true,
     typeCheck: true,
   },
+  runtimeConfig: {
+    public: {
+      API_URL: process.env.NUXT_API_URL,
+    },
+  },
 });

@@ -15,7 +15,7 @@
       "~/*": ["./*"],
       "@/*": ["./*"]
     },
-    "types": ["@types/node", "@nuxtjs/i18n", "vuetify", "@pinia/nuxt"],
+    "types": ["@types/node", "@nuxtjs/i18n", "vuetify", "@pinia/nuxt", "nuxt"],
     "jsx": "preserve",
     "resolveJsonModule": true,
     "noEmit": true,
@@ -29,7 +29,8 @@
     "plugins/**/*.ts",
     "components/**/*.vue",
     "layouts/**/*.vue",
-    "pages/**/*.vue"
-, "error.vue"  ],
+    "pages/**/*.vue",
+    "error.vue"
+  ],
   "exclude": ["node_modules", ".nuxt", "dist"]
 }
