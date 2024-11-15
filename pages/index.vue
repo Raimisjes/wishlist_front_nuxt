@@ -3,7 +3,7 @@ import { useI18n } from 'vue-i18n';
 import { useTemplateRef } from 'vue';
 import { useHomepageStore } from '@/stores/homepage';
 import { useRegistrationStore } from '@/stores/registration';
-import { useRouter } from 'vue-router';
+import { useRouter, onBeforeRouteLeave } from 'vue-router';
 
 const router = useRouter();
 const { locale, t } = useI18n();
@@ -35,6 +35,10 @@ function goRegister() {
     store.state.usernameCheck.form.username;
   router.push('/registration');
 }
+
+onBeforeRouteLeave(() => {
+  useHomepageStore().clearStore();
+});
 </script>
 
 <template>

@@ -21,11 +21,8 @@ interface RegistrationRes {
   status: Boolean;
 }
 
-export const useRegistrationStore = defineStore('registration', () => {
-  const router = useRouter();
-  const config = useRuntimeConfig();
-
-  const state = reactive<RegistrationState>({
+function getInitialState(): RegistrationState {
+  return {
     registration: {
       form: {
         username: '',
@@ -37,7 +34,14 @@ export const useRegistrationStore = defineStore('registration', () => {
         error: '',
       },
     },
-  });
+  };
+}
+
+export const useRegistrationStore = defineStore('registration', () => {
+  const router = useRouter();
+  const config = useRuntimeConfig();
+
+  const state = reactive<RegistrationState>(getInitialState());
 
   async function register() {
     if (state.registration.form.isLoading) return;
@@ -75,8 +79,13 @@ export const useRegistrationStore = defineStore('registration', () => {
     state.registration.form.isLoading = false;
   }
 
+  function clearStore() {
+    Object.assign(state, getInitialState());
+  }
+
   return {
     state,
     register,
+    clearStore,
   };
 });

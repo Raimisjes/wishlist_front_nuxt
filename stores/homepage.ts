@@ -20,10 +20,8 @@ interface UsernameCheckRes {
   };
 }
 
-export const useHomepageStore = defineStore('homepage', () => {
-  const config = useRuntimeConfig();
-
-  const state = reactive<HomepageState>({
+function getInitialState() : HomepageState {
+  return {
     usernameCheck: {
       form: {
         username: '',
@@ -32,7 +30,13 @@ export const useHomepageStore = defineStore('homepage', () => {
       },
       usernameExists: null,
     },
-  });
+  };
+}
+
+export const useHomepageStore = defineStore('homepage', () => {
+  const config = useRuntimeConfig();
+
+  const state = reactive<HomepageState>(getInitialState());
 
   async function checkUsername() {
     state.usernameCheck.usernameExists = null;
@@ -63,8 +67,13 @@ export const useHomepageStore = defineStore('homepage', () => {
     state.usernameCheck.form.isLoading = false;
   }
 
+  function clearStore() {
+    Object.assign(state, getInitialState());
+  }
+
   return {
     state,
     checkUsername,
+    clearStore,
   };
 });
