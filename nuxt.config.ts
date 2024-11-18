@@ -20,6 +20,7 @@ export default defineNuxtConfig({
     '@nuxtjs/i18n',
     'vuetify-nuxt-module',
     '@nuxt/eslint',
+    'pinia-plugin-persistedstate/nuxt',
   ],
   alias: {
     pinia: '/node_modules/@pinia/nuxt/node_modules/pinia/dist/pinia.mjs',

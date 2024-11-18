@@ -20,7 +20,7 @@ interface UsernameCheckRes {
   };
 }
 
-function getInitialState() : HomepageState {
+function getInitialState(): HomepageState {
   return {
     usernameCheck: {
       form: {
@@ -33,47 +33,53 @@ function getInitialState() : HomepageState {
   };
 }
 
-export const useHomepageStore = defineStore('homepage', () => {
-  const config = useRuntimeConfig();
+export const useHomepageStore = defineStore(
+  'homepage',
+  () => {
+    const config = useRuntimeConfig();
 
-  const state = reactive<HomepageState>(getInitialState());
+    const state = reactive<HomepageState>(getInitialState());
 
-  async function checkUsername() {
-    state.usernameCheck.usernameExists = null;
+    async function checkUsername() {
+      state.usernameCheck.usernameExists = null;
 
-    if (state.usernameCheck.form.isLoading) return;
+      if (state.usernameCheck.form.isLoading) return;
 
-    state.usernameCheck.form.isLoading = true;
-    try {
-      const response = await $fetch<UsernameCheckRes>(
-        `${config.public.API_URL}/user/checkusername`,
-        {
-          method: 'post',
-          body: {
-            username: state.usernameCheck.form.username,
+      state.usernameCheck.form.isLoading = true;
+      try {
+        const response = await $fetch<UsernameCheckRes>(
+          `${config.public.API_URL}/user/checkusername`,
+          {
+            method: 'post',
+            body: {
+              username: state.usernameCheck.form.username,
+            },
+            timeout: 10000,
           },
-          timeout: 10000,
-        },
-      );
-      state.usernameCheck.usernameExists = response.data.usernameExists;
-    } catch (error) {
-      let errorMessage = '';
-      !error.data
-        ? (errorMessage = 'errors.internal001')
-        : (errorMessage = `errors.${error.data.data}`);
+        );
+        state.usernameCheck.usernameExists = response.data.usernameExists;
+      } catch (error) {
+        let errorMessage = '';
+        !error.data
+          ? (errorMessage = 'errors.internal001')
+          : (errorMessage = `errors.${error.data.data}`);
 
-      state.usernameCheck.form.error = errorMessage;
+        state.usernameCheck.form.error = errorMessage;
+      }
+      state.usernameCheck.form.isLoading = false;
     }
-    state.usernameCheck.form.isLoading = false;
-  }
 
-  function clearStore() {
-    Object.assign(state, getInitialState());
-  }
+    function clearStore() {
+      Object.assign(state, getInitialState());
+    }
 
-  return {
-    state,
-    checkUsername,
-    clearStore,
-  };
-});
+    return {
+      state,
+      checkUsername,
+      clearStore,
+    };
+  },
+  {
+    persist: false,
+  },
+);

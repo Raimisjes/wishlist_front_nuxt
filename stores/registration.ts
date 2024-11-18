@@ -37,55 +37,61 @@ function getInitialState(): RegistrationState {
   };
 }
 
-export const useRegistrationStore = defineStore('registration', () => {
-  const router = useRouter();
-  const config = useRuntimeConfig();
+export const useRegistrationStore = defineStore(
+  'registration',
+  () => {
+    const router = useRouter();
+    const config = useRuntimeConfig();
 
-  const state = reactive<RegistrationState>(getInitialState());
+    const state = reactive<RegistrationState>(getInitialState());
 
-  async function register() {
-    if (state.registration.form.isLoading) return;
+    async function register() {
+      if (state.registration.form.isLoading) return;
 
-    state.registration.form.isLoading = true;
-    state.registration.form.error = '';
+      state.registration.form.isLoading = true;
+      state.registration.form.error = '';
 
-    try {
-      const response = await $fetch<RegistrationRes>(
-        `${config.public.API_URL}/user/add`,
-        {
-          method: 'post',
-          body: {
-            username: state.registration.form.username,
-            password: state.registration.form.password,
-            email: state.registration.form.email,
-            termsAccepted: state.registration.form.termsAccepted,
+      try {
+        const response = await $fetch<RegistrationRes>(
+          `${config.public.API_URL}/user/add`,
+          {
+            method: 'post',
+            body: {
+              username: state.registration.form.username,
+              password: state.registration.form.password,
+              email: state.registration.form.email,
+              termsAccepted: state.registration.form.termsAccepted,
+            },
+            timeout: 10000,
           },
-          timeout: 10000,
-        },
-      );
+        );
 
-      if (response.status) {
-        router.push('registration/success');
-        return;
+        if (response.status) {
+          router.push('registration/success');
+          return;
+        }
+      } catch (error) {
+        let errorMessage = '';
+        !error.data
+          ? (errorMessage = 'errors.internal001')
+          : (errorMessage = `errors.${error.data.data}`);
+
+        state.registration.form.error = errorMessage;
       }
-    } catch (error) {
-      let errorMessage = '';
-      !error.data
-        ? (errorMessage = 'errors.internal001')
-        : (errorMessage = `errors.${error.data.data}`);
-
-      state.registration.form.error = errorMessage;
+      state.registration.form.isLoading = false;
     }
-    state.registration.form.isLoading = false;
-  }
 
-  function clearStore() {
-    Object.assign(state, getInitialState());
-  }
+    function clearStore() {
+      Object.assign(state, getInitialState());
+    }
 
-  return {
-    state,
-    register,
-    clearStore,
-  };
-});
+    return {
+      state,
+      register,
+      clearStore,
+    };
+  },
+  {
+    persist: false,
+  },
+);
