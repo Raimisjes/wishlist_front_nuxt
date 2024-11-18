@@ -1,7 +1,12 @@
-<script lang="ts" setup>
+<script setup lang="ts">
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
+
+// @ts-ignore
+definePageMeta({
+  middleware: 'route-guard',
+});
 
 function toHomepage(): void {
   router.push('/');
