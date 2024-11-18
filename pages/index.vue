@@ -1,12 +1,12 @@
 <script lang="ts" setup>
 import { useI18n } from 'vue-i18n';
-import { useTemplateRef } from 'vue';
+import { useTemplateRef, onUnmounted } from 'vue';
 import { useHomepageStore } from '@/stores/homepage';
 import { useRegistrationStore } from '@/stores/registration';
-import { useRouter, onBeforeRouteLeave } from 'vue-router';
+import { useRouter } from 'vue-router';
 
 const router = useRouter();
-const { locale, t } = useI18n();
+const { t } = useI18n();
 const store = useHomepageStore();
 
 const usernameCheckFormEl = useTemplateRef('usernameCheckFormEl');
@@ -36,7 +36,7 @@ function goRegister() {
   router.push('/registration');
 }
 
-onBeforeRouteLeave(() => {
+onUnmounted(() => {
   useHomepageStore().clearStore();
 });
 </script>

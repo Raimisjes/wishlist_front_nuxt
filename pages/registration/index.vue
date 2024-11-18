@@ -1,8 +1,7 @@
 <script lang="ts" setup>
 import { useI18n } from 'vue-i18n';
-import { useTemplateRef } from 'vue';
+import { useTemplateRef, onUnmounted } from 'vue';
 import { useRegistrationStore } from '@/stores/registration';
-import { onBeforeRouteLeave } from 'vue-router';
 
 const { t } = useI18n();
 
@@ -38,7 +37,7 @@ async function submitForm() {
   store.register();
 }
 
-onBeforeRouteLeave(() => {
+onUnmounted(() => {
   useRegistrationStore().clearStore();
 });
 </script>
