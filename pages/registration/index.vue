@@ -5,6 +5,11 @@ import { useRegistrationStore } from '@/stores/registration';
 
 const { t } = useI18n();
 
+// @ts-ignore
+definePageMeta({
+  middleware: 'route-guard',
+});
+
 const store = useRegistrationStore();
 const state = useRegistrationStore().state.registration;
 

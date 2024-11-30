@@ -1,4 +1,8 @@
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import { useUserStore } from '@/stores/user';
+
+const userState = useUserStore().state.user;
+</script>
 
 <template>
   <header>
@@ -8,15 +12,33 @@
       class="homepage-link"
       ><img src="@/assets/images/site-logo.png" alt="Logo"
     /></NuxtLink>
-    <div class="buttons-holder">
+    <div class="buttons-holder" v-if="!userState.logged">
       <v-btn
         color="primary"
         prepend-icon="mdi-account"
         size="small"
         :title="$t('words.login')"
-        class="bubu"
+        :to="'/login'"
         >{{ $t('words.login') }}</v-btn
       >
+    </div>
+    <div
+      class="menu-holder"
+      v-if="userState.logged && userState.username !== ''"
+    >
+      <v-menu>
+        <template v-slot:activator="{ props }">
+          <b class="username" v-bind="props">@{{ userState.username }}</b>
+        </template>
+        <v-list class="header-menu">
+          <v-list-item>
+            <NuxtLink to="/logout" :aria-label="$t('components.header.logout')">
+              <v-icon>mdi-logout</v-icon>
+              {{ $t('components.header.logout') }}
+            </NuxtLink>
+          </v-list-item>
+        </v-list>
+      </v-menu>
     </div>
   </header>
 </template>
@@ -53,11 +75,32 @@ header {
     }
   }
 
+  .menu-holder {
+    .username {
+      cursor: pointer;
+    }
+  }
+
   @media screen and (max-width: 600px) {
     .homepage-link {
       img {
         max-height: 35px;
       }
+    }
+  }
+}
+.header-menu {
+  padding: 0;
+  
+  a {
+    color: #000;
+    text-decoration: none;
+
+    .v-icon {
+      margin-right: 8px;
+    }
+    &:hover {
+      color: $primary;
     }
   }
 }

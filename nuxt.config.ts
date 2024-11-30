@@ -51,6 +51,15 @@ export default defineNuxtConfig({
       autoprefixer: {},
     },
   },
+  vite: {
+    css: {
+      preprocessorOptions: {
+        scss: {
+          additionalData: `@import "~/assets/_variables.scss";`,
+        },
+      },
+    },
+  },
   typescript: {
     strict: true,
     typeCheck: true,

@@ -6,6 +6,7 @@ export default {
       components: {
         header: {
           homepage: 'Homepage',
+          logout: 'Log out',
         },
       },
       pages: {
@@ -30,10 +31,10 @@ export default {
         },
         registrationSuccess: {
           title: 'Registration was successful.',
-        }
+        },
       },
       words: {
-        login: 'Login',
+        login: 'Log in',
         signup: 'Sign up',
         back: 'Back',
         homepage: 'Homepage',
