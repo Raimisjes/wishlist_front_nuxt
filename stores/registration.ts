@@ -67,7 +67,7 @@ export const useRegistrationStore = defineStore(
         );
 
         if (response.status) {
-          router.push('registration/success');
+          router.push('/registration/success');
           return;
         }
       } catch (error) {
