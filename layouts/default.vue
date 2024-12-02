@@ -2,6 +2,7 @@
 
 <template>
   <div class="container">
+    <Snackbar />
     <PageHeader />
     <NuxtPage />
     <PageFooter />

@@ -8,6 +8,9 @@ export default {
           homepage: 'Homepage',
           logout: 'Log out',
         },
+        snackbar: {
+          logout: 'Successfully logged out.',
+        },
       },
       pages: {
         index: {
