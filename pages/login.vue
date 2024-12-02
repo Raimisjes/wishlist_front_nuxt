@@ -11,7 +11,6 @@ definePageMeta({
 });
 
 const loginStore = useLoginStore();
-const loginState = useLoginStore().state.login;
 
 const loginFormEl = useTemplateRef('loginForm');
 
@@ -38,7 +37,7 @@ onUnmounted(() => {
       <v-form @submit.prevent="submitForm()" ref="loginForm">
         <div class="input-holder">
           <v-text-field
-            v-model="loginState.form.username"
+            v-model="loginStore.state.form.username"
             :label="$t('pages.registration.username')"
             :rules="validationRules.usernameRules"
             hide-details="auto"
@@ -50,28 +49,29 @@ onUnmounted(() => {
         </div>
         <div class="input-holder">
           <v-text-field
-            v-model="loginState.form.password"
+            v-model="loginStore.state.form.password"
             :label="$t('pages.registration.password')"
             :rules="validationRules.passwordRules"
             :append-icon="
-              loginState.form.hidePassword ? 'mdi-eye' : 'mdi-eye-off'
+              loginStore.state.form.hidePassword ? 'mdi-eye' : 'mdi-eye-off'
             "
             hide-details="auto"
             validate-on="blur"
             variant="underlined"
             color="primary"
             theme="default"
-            :type="loginState.form.hidePassword ? 'password' : 'text'"
+            :type="loginStore.state.form.hidePassword ? 'password' : 'text'"
             @click:append="
               () =>
-                (loginState.form.hidePassword = !loginState.form.hidePassword)
+                (loginStore.state.form.hidePassword =
+                  !loginStore.state.form.hidePassword)
             "
           ></v-text-field>
         </div>
         <div class="button-holder">
           <v-btn
-            :disabled="loginState.form.isLoading"
-            :loading="loginState.form.isLoading"
+            :disabled="loginStore.state.form.isLoading"
+            :loading="loginStore.state.form.isLoading"
             color="primary"
             size="large"
             block
@@ -80,8 +80,8 @@ onUnmounted(() => {
             >{{ $t('words.login') }}</v-btn
           >
         </div>
-        <div class="form-error-holder" v-if="loginState.form.error">
-          {{ $t(loginState.form.error) }}
+        <div class="form-error-holder" v-if="loginStore.state.form.error">
+          {{ $t(loginStore.state.form.error) }}
         </div>
       </v-form>
     </div>

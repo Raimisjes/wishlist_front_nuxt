@@ -7,7 +7,9 @@ import { useRouter } from 'vue-router';
 
 const router = useRouter();
 const { t } = useI18n();
-const store = useHomepageStore();
+
+const homepageStore = useHomepageStore();
+const registrationStore = useRegistrationStore();
 
 const usernameCheckFormEl = useTemplateRef('usernameCheckFormEl');
 
@@ -23,21 +25,21 @@ const usernameCheck = {
 
 function submitForm() {
   if (!usernameCheckFormEl.value?.isValid) return;
-  store.checkUsername();
+  homepageStore.checkUsername();
 }
 
 function onInputUsername() {
-  store.state.usernameCheck.usernameExists = null;
-  store.state.usernameCheck.form.error = '';
+  homepageStore.state.usernameCheck.usernameExists = null;
+  homepageStore.state.usernameCheck.form.error = '';
 }
 function goRegister() {
-  useRegistrationStore().state.registration.form.username =
-    store.state.usernameCheck.form.username;
+  registrationStore.state.form.username =
+    homepageStore.state.usernameCheck.form.username;
   router.push('/registration');
 }
 
 onUnmounted(() => {
-  useHomepageStore().clearStore();
+  homepageStore.clearStore();
 });
 </script>
 
@@ -47,15 +49,15 @@ onUnmounted(() => {
       <h1 v-html="$t('pages.index.slogan')"></h1>
       <v-form @submit.prevent="submitForm()" ref="usernameCheckFormEl">
         <v-text-field
-          v-model="store.state.usernameCheck.form.username"
+          v-model="homepageStore.state.usernameCheck.form.username"
           @input="onInputUsername()"
           @click:append-inner="submitForm()"
-          :loading="store.state.usernameCheck.form.isLoading"
-          :disabled="store.state.usernameCheck.form.isLoading"
+          :loading="homepageStore.state.usernameCheck.form.isLoading"
+          :disabled="homepageStore.state.usernameCheck.form.isLoading"
           :prefix="$t('pages.index.usernameCheckPrefix')"
           :error-messages="
-            store.state.usernameCheck.form.error != ''
-              ? $t(store.state.usernameCheck.form.error)
+            homepageStore.state.usernameCheck.form.error != ''
+              ? $t(homepageStore.state.usernameCheck.form.error)
               : ''
           "
           :placeholder="$t('pages.index.usernameCheckPlaceholder')"
@@ -68,7 +70,7 @@ onUnmounted(() => {
         <Transition name="fade">
           <div
             class="button-holder"
-            v-if="store.state.usernameCheck.usernameExists == false"
+            v-if="homepageStore.state.usernameCheck.usernameExists == false"
             mode="in-out"
           >
             <v-btn

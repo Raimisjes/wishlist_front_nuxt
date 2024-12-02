@@ -5,14 +5,12 @@ import { useRuntimeConfig } from 'nuxt/app';
 import { useUserStore } from '@/stores/user';
 
 interface LoginState {
-  login: {
-    form: {
-      username: string;
-      password: string;
-      hidePassword: boolean;
-      isLoading: boolean;
-      error: string;
-    };
+  form: {
+    username: string;
+    password: string;
+    hidePassword: boolean;
+    isLoading: boolean;
+    error: string;
   };
 }
 
@@ -26,14 +24,12 @@ interface LoginRes {
 
 function getInitialState(): LoginState {
   return {
-    login: {
-      form: {
-        username: '',
-        password: '',
-        hidePassword: true,
-        isLoading: false,
-        error: '',
-      },
+    form: {
+      username: '',
+      password: '',
+      hidePassword: true,
+      isLoading: false,
+      error: '',
     },
   };
 }
@@ -47,10 +43,10 @@ export const useLoginStore = defineStore(
     const state = reactive<LoginState>(getInitialState());
 
     async function login() {
-      if (state.login.form.isLoading) return;
+      if (state.form.isLoading) return;
 
-      state.login.form.isLoading = true;
-      state.login.form.error = '';
+      state.form.isLoading = true;
+      state.form.error = '';
 
       try {
         const response = await $fetch<LoginRes>(
@@ -58,17 +54,17 @@ export const useLoginStore = defineStore(
           {
             method: 'post',
             body: {
-              username: state.login.form.username,
-              password: state.login.form.password,
+              username: state.form.username,
+              password: state.form.password,
             },
             timeout: 10000,
           },
         );
 
         if (response.status) {
-          useUserStore().state.user.username = response.data.username;
-          useUserStore().state.user.token = response.data.token;
-          useUserStore().state.user.logged = true;
+          useUserStore().state.username = response.data.username;
+          useUserStore().state.token = response.data.token;
+          useUserStore().state.logged = true;
           router.push('/');
           return;
         }
@@ -78,9 +74,9 @@ export const useLoginStore = defineStore(
           ? (errorMessage = 'errors.internal001')
           : (errorMessage = `errors.${error.data.data}`);
 
-        state.login.form.error = errorMessage;
+        state.form.error = errorMessage;
       }
-      state.login.form.isLoading = false;
+      state.form.isLoading = false;
     }
 
     function clearStore() {

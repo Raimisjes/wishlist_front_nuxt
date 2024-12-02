@@ -5,18 +5,18 @@ import { useRuntimeConfig } from 'nuxt/app';
 interface HomepageState {
   usernameCheck: {
     form: {
-      username: String;
-      isLoading: Boolean;
-      error: String;
+      username: string;
+      isLoading: boolean;
+      error: string;
     };
-    usernameExists: null | Boolean;
+    usernameExists: null | boolean;
   };
 }
 
 interface UsernameCheckRes {
-  status: Boolean;
+  status: boolean;
   data: {
-    usernameExists: Boolean;
+    usernameExists: boolean;
   };
 }
 

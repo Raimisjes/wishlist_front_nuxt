@@ -5,20 +5,16 @@ import { useRouter } from 'vue-router';
 import { useUIStore } from './ui';
 
 interface UserState {
-  user: {
-    username: string;
-    token: string;
-    logged: boolean;
-  };
+  username: string;
+  token: string;
+  logged: boolean;
 }
 
 function getInitialState(): UserState {
   return {
-    user: {
-      username: '',
-      token: '',
-      logged: false,
-    },
+    username: '',
+    token: '',
+    logged: false,
   };
 }
 
@@ -41,15 +37,15 @@ export const useUserStore = defineStore(
           {
             method: 'get',
             params: {
-              token: state.user.token,
+              token: state.token,
             },
             timeout: 10000,
           },
         );
 
         if (response.status) {
-          useUIStore().showSnackbar('components.snackbar.logout', 4000);
           clearStore();
+          useUIStore().showSnackbar('components.snackbar.logout', 4000);
           router.push('/');
         }
       } catch (error) {

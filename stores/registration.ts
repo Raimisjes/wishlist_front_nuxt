@@ -4,35 +4,31 @@ import { useRouter } from 'vue-router';
 import { useRuntimeConfig } from 'nuxt/app';
 
 interface RegistrationState {
-  registration: {
-    form: {
-      username: String;
-      email: String;
-      password: String;
-      hidePassword: Boolean;
-      termsAccepted: Boolean;
-      isLoading: Boolean;
-      error: String;
-    };
+  form: {
+    username: string;
+    email: string;
+    password: string;
+    hidePassword: boolean;
+    termsAccepted: Boolean;
+    isLoading: boolean;
+    error: string;
   };
 }
 
 interface RegistrationRes {
-  status: Boolean;
+  status: boolean;
 }
 
 function getInitialState(): RegistrationState {
   return {
-    registration: {
-      form: {
-        username: '',
-        email: '',
-        password: '',
-        hidePassword: true,
-        termsAccepted: false,
-        isLoading: false,
-        error: '',
-      },
+    form: {
+      username: '',
+      email: '',
+      password: '',
+      hidePassword: true,
+      termsAccepted: false,
+      isLoading: false,
+      error: '',
     },
   };
 }
@@ -46,10 +42,10 @@ export const useRegistrationStore = defineStore(
     const state = reactive<RegistrationState>(getInitialState());
 
     async function register() {
-      if (state.registration.form.isLoading) return;
+      if (state.form.isLoading) return;
 
-      state.registration.form.isLoading = true;
-      state.registration.form.error = '';
+      state.form.isLoading = true;
+      state.form.error = '';
 
       try {
         const response = await $fetch<RegistrationRes>(
@@ -57,10 +53,10 @@ export const useRegistrationStore = defineStore(
           {
             method: 'post',
             body: {
-              username: state.registration.form.username,
-              password: state.registration.form.password,
-              email: state.registration.form.email,
-              termsAccepted: state.registration.form.termsAccepted,
+              username: state.form.username,
+              password: state.form.password,
+              email: state.form.email,
+              termsAccepted: state.form.termsAccepted,
             },
             timeout: 10000,
           },
@@ -76,9 +72,9 @@ export const useRegistrationStore = defineStore(
           ? (errorMessage = 'errors.internal001')
           : (errorMessage = `errors.${error.data.data}`);
 
-        state.registration.form.error = errorMessage;
+        state.form.error = errorMessage;
       }
-      state.registration.form.isLoading = false;
+      state.form.isLoading = false;
     }
 
     function clearStore() {

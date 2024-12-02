@@ -6,7 +6,7 @@ export default defineNuxtRouteMiddleware((to, from) => {
   //unavailable routes for logged users
   if (
     (to.path === '/login' || to.path === '/registration') &&
-    useUserStore().state.user.logged
+    useUserStore().state.logged
   ) {
     return abortNavigation();
   }

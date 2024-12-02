@@ -1,23 +1,23 @@
 <script lang="ts" setup>
 import { useUIStore } from '@/stores/ui';
 
-const uiState = useUIStore().state;
+const uiStore = useUIStore();
 
 function onSnackbarClose() {
-  !uiState.snackbar.show ? useUIStore().clearSnackbar() : '';
+  !uiStore.state.snackbar.show ? uiStore.clearSnackbar() : '';
 }
 </script>
 
 <template>
   <v-snackbar
-    v-model="uiState.snackbar.show"
+    v-model="uiStore.state.snackbar.show"
     close-on-content-click
     :location="'top'"
-    :timeout="uiState.snackbar.timeout"
+    :timeout="uiStore.state.snackbar.timeout"
     @update:modelValue="onSnackbarClose"
     color="primary"
   >
-    {{ $t(uiState.snackbar.message) }}
+    {{ $t(uiStore.state.snackbar.message) }}
   </v-snackbar>
 </template>
 
