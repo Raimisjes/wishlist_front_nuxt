@@ -1,7 +1,9 @@
 <script lang="ts" setup>
 import { useUIStore } from '@/stores/ui';
+import { storeToRefs } from 'pinia';
 
 const uiStore = useUIStore();
+const { state: uiState } = storeToRefs(uiStore);
 
 function onSnackbarClose() {
   !uiStore.state.snackbar.show ? uiStore.clearSnackbar() : '';
@@ -10,14 +12,14 @@ function onSnackbarClose() {
 
 <template>
   <v-snackbar
-    v-model="uiStore.state.snackbar.show"
+    v-model="uiState.snackbar.show"
     close-on-content-click
     :location="'top'"
-    :timeout="uiStore.state.snackbar.timeout"
+    :timeout="uiState.snackbar.timeout"
     @update:modelValue="onSnackbarClose"
     color="primary"
   >
-    {{ $t(uiStore.state.snackbar.message) }}
+    {{ $t(uiState.snackbar.message) }}
   </v-snackbar>
 </template>
 

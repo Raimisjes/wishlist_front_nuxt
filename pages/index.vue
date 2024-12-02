@@ -4,12 +4,15 @@ import { useTemplateRef, onUnmounted } from 'vue';
 import { useHomepageStore } from '@/stores/homepage';
 import { useRegistrationStore } from '@/stores/registration';
 import { useRouter } from 'vue-router';
+import { storeToRefs } from 'pinia';
 
 const router = useRouter();
 const { t } = useI18n();
 
 const homepageStore = useHomepageStore();
 const registrationStore = useRegistrationStore();
+
+const { state: homepageState } = storeToRefs(homepageStore);
 
 const usernameCheckFormEl = useTemplateRef('usernameCheckFormEl');
 
@@ -32,6 +35,7 @@ function onInputUsername() {
   homepageStore.state.usernameCheck.usernameExists = null;
   homepageStore.state.usernameCheck.form.error = '';
 }
+
 function goRegister() {
   registrationStore.state.form.username =
     homepageStore.state.usernameCheck.form.username;
@@ -49,15 +53,15 @@ onUnmounted(() => {
       <h1 v-html="$t('pages.index.slogan')"></h1>
       <v-form @submit.prevent="submitForm()" ref="usernameCheckFormEl">
         <v-text-field
-          v-model="homepageStore.state.usernameCheck.form.username"
+          v-model="homepageState.usernameCheck.form.username"
           @input="onInputUsername()"
           @click:append-inner="submitForm()"
-          :loading="homepageStore.state.usernameCheck.form.isLoading"
-          :disabled="homepageStore.state.usernameCheck.form.isLoading"
+          :loading="homepageState.usernameCheck.form.isLoading"
+          :disabled="homepageState.usernameCheck.form.isLoading"
           :prefix="$t('pages.index.usernameCheckPrefix')"
           :error-messages="
-            homepageStore.state.usernameCheck.form.error != ''
-              ? $t(homepageStore.state.usernameCheck.form.error)
+            homepageState.usernameCheck.form.error != ''
+              ? $t(homepageState.usernameCheck.form.error)
               : ''
           "
           :placeholder="$t('pages.index.usernameCheckPlaceholder')"
@@ -70,7 +74,7 @@ onUnmounted(() => {
         <Transition name="fade">
           <div
             class="button-holder"
-            v-if="homepageStore.state.usernameCheck.usernameExists == false"
+            v-if="homepageState.usernameCheck.usernameExists == false"
             mode="in-out"
           >
             <v-btn

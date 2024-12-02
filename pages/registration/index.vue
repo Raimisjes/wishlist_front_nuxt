@@ -2,6 +2,7 @@
 import { useI18n } from 'vue-i18n';
 import { useTemplateRef, onUnmounted } from 'vue';
 import { useRegistrationStore } from '@/stores/registration';
+import { storeToRefs } from 'pinia';
 
 const { t } = useI18n();
 
@@ -11,6 +12,8 @@ definePageMeta({
 });
 
 const registrationStore = useRegistrationStore();
+
+const { state: registrationState } = storeToRefs(registrationStore);
 
 const registrationFormEl = useTemplateRef('registrationForm');
 
@@ -53,7 +56,7 @@ onUnmounted(() => {
       <v-form @submit.prevent="submitForm()" ref="registrationForm">
         <div class="input-holder">
           <v-text-field
-            v-model="registrationStore.state.form.email"
+            v-model="registrationState.form.email"
             :label="$t('pages.registration.email')"
             :rules="validationRules.emailRules"
             hide-details="auto"
@@ -65,7 +68,7 @@ onUnmounted(() => {
         </div>
         <div class="input-holder">
           <v-text-field
-            v-model="registrationStore.state.form.username"
+            v-model="registrationState.form.username"
             :label="$t('pages.registration.username')"
             :rules="validationRules.usernameRules"
             :hint="$t('pages.registration.usernameHint')"
@@ -78,13 +81,11 @@ onUnmounted(() => {
         </div>
         <div class="input-holder">
           <v-text-field
-            v-model="registrationStore.state.form.password"
+            v-model="registrationState.form.password"
             :label="$t('pages.registration.password')"
             :rules="validationRules.passwordRules"
             :append-icon="
-              registrationStore.state.form.hidePassword
-                ? 'mdi-eye'
-                : 'mdi-eye-off'
+              registrationState.form.hidePassword ? 'mdi-eye' : 'mdi-eye-off'
             "
             :hint="$t('pages.registration.passwordHint')"
             hide-details="auto"
@@ -92,19 +93,17 @@ onUnmounted(() => {
             variant="underlined"
             color="primary"
             theme="default"
-            :type="
-              registrationStore.state.form.hidePassword ? 'password' : 'text'
-            "
+            :type="registrationState.form.hidePassword ? 'password' : 'text'"
             @click:append="
               () =>
-                (registrationStore.state.form.hidePassword =
-                  !registrationStore.state.form.hidePassword)
+                (registrationState.form.hidePassword =
+                  !registrationState.form.hidePassword)
             "
           ></v-text-field>
         </div>
         <div class="input-holder">
           <v-checkbox
-            v-model="registrationStore.state.form.termsAccepted"
+            v-model="registrationState.form.termsAccepted"
             color="primary"
             required
             :rules="validationRules.termsAcceptedRules"
@@ -119,8 +118,8 @@ onUnmounted(() => {
         </div>
         <div class="button-holder">
           <v-btn
-            :disabled="registrationStore.state.form.isLoading"
-            :loading="registrationStore.state.form.isLoading"
+            :disabled="registrationState.form.isLoading"
+            :loading="registrationState.form.isLoading"
             color="primary"
             size="large"
             block
@@ -129,11 +128,8 @@ onUnmounted(() => {
             >{{ $t('words.signup') }}</v-btn
           >
         </div>
-        <div
-          class="form-error-holder"
-          v-if="registrationStore.state.form.error"
-        >
-          {{ $t(registrationStore.state.form.error) }}
+        <div class="form-error-holder" v-if="registrationState.form.error">
+          {{ $t(registrationState.form.error) }}
         </div>
       </v-form>
     </div>

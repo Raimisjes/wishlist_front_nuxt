@@ -1,7 +1,9 @@
 <script lang="ts" setup>
 import { useUserStore } from '@/stores/user';
+import { storeToRefs } from 'pinia';
 
 const userStore = useUserStore();
+const { state: userState } = storeToRefs(userStore);
 
 const logout = async function (e: Event): Promise<void> {
   e.preventDefault();
@@ -17,7 +19,7 @@ const logout = async function (e: Event): Promise<void> {
       class="homepage-link"
       ><img src="@/assets/images/site-logo.png" alt="Logo"
     /></NuxtLink>
-    <div class="buttons-holder" v-if="!userStore.state.logged">
+    <div class="buttons-holder" v-if="!userState.logged">
       <v-btn
         color="primary"
         prepend-icon="mdi-account"
@@ -29,11 +31,11 @@ const logout = async function (e: Event): Promise<void> {
     </div>
     <div
       class="menu-holder"
-      v-if="userStore.state.logged && userStore.state.username !== ''"
+      v-if="userState.logged && userState.username !== ''"
     >
       <v-menu>
         <template v-slot:activator="{ props }">
-          <b class="username" v-bind="props">@{{ userStore.state.username }}</b>
+          <b class="username" v-bind="props">@{{ userState.username }}</b>
         </template>
         <v-list class="header-menu">
           <v-list-item>
