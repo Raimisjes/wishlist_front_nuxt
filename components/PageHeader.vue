@@ -2,6 +2,11 @@
 import { useUserStore } from '@/stores/user';
 
 const userState = useUserStore().state.user;
+
+const logout = async function (e: Event): Promise<void> {
+  e.preventDefault();
+  useUserStore().logout();
+};
 </script>
 
 <template>
@@ -32,10 +37,13 @@ const userState = useUserStore().state.user;
         </template>
         <v-list class="header-menu">
           <v-list-item>
-            <NuxtLink to="/logout" :aria-label="$t('components.header.logout')">
+            <a
+              @click="logout($event)"
+              :aria-label="$t('components.header.logout')"
+            >
               <v-icon>mdi-logout</v-icon>
               {{ $t('components.header.logout') }}
-            </NuxtLink>
+            </a>
           </v-list-item>
         </v-list>
       </v-menu>
@@ -91,7 +99,7 @@ header {
 }
 .header-menu {
   padding: 0;
-  
+
   a {
     color: #000;
     text-decoration: none;

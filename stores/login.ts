@@ -7,20 +7,20 @@ import { useUserStore } from '@/stores/user';
 interface LoginState {
   login: {
     form: {
-      username: String;
-      password: String;
-      hidePassword: Boolean;
-      isLoading: Boolean;
-      error: String;
+      username: string;
+      password: string;
+      hidePassword: boolean;
+      isLoading: boolean;
+      error: string;
     };
   };
 }
 
 interface LoginRes {
-  status: Boolean;
+  status: boolean;
   data: {
-    token: String;
-    username: String;
+    token: string;
+    username: string;
   };
 }
 
