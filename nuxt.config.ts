@@ -14,6 +14,7 @@ export default defineNuxtConfig({
       ],
       title: 'gftme.one',
     },
+    pageTransition: { name: 'fade', mode: 'out-in' },
   },
   modules: [
     '@pinia/nuxt',
@@ -42,6 +43,10 @@ export default defineNuxtConfig({
             },
           },
         },
+      },
+      icons: {
+        defaultSet: 'mdi',
+        sets: ['mdi', 'fa'],
       },
     },
   },
