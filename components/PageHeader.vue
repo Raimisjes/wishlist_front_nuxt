@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { useUserStore } from '@/stores/user';
+import { useAuthStore } from '@/stores/auth';
 import { storeToRefs } from 'pinia';
 
 const userStore = useUserStore();
@@ -7,7 +8,7 @@ const { state: userState } = storeToRefs(userStore);
 
 const logout = async function (e: Event): Promise<void> {
   e.preventDefault();
-  userStore.logout();
+  useAuthStore().logout();
 };
 </script>
 
@@ -19,7 +20,7 @@ const logout = async function (e: Event): Promise<void> {
       class="homepage-link"
       ><img src="@/assets/images/site-logo.png" alt="Logo"
     /></NuxtLink>
-    <div class="buttons-holder" v-if="!userState.logged">
+    <div class="buttons-holder" v-if="!userState.authenticated">
       <v-btn
         color="primary"
         prepend-icon="mdi-account"
@@ -31,13 +32,22 @@ const logout = async function (e: Event): Promise<void> {
     </div>
     <div
       class="menu-holder"
-      v-if="userState.logged && userState.username !== ''"
+      v-if="userState.authenticated && userState.username !== ''"
     >
       <v-menu>
         <template v-slot:activator="{ props }">
           <b class="username" v-bind="props">@{{ userState.username }}</b>
         </template>
         <v-list class="header-menu">
+          <v-list-item>
+            <NuxtLink
+              to="/settings"
+              :aria-label="$t('components.header.settings')"
+            >
+              <v-icon>mdi-cog</v-icon>
+              {{ $t('components.header.settings') }}
+            </NuxtLink>
+          </v-list-item>
           <v-list-item>
             <a
               @click="logout($event)"
@@ -102,6 +112,9 @@ header {
 .header-menu {
   padding: 0;
 
+  .v-list-item {
+    min-height: 40px;
+  }
   a {
     color: #000;
     text-decoration: none;

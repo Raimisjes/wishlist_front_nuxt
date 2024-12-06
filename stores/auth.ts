@@ -3,13 +3,9 @@ import { reactive } from 'vue';
 import { useRuntimeConfig } from 'nuxt/app';
 import { useUserStore } from '@/stores/user';
 import { useRouter } from 'vue-router';
+import { useUIStore } from './ui';
 
 interface AuthState {
-  user: {
-    username: string;
-    accessToken: string;
-    authenticated: boolean;
-  };
   form: {
     username: string;
     password: string;
@@ -31,11 +27,6 @@ interface LoginApiResponse {
 
 function getInitialState(): AuthState {
   return {
-    user: {
-      username: '',
-      accessToken: '',
-      authenticated: false,
-    },
     form: {
       username: '',
       password: '',
@@ -75,9 +66,11 @@ export const useAuthStore = defineStore(
         );
 
         if (response.status) {
-          state.user.username = response.data.username;
-          state.user.accessToken = response.data.accessToken;
-          state.user.authenticated = true;
+          useUserStore().state.username = response.data.username;
+          useUserStore().state.email = response.data.email;
+          useUserStore().state.accessToken = response.data.accessToken;
+          useUserStore().state.role = response.data.role;
+          useUserStore().state.authenticated = true;
           router.push('/');
           return;
         }
@@ -90,6 +83,29 @@ export const useAuthStore = defineStore(
         state.form.error = errorMessage;
       }
       state.form.isLoading = false;
+    }
+
+    async function logout() {
+      try {
+        const response = await $fetch<any>(
+          `${config.public.API_URL}/user/logout`,
+          {
+            method: 'get',
+            timeout: 10000,
+          },
+        );
+
+        if (response.status) {
+          useUserStore().clearStore();
+          useUIStore().showSnackbar('components.snackbar.logout', 4000);
+          router.push('/');
+        }
+      } catch (error) {
+        let errorMessage;
+        !error.data
+          ? (errorMessage = 'errors.internal001')
+          : (errorMessage = `errors.${error.data.data}`);
+      }
     }
 
     function clearStore() {
@@ -109,6 +125,7 @@ export const useAuthStore = defineStore(
     return {
       state,
       login,
+      logout,
       clearStore,
       clearForm,
     };
