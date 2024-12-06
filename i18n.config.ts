@@ -7,6 +7,7 @@ export default {
         header: {
           homepage: 'Homepage',
           logout: 'Log out',
+          settings: 'Settings',
         },
         snackbar: {
           logout: 'Successfully logged out.',
@@ -35,12 +36,25 @@ export default {
         registrationSuccess: {
           title: 'Registration was successful.',
         },
+        settings: {
+          title: 'Settings',
+          changePassword: 'Change password',
+          currentPassword: 'Current password',
+          newPassword: 'New password',
+          newRepeatedPassword: 'Repeat new password',
+          socialNetworks: 'Social networks',
+          facebookLink: 'Facebook profile link',
+          instagramLink: 'Instagram profile link',
+          yotubeLink: 'Youtube profile link',
+          tiktokLink: 'Tik Tok profile link',
+        },
       },
       words: {
         login: 'Log in',
         signup: 'Sign up',
         back: 'Back',
         homepage: 'Homepage',
+        change: 'Change',
       },
       errors: {
         homepage: {
@@ -86,6 +100,8 @@ export default {
         // validation030: 'Norų sąrašo savininkas privalomas',
         // validation031: 'Norų sąrašas nerastas',
         // validation032: 'Nenurodytas norų sąrašo savininkas',
+        validation033: 'Field is required',
+        validation034: 'New password should be equal in both fields.',
       },
     },
   },

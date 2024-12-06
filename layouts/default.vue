@@ -15,7 +15,7 @@
   padding: 0 15px;
   margin: 0 auto;
   display: grid;
-  grid-template-rows: 70px calc(100vh - 110px) 40px;
+  grid-template-rows: 70px auto 55px;
   min-height: 100vh;
 
   main {

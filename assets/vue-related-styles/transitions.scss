@@ -1,3 +1,4 @@
+//fade in/out
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.4s ease-in-out;
@@ -6,4 +7,24 @@
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+}
+
+//expand/suspend
+.expand-enter-active,
+.expand-leave-active {
+  transition:
+    max-height 0.5s ease-out,
+    opacity 0.5s ease-out;
+}
+
+.expand-enter-from,
+.expand-leave-to {
+  max-height: 0;
+  opacity: 0;
+}
+
+.expand-enter-to,
+.expand-leave-from {
+  max-height: 400px;
+  opacity: 1;
 }

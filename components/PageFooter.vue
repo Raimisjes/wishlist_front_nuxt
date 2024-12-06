@@ -13,6 +13,7 @@ footer {
   align-items: center;
   justify-content: center;
   height: 35px;
+  margin-top: 20px;
 
   a {
     margin: 0 2px;
