@@ -1,10 +1,15 @@
 import { defineStore } from 'pinia';
 import { reactive } from 'vue';
-import { useRouter } from 'vue-router';
 import { useRuntimeConfig } from 'nuxt/app';
 import { useUserStore } from '@/stores/user';
+import { useRouter } from 'vue-router';
 
-interface LoginState {
+interface AuthState {
+  user: {
+    username: string;
+    accessToken: string;
+    authenticated: boolean;
+  };
   form: {
     username: string;
     password: string;
@@ -14,16 +19,23 @@ interface LoginState {
   };
 }
 
-interface LoginRes {
+interface LoginApiResponse {
   status: boolean;
   data: {
-    token: string;
     username: string;
+    accessToken: string;
+    email: string;
+    role: string;
   };
 }
 
-function getInitialState(): LoginState {
+function getInitialState(): AuthState {
   return {
+    user: {
+      username: '',
+      accessToken: '',
+      authenticated: false,
+    },
     form: {
       username: '',
       password: '',
@@ -34,13 +46,13 @@ function getInitialState(): LoginState {
   };
 }
 
-export const useLoginStore = defineStore(
-  'login',
+export const useAuthStore = defineStore(
+  'auth',
   () => {
     const router = useRouter();
     const config = useRuntimeConfig();
 
-    const state = reactive<LoginState>(getInitialState());
+    const state = reactive<AuthState>(getInitialState());
 
     async function login() {
       if (state.form.isLoading) return;
@@ -49,7 +61,7 @@ export const useLoginStore = defineStore(
       state.form.error = '';
 
       try {
-        const response = await $fetch<LoginRes>(
+        const response = await $fetch<LoginApiResponse>(
           `${config.public.API_URL}/user/login`,
           {
             method: 'post',
@@ -58,13 +70,14 @@ export const useLoginStore = defineStore(
               password: state.form.password,
             },
             timeout: 10000,
+            credentials: 'include',
           },
         );
 
         if (response.status) {
-          useUserStore().state.username = response.data.username;
-          useUserStore().state.token = response.data.token;
-          useUserStore().state.logged = true;
+          state.user.username = response.data.username;
+          state.user.accessToken = response.data.accessToken;
+          state.user.authenticated = true;
           router.push('/');
           return;
         }
@@ -83,10 +96,21 @@ export const useLoginStore = defineStore(
       Object.assign(state, getInitialState());
     }
 
+    function clearForm() {
+      Object.assign(state.form, {
+        username: '',
+        password: '',
+        hidePassword: true,
+        isLoading: false,
+        error: '',
+      });
+    }
+
     return {
       state,
       login,
       clearStore,
+      clearForm,
     };
   },
   {
