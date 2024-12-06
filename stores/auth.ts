@@ -92,6 +92,7 @@ export const useAuthStore = defineStore(
           {
             method: 'get',
             timeout: 10000,
+            credentials: 'include',
           },
         );
 
