@@ -28,14 +28,9 @@ export const useUserStore = defineStore(
       Object.assign(state, getInitialState());
     }
 
-    //function clearChangePassForm() {
-      //Object.assign(state.changePassword, getInitialState().changePassword);
-    //}
-
     return {
       state,
       clearStore,
-      //clearChangePassForm,
     };
   },
   {

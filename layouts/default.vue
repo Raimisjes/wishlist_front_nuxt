@@ -2,10 +2,10 @@
 
 <template>
   <div class="container">
-    <Snackbar />
-    <PageHeader />
+    <CommonSnackbar />
+    <CommonPageHeader />
     <NuxtPage />
-    <PageFooter />
+    <CommonPageFooter />
   </div>
 </template>
 

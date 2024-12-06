@@ -3,14 +3,14 @@ import { useUserStore } from '~/stores/user';
 
 // @ts-ignore
 export default defineNuxtRouteMiddleware((to, from) => {
-  //unavailable routes for logged users
+  //unavailable routes for authenticated users
   if (
     (to.path === '/login' || to.path === '/registration') &&
     useUserStore().state.authenticated
   ) {
     return abortNavigation();
   }
-
+  //registration success page routeguard
   if (to.path === '/registration/success' && from.path !== '/registration') {
     return abortNavigation();
   }
