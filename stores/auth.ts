@@ -109,6 +109,26 @@ export const useAuthStore = defineStore(
       }
     }
 
+    async function refreshToken({ response }: { response: any }) {
+      if (response.status === 401 && response._data.data == 'internal004') {
+        try {
+          const response = await $fetch<any>(
+            `${config.public.API_URL}/user/refresh`,
+            {
+              method: 'post',
+              timeout: 10000,
+              credentials: 'include',
+            },
+          );
+          useUserStore().state.accessToken = response.data.accessToken;
+          return true;
+        } catch (error) {
+          await useAuthStore().logout();
+        }
+      }
+      return false;
+    }
+
     function clearStore() {
       Object.assign(state, getInitialState());
     }
@@ -127,6 +147,7 @@ export const useAuthStore = defineStore(
       state,
       login,
       logout,
+      refreshToken,
       clearStore,
       clearForm,
     };
