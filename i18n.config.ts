@@ -10,7 +10,7 @@ export default {
           settings: 'Settings',
         },
         snackbar: {
-          logout: 'Successfully logged out.',
+          logout: 'You have been logged out.',
         },
       },
       pages: {
@@ -47,6 +47,7 @@ export default {
           instagramLink: 'Instagram profile link',
           yotubeLink: 'Youtube profile link',
           tiktokLink: 'Tik Tok profile link',
+          changePassSuccess: 'The password has been changed successfully.'
         },
       },
       words: {
@@ -66,7 +67,7 @@ export default {
         internal001: 'Unexpected error. Try again later.',
         internal002: 'Database error.',
         internal003: 'Limited access.',
-        internal004: 'Unauthorized.',
+        internal004: 'Unauthenticated.',
         internal005: 'Bad login credentials.',
         validation001: 'Username is mandatory',
         validation002: 'Username is taken',
@@ -102,6 +103,7 @@ export default {
         // validation032: 'Nenurodytas norų sąrašo savininkas',
         validation033: 'Field is required',
         validation034: 'New password should be equal in both fields.',
+        validation035: 'Incorrect current password.',
       },
     },
   },

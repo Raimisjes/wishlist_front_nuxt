@@ -1,6 +1,9 @@
 <script lang="ts" setup>
 import { useUIStore } from '@/stores/ui';
 import { storeToRefs } from 'pinia';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 const uiStore = useUIStore();
 const { state: uiState } = storeToRefs(uiStore);
