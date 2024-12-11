@@ -55,7 +55,7 @@ export const useUserSettingsStore = defineStore(
       try {
         let refreshTokenSuccess: boolean;
 
-        const response = await $fetch<any>(
+        const response = await $fetch<Promise<any>>(
           `${config.public.API_URL}/user/edit/password`,
           {
             method: 'post',

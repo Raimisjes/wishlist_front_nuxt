@@ -3,6 +3,7 @@ import { useI18n } from 'vue-i18n';
 import { useTemplateRef, onUnmounted } from 'vue';
 import { useHomepageStore } from '@/stores/homepage';
 import { useRegistrationStore } from '@/stores/registration';
+import { useUserStore } from '@/stores/user';
 import { useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
 
@@ -11,6 +12,7 @@ const { t } = useI18n();
 
 const homepageStore = useHomepageStore();
 const registrationStore = useRegistrationStore();
+const userStore = useUserStore();
 
 const { state: homepageState } = storeToRefs(homepageStore);
 
@@ -51,42 +53,48 @@ onUnmounted(() => {
   <main>
     <div class="left-side">
       <h1 v-html="$t('pages.index.slogan')"></h1>
-      <v-form @submit.prevent="submitForm()" ref="usernameCheckFormEl">
-        <v-text-field
-          v-model="homepageState.usernameCheck.form.username"
-          @input="onInputUsername()"
-          @click:append-inner="submitForm()"
-          :loading="homepageState.usernameCheck.form.isLoading"
-          :disabled="homepageState.usernameCheck.form.isLoading"
-          :prefix="$t('pages.index.usernameCheckPrefix')"
-          :error-messages="
-            homepageState.usernameCheck.form.error != ''
-              ? $t(homepageState.usernameCheck.form.error)
-              : ''
-          "
-          :placeholder="$t('pages.index.usernameCheckPlaceholder')"
-          :rules="[usernameCheck.rules.minLength, usernameCheck.rules.match]"
-          variant="underlined"
-          color="primary"
-          theme="default"
-          append-inner-icon="mdi-magnify"
-        ></v-text-field>
-        <Transition name="fade">
-          <div
-            class="button-holder"
-            v-if="homepageState.usernameCheck.usernameExists == false"
-            mode="in-out"
-          >
-            <v-btn
-              color="primary"
-              @click="goRegister()"
-              size="small"
-              :title="$t('words.signup')"
-              >{{ $t('words.signup') }}</v-btn
+      <Transition name="fade">
+        <v-form
+          @submit.prevent="submitForm()"
+          ref="usernameCheckFormEl"
+          v-if="!userStore.state.authenticated"
+        >
+          <v-text-field
+            v-model="homepageState.usernameCheck.form.username"
+            @input="onInputUsername()"
+            @click:append-inner="submitForm()"
+            :loading="homepageState.usernameCheck.form.isLoading"
+            :disabled="homepageState.usernameCheck.form.isLoading"
+            :prefix="$t('pages.index.usernameCheckPrefix')"
+            :error-messages="
+              homepageState.usernameCheck.form.error != ''
+                ? $t(homepageState.usernameCheck.form.error)
+                : ''
+            "
+            :placeholder="$t('pages.index.usernameCheckPlaceholder')"
+            :rules="[usernameCheck.rules.minLength, usernameCheck.rules.match]"
+            variant="underlined"
+            color="primary"
+            theme="default"
+            append-inner-icon="mdi-magnify"
+          ></v-text-field>
+          <Transition name="fade">
+            <div
+              class="button-holder"
+              v-if="homepageState.usernameCheck.usernameExists == false"
+              mode="in-out"
             >
-          </div>
-        </Transition>
-      </v-form>
+              <v-btn
+                color="primary"
+                @click="goRegister()"
+                size="small"
+                :title="$t('words.signup')"
+                >{{ $t('words.signup') }}</v-btn
+              >
+            </div>
+          </Transition>
+        </v-form>
+      </Transition>
     </div>
     <!-- <div class="hero-image-holder"></div> -->
   </main>
