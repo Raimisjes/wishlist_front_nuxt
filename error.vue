@@ -10,7 +10,7 @@ function goBack(): void {
 
 <template>
   <div class="container">
-    <PageHeader />
+    <CommonPageHeader />
     <main>
       <div>
         <v-icon color="primary">mdi-emoticon-cry-outline</v-icon>
@@ -20,7 +20,7 @@ function goBack(): void {
         }}</v-btn>
       </div>
     </main>
-    <PageFooter />
+    <CommonPageFooter />
   </div>
 </template>
 
