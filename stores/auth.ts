@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import { reactive } from 'vue';
+import _ from 'lodash';
 import { useRuntimeConfig } from 'nuxt/app';
 import { useUserStore } from '@/stores/user';
 import { useRouter } from 'vue-router';
@@ -12,16 +13,6 @@ interface AuthState {
     hidePassword: boolean;
     isLoading: boolean;
     error: string;
-  };
-}
-
-interface LoginApiResponse {
-  status: boolean;
-  data: {
-    username: string;
-    accessToken: string;
-    email: string;
-    role: string;
   };
 }
 
@@ -52,7 +43,7 @@ export const useAuthStore = defineStore(
       state.form.error = '';
 
       try {
-        const response = await $fetch<LoginApiResponse>(
+        const response = await $fetch<Promise<any>>(
           `${config.public.API_URL}/user/login`,
           {
             method: 'post',
@@ -66,10 +57,7 @@ export const useAuthStore = defineStore(
         );
 
         if (response.status) {
-          useUserStore().state.username = response.data.username;
-          useUserStore().state.email = response.data.email;
-          useUserStore().state.accessToken = response.data.accessToken;
-          useUserStore().state.role = response.data.role;
+          _.merge(useUserStore().state, response.data);
           useUserStore().state.authenticated = true;
           router.push('/');
           return;
