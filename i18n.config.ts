@@ -43,11 +43,9 @@ export default {
           newPassword: 'New password',
           newRepeatedPassword: 'Repeat new password',
           socialNetworks: 'Social networks',
-          facebookLink: 'Facebook profile link',
-          instagramLink: 'Instagram profile link',
-          yotubeLink: 'Youtube profile link',
-          tiktokLink: 'Tik Tok profile link',
-          changePassSuccess: 'The password has been changed successfully.'
+          changePassSuccess: 'The password has been changed successfully.',
+          enablePublicView: 'Enable view on my page',
+          editSocialNetworkSuccess: 'Social network link added successfully.',
         },
       },
       words: {
@@ -56,6 +54,8 @@ export default {
         back: 'Back',
         homepage: 'Homepage',
         change: 'Change',
+        save: 'Save',
+        link: 'link',
       },
       errors: {
         homepage: {
@@ -105,6 +105,26 @@ export default {
         validation034: 'New password should be equal in both fields.',
         validation035: 'Incorrect current password.',
       },
+      socialNetworks: {
+        facebook: 'Facebook',
+        instagram: 'Instagram',
+        youtube: 'Youtube',
+        tiktok: 'Tik Tok',
+      },
+      phrases: {
+        addSocialNetworkTitle: ({ named }) =>
+          `Add your ${named('network')} link`,
+        socialNetworkURLPlaceholder: ({ named }) =>
+          `${named('network')} profile link`,
+      },
+      $vuetify: {
+        input: {
+          appendAction: 'Append Action',
+        },
+      },
     },
+  },
+  missing: (locale, key) => {
+    console.warn(`Missing translation key: ${key} in locale: ${locale}`);
   },
 };

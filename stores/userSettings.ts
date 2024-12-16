@@ -18,6 +18,14 @@ interface UserSettingsState {
       error: string;
     };
   };
+  socialNetworks: {
+    form: {
+      url: string;
+      active: boolean;
+      isLoading: boolean;
+      error: string;
+    };
+  };
 }
 
 function getInitialState(): UserSettingsState {
@@ -30,6 +38,14 @@ function getInitialState(): UserSettingsState {
         hideNewPassword: true,
         newRepeated: '',
         hideRepeatedPassword: true,
+        isLoading: false,
+        error: '',
+      },
+    },
+    socialNetworks: {
+      form: {
+        url: '',
+        active: false,
         isLoading: false,
         error: '',
       },
@@ -66,10 +82,10 @@ export const useUserSettingsStore = defineStore(
             async onRequest({ options }) {
               options.body = {
                 username: useUserStore().state.username,
+                accessToken: useUserStore().state.accessToken,
                 password: state.changePassword.form.currentPassword,
                 newPassword: state.changePassword.form.newPassword,
                 repeatedNewPass: state.changePassword.form.newRepeated,
-                accessToken: useUserStore().state.accessToken,
               };
             },
             async onResponseError({ options, response }) {
@@ -100,6 +116,73 @@ export const useUserSettingsStore = defineStore(
       return passChangeSuccess;
     }
 
+    async function editSocialNetwork(socialNetworkKey: string) {
+      if (state.socialNetworks.form.isLoading) return;
+
+      state.socialNetworks.form.isLoading = true;
+      state.socialNetworks.form.error = '';
+
+      let editSocialNetworkSuccess = false;
+
+      try {
+        let refreshTokenSuccess: boolean;
+
+        let socialNetworkData: any = {};
+        socialNetworkData[socialNetworkKey] = {
+          url: state.socialNetworks.form.url,
+          active: state.socialNetworks.form.active,
+        };
+
+        const response = await $fetch<Promise<any>>(
+          `${config.public.API_URL}/user/edit`,
+          {
+            method: 'post',
+            timeout: 10000,
+            retryStatusCodes: [401],
+            retryDelay: 500,
+            retry: 0,
+            async onRequest({ options }) {
+              options.body = {
+                username: useUserStore().state.username,
+                accessToken: useUserStore().state.accessToken,
+                socialNetworks: socialNetworkData,
+              };
+            },
+            async onResponseError({ options, response }) {
+              refreshTokenSuccess = await useAuthStore().refreshToken({
+                options,
+                response,
+              });
+              if (refreshTokenSuccess) {
+                options.retry = 1;
+              }
+            },
+          },
+        );
+
+        editSocialNetworkSuccess = response.status;
+        useUIStore().showSnackbar(
+          'pages.settings.editSocialNetworkSuccess',
+          7000,
+        );
+        useUserStore().state.socialNetworks[socialNetworkKey].url =
+          state.socialNetworks.form.url;
+        useUserStore().state.socialNetworks[socialNetworkKey].active =
+          state.socialNetworks.form.active;
+        clearSocialNetworksForm();
+      } catch (error) {
+        let errorMessage = '';
+        !error.data
+          ? (errorMessage = 'errors.internal001')
+          : (errorMessage = `errors.${error.data.data}`);
+
+        state.socialNetworks.form.error = errorMessage;
+      }
+
+      state.socialNetworks.form.isLoading = false;
+      return editSocialNetworkSuccess;
+    }
+
     function clearStore() {
       Object.assign(state, getInitialState());
     }
@@ -108,11 +191,17 @@ export const useUserSettingsStore = defineStore(
       Object.assign(state.changePassword, getInitialState().changePassword);
     }
 
+    function clearSocialNetworksForm() {
+      Object.assign(state.socialNetworks, getInitialState().socialNetworks);
+    }
+
     return {
       state,
       changePassword,
       clearStore,
       clearChangePasswordForm,
+      editSocialNetwork,
+      clearSocialNetworksForm,
     };
   },
   {
