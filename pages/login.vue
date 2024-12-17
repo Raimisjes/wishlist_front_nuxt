@@ -84,9 +84,30 @@ onUnmounted(() => {
         <div class="form-error-holder" v-if="authState.form.error">
           {{ $t(authState.form.error) }}
         </div>
+        <div class="password-reset">
+          <NuxtLink
+            to="/resetpassword"
+            :aria-label="$t('pages.login.forgotPassword')"
+            >{{ $t('pages.login.forgotPassword') }}</NuxtLink
+          >
+        </div>
       </v-form>
     </div>
   </main>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.password-reset {
+  text-align: center;
+  margin: 15px 0 0 0;
+
+  a {
+    font-size: 13px;
+    color: $text_color_light;
+
+    &:hover {
+      color: $primary;
+    }
+  }
+}
+</style>

@@ -47,6 +47,15 @@ export default {
           enablePublicView: 'Enable view on my page',
           editSocialNetworkSuccess: 'Social network link added successfully.',
         },
+        login: {
+          forgotPassword: 'Forgot password?',
+        },
+        resetPassword: {
+          title: 'Reset password',
+          explainText:
+            'If you signed up with an email and password, reset your password below.',
+          buttonTitle: 'Reset password',
+        },
       },
       words: {
         login: 'Log in',
@@ -56,8 +65,10 @@ export default {
         change: 'Change',
         save: 'Save',
         link: 'link',
+        email: 'E-mail',
       },
       errors: {
+        undefined: 'Unexpected error. Try again later.',
         homepage: {
           usernameCheck: {
             minLength: 'Username too short',

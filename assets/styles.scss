@@ -10,36 +10,51 @@ html {
 }
 
 .form-holder {
-    background-color: #f8fffd;
-    border-radius: 20px;
-    padding: 40px;
-    box-shadow:
-      rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
-      rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
-    max-width: 400px;
-    width: 100%;
-    margin: auto;
-  
-    h1 {
-      text-align: center;
-      margin: 0 0 20px 0;
-    }
-    .input-holder {
-      margin: 0 0 5px;
-    }
-    .button-holder {
-      margin: 15px 0 0 0;
-    }
-    .form-error-holder {
-      color: #d12323;
-      font-size: 13px;
-      margin:  15px 0 0 0;
+  background-color: #f8fffd;
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow:
+    rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+    rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+  max-width: 400px;
+  width: 100%;
+  margin: auto;
+
+  h1 {
+    text-align: center;
+    margin: 0 0 20px 0;
+
+    + p {
+      font-size: 14px;
+      margin: 0 0 10px 0;
     }
   }
-  .form-box {
-    .form-error-holder {
-      color: #d12323;
-      font-size: 13px;
-      margin:  15px 0 0 0;
-    }
+  .input-holder {
+    margin: 0 0 5px;
   }
+  .button-holder {
+    margin: 15px 0 0 0;
+  }
+  .form-error-holder {
+    color: #d12323;
+    font-size: 13px;
+    margin:  15px 0 0 0;
+  }
+  @media screen and (max-width: 450px) {
+    padding: 40px 20px;
+  }
+}
+.form-box {
+  .form-error-holder {
+    color: #d12323;
+    font-size: 13px;
+    margin:  15px 0 0 0;
+  }
+}
+
+a {
+  color: $primary;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease-in-out;
+}
