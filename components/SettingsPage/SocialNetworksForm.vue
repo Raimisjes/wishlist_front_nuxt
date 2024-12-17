@@ -29,7 +29,7 @@ const socialNetworkFormEl = useTemplateRef('socialNetworkFormEl');
 const validationRules = {
   urlRules: [
     (v: string) =>
-      /^(?:(?:https?|ftp):\/\/)?(?:www\.)?[a-z0-9-]+(?:\.[a-z0-9-]+)+[^\s]*$/i.test(
+      /^(?:(?:(?:https?|ftp):\/\/)?(?:www\.)?[a-z0-9-]+(?:\.[a-z0-9-]+)+[^\s]*)?$/i.test(
         v,
       ) || t('errors.validation011'),
   ],
