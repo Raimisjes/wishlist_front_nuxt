@@ -2,7 +2,7 @@
 import { useUserSettingsStore } from '@/stores/userSettings';
 import { useUserStore } from '@/stores/user';
 import { storeToRefs } from 'pinia';
-import { reactive, ref, watch } from 'vue';
+import { reactive, ref, watch, useTemplateRef } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
@@ -24,6 +24,17 @@ const { state: userSettingsState } = storeToRefs(userSettingsStore);
 const userStore = useUserStore();
 const { state: userState } = storeToRefs(userStore);
 
+const socialNetworkFormEl = useTemplateRef('socialNetworkFormEl');
+
+const validationRules = {
+  urlRules: [
+    (v: string) =>
+      /^(?:(?:https?|ftp):\/\/)?(?:www\.)?[a-z0-9-]+(?:\.[a-z0-9-]+)+[^\s]*$/i.test(
+        v,
+      ) || t('errors.validation011'),
+  ],
+};
+
 function initialSelectedNetwork(): SocialNetwork {
   return {
     url: '',
@@ -39,6 +50,8 @@ function selectSocialNetwork(network: SocialNetwork) {
 }
 
 async function saveSocialNetwork() {
+  let validateStatus = await socialNetworkFormEl.value?.validate();
+  if (!validateStatus || !validateStatus.valid) return;
   const editSocialNetworkSuccess = await userSettingsStore.editSocialNetwork(
     selectedSocialNetwork.key,
   );
@@ -66,6 +79,7 @@ watch(viewSocialsDialog, (newValue) => {
       @click="selectSocialNetwork(network)"
       v-for="network of userState.socialNetworks"
       :title="t(`socialNetworks.${network.key}`)"
+      :class="{ enabled: network.active, disabled: !network.active }"
       >{{ network.icon }}</v-icon
     >
   </div>
@@ -82,48 +96,51 @@ watch(viewSocialsDialog, (newValue) => {
           })
         }}
       </h3>
-      <div class="form-box">
-        <div class="input-holder">
-          <v-text-field
-            v-model="userSettingsState.socialNetworks.form.url"
-            :label="
-              $t('phrases.socialNetworkURLPlaceholder', {
-                network: $t(`socialNetworks.${selectedSocialNetwork.key}`),
-              })
-            "
-            :prepend-icon="selectedSocialNetwork.icon"
-            hide-details="auto"
-            validate-on="blur"
-            variant="underlined"
-            color="primary"
-            theme="default"
-            type="text"
-          ></v-text-field>
-          <v-switch
-            v-model="userSettingsState.socialNetworks.form.active"
-            color="primary"
-            hide-details
-            :label="$t('pages.settings.enablePublicView')"
-          ></v-switch>
-        </div>
-        <div class="button-holder">
-          <v-btn
-            :disabled="userSettingsState.socialNetworks.form.isLoading"
-            :loading="userSettingsState.socialNetworks.form.isLoading"
-            color="primary"
-            :title="$t('words.save')"
-            @click="saveSocialNetwork()"
-            >{{ $t('words.save') }}</v-btn
+      <v-form @submit.prevent="saveSocialNetwork()" ref="socialNetworkFormEl">
+        <div class="form-box">
+          <div class="input-holder">
+            <v-text-field
+              v-model="userSettingsState.socialNetworks.form.url"
+              :label="
+                $t('phrases.socialNetworkURLPlaceholder', {
+                  network: $t(`socialNetworks.${selectedSocialNetwork.key}`),
+                })
+              "
+              :prepend-icon="selectedSocialNetwork.icon"
+              :rules="validationRules.urlRules"
+              hide-details="auto"
+              validate-on="blur"
+              variant="underlined"
+              color="primary"
+              theme="default"
+              type="text"
+            ></v-text-field>
+            <v-switch
+              v-model="userSettingsState.socialNetworks.form.active"
+              color="primary"
+              hide-details
+              :label="$t('pages.settings.enablePublicView')"
+            ></v-switch>
+          </div>
+          <div class="button-holder">
+            <v-btn
+              :disabled="userSettingsState.socialNetworks.form.isLoading"
+              :loading="userSettingsState.socialNetworks.form.isLoading"
+              color="primary"
+              :title="$t('words.save')"
+              type="submit"
+              >{{ $t('words.save') }}</v-btn
+            >
+            <v-btn text="Close" @click="viewSocialsDialog = false"></v-btn>
+          </div>
+          <div
+            class="form-error-holder"
+            v-if="userSettingsState.socialNetworks.form.error"
           >
-          <v-btn text="Close" @click="viewSocialsDialog = false"></v-btn>
+            {{ $t(userSettingsState.socialNetworks.form.error) }}
+          </div>
         </div>
-        <div
-          class="form-error-holder"
-          v-if="userSettingsState.socialNetworks.form.error"
-        >
-          {{ $t(userSettingsState.socialNetworks.form.error) }}
-        </div>
-      </div>
+      </v-form>
     </v-card>
   </v-dialog>
 </template>
@@ -137,6 +154,13 @@ watch(viewSocialsDialog, (newValue) => {
 
   > .v-icon {
     margin-right: 8px;
+
+    &.enabled {
+      color: #000;
+    }
+    &.disabled {
+      color: rgba(0, 0, 0, 0.4);
+    }
   }
 }
 .socials-dialog {

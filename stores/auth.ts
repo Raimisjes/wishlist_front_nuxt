@@ -5,6 +5,7 @@ import { useRuntimeConfig } from 'nuxt/app';
 import { useUserStore } from '@/stores/user';
 import { useRouter } from 'vue-router';
 import { useUIStore } from './ui';
+import { useUserSettingsStore } from './userSettings';
 
 interface AuthState {
   form: {
@@ -86,6 +87,7 @@ export const useAuthStore = defineStore(
 
         if (response.status) {
           useUserStore().clearStore();
+          useUserSettingsStore().clearStore();
           useUIStore().showSnackbar('components.snackbar.logout', 4000);
           router.push('/');
         }

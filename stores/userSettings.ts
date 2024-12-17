@@ -4,6 +4,7 @@ import { useRuntimeConfig } from 'nuxt/app';
 import { useUserStore } from '@/stores/user';
 import { useAuthStore } from '@/stores/auth';
 import { useUIStore } from '@/stores/ui';
+import DOMPurify from 'dompurify';
 
 interface UserSettingsState {
   changePassword: {
@@ -129,7 +130,7 @@ export const useUserSettingsStore = defineStore(
 
         let socialNetworkData: any = {};
         socialNetworkData[socialNetworkKey] = {
-          url: state.socialNetworks.form.url,
+          url: DOMPurify.sanitize(state.socialNetworks.form.url),
           active: state.socialNetworks.form.active,
         };
 

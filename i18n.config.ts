@@ -79,7 +79,7 @@ export default {
         validation008: 'Bad password format',
         validation009: 'You should accept with our terms and conditions',
         validation010: 'You should accept with our terms and conditions',
-        // validation011: 'Neteisinga nuoroda',
+        validation011: 'Incorrect URL format.',
         // validation012: 'Per daug duomenų',
         // validation013: 'Pavadinimas privalomas',
         // validation014: 'Pavadinimas per ilgas',
