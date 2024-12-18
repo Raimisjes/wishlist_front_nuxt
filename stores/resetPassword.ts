@@ -2,7 +2,6 @@ import { defineStore } from 'pinia';
 import { reactive } from 'vue';
 import { useRuntimeConfig } from 'nuxt/app';
 import { useRouter } from 'vue-router';
-//import { useUIStore } from './ui';
 
 interface ResetPasswordState {
   form: {
@@ -25,7 +24,7 @@ function getInitialState(): ResetPasswordState {
 export const useResetPasswordStore = defineStore(
   'resetPassword',
   () => {
-    //const router = useRouter();
+    const router = useRouter();
     const config = useRuntimeConfig();
 
     const state = reactive<ResetPasswordState>(getInitialState());
@@ -38,7 +37,7 @@ export const useResetPasswordStore = defineStore(
 
       try {
         const response = await $fetch<Promise<any>>(
-          `${config.public.API_URL}/resetpassword/init`,
+          `${config.public.API_URL}/user/resetpassword/init`,
           {
             method: 'post',
             body: {
@@ -49,9 +48,8 @@ export const useResetPasswordStore = defineStore(
         );
 
         if (response.status) {
-          // useUIStore().showSnackbar('components.snackbar.logout', 4000);
-          // router.push('/');
-          // return;
+          router.push('/resetpassword/success');
+          return;
         }
       } catch (error) {
         let errorMessage = '';

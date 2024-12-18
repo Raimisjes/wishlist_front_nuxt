@@ -28,7 +28,7 @@ export default {
           usernameHint: 'Available symbols: letters A-Z, numbers 0-9',
           password: 'Password',
           passwordHint:
-            'Password should include at least one capital letter and at least on number.',
+            'Password should include at least one capital letter and at least one number.',
           conditionsLabel1:
             "By selecting I confirm that I've read and accept gftme.one",
           conditionsLabel2: 'Terms & Conditions',
@@ -56,6 +56,9 @@ export default {
             'If you signed up with an email and password, reset your password below.',
           buttonTitle: 'Reset password',
         },
+        resetPasswordSuccess: {
+          title: 'You’ve received an email with password reset instructions.',
+        },
       },
       words: {
         login: 'Log in',
@@ -80,6 +83,8 @@ export default {
         internal003: 'Limited access.',
         internal004: 'Unauthenticated.',
         internal005: 'Bad login credentials.',
+        internal006: 'Unauthenticated.',
+        internal007: 'Unexpected error. Try again later.',
         validation001: 'Username is mandatory',
         validation002: 'Username is taken',
         validation003: 'Wrong username format.',
@@ -115,6 +120,9 @@ export default {
         validation033: 'Field is required',
         validation034: 'New password should be equal in both fields.',
         validation035: 'Incorrect current password.',
+        validation036: `The provided email address does not match any existing user account.`,
+        validation037:
+          'Too much password reset attempts. Please, try again later.',
       },
       socialNetworks: {
         facebook: 'Facebook',

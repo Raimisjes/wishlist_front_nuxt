@@ -4,6 +4,11 @@ import { useTemplateRef, onUnmounted } from 'vue';
 import { useResetPasswordStore } from '@/stores/resetPassword';
 import { storeToRefs } from 'pinia';
 
+// @ts-ignore
+definePageMeta({
+  middleware: 'route-guard',
+});
+
 const { t } = useI18n();
 
 const resetPassStore = useResetPasswordStore();
