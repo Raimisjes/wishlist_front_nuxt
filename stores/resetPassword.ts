@@ -49,7 +49,6 @@ export const useResetPasswordStore = defineStore(
 
         if (response.status) {
           router.push('/resetpassword/success');
-          return;
         }
       } catch (error) {
         let errorMessage = '';

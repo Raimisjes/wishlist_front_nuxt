@@ -59,6 +59,15 @@ export default {
         resetPasswordSuccess: {
           title: 'You’ve received an email with password reset instructions.',
         },
+        changePassword: {
+          title: 'Create new password',
+          newPassword: 'New password',
+          newRepeatedPassword: 'Repeat new password',
+          buttonTitle: 'Create new password',
+        },
+        changePasswordSuccess: {
+          title: 'The password has been changed successfully.',
+        },
       },
       words: {
         login: 'Log in',
