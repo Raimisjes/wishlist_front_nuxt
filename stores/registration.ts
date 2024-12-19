@@ -64,7 +64,6 @@ export const useRegistrationStore = defineStore(
 
         if (response.status) {
           router.push('/registration/success');
-          return;
         }
       } catch (error) {
         let errorMessage = '';
