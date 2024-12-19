@@ -5,6 +5,11 @@ import { storeToRefs } from 'pinia';
 import { ref, onUnmounted, onMounted, useTemplateRef } from 'vue';
 import { useI18n } from 'vue-i18n';
 
+// @ts-ignore
+definePageMeta({
+  middleware: 'route-guard',
+});
+
 const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();

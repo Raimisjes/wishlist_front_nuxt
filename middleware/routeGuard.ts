@@ -5,23 +5,35 @@ import { useUserStore } from '~/stores/user';
 export default defineNuxtRouteMiddleware((to, from) => {
   //unavailable routes for authenticated users
   if (
-    (to.path === '/login' ||
-      to.path === '/registration' ||
-      to.path === '/resetpassword') &&
+    (to.fullPath.includes('/login') ||
+      to.fullPath.includes('/registration') ||
+      to.fullPath.includes('/resetpassword')) &&
     useUserStore().state.authenticated
   ) {
     return abortNavigation();
   }
+
   //registration success page routeguard
-  if (to.path === '/registration/success' && from.path !== '/registration') {
-    return abortNavigation();
-  }
-  //resetpassword success page routeguard
-  if (to.path === '/resetpassword/success' && from.path !== '/resetpassword') {
+  if (
+    to.fullPath.includes('/registration/success') &&
+    from.path !== '/registration'
+  ) {
     return abortNavigation();
   }
 
-  if (to.path === '/settings' && !useUserStore().state.authenticated) {
+  //resetpassword success page routeguard
+  if (
+    (to.fullPath.includes('/resetpassword/success') ||
+      to.fullPath.includes('/resetpassword/changesuccess')) &&
+    !from.fullPath.includes('/resetpassword')
+  ) {
+    return abortNavigation();
+  }
+
+  if (
+    to.fullPath.includes('/settings') &&
+    !useUserStore().state.authenticated
+  ) {
     return abortNavigation();
   }
 });

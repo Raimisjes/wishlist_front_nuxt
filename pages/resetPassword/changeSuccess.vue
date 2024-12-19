@@ -1,6 +1,11 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
 
+// @ts-ignore
+definePageMeta({
+  middleware: 'route-guard',
+});
+
 const router = useRouter();
 
 function toLoginPage(): void {
