@@ -8,6 +8,13 @@ body {
     .v-input__control{
       max-height: 48px;
     }
+    &.v-textarea {
+      margin: 0 0 15px 0;
+
+      .v-input__control{
+        max-height: none;
+      }
+    }
     .v-input__append {
       padding-top: 15px;
     }

@@ -31,7 +31,8 @@ export default defineNuxtRouteMiddleware((to, from) => {
   }
 
   if (
-    to.fullPath.includes('/settings') &&
+    (to.fullPath.includes('/settings') ||
+      to.fullPath.includes('/mywishlist')) &&
     !useUserStore().state.authenticated
   ) {
     return abortNavigation();
