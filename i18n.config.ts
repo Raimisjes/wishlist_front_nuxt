@@ -13,6 +13,9 @@ export default {
         snackbar: {
           logout: 'You have been logged out.',
         },
+        fileUpload: {
+          uploadText: 'Drop image here or click to upload',
+        },
       },
       pages: {
         index: {
@@ -71,10 +74,10 @@ export default {
         },
         myWishlist: {
           title: 'Wishlist',
-          addNewWish: 'Add gift',
+          addNewWish: 'Add wish',
           enterURL: 'Insert URL from the web',
-          wishTitle: 'Gift title',
-          wishDescription: 'Gift description',
+          giftTitle: 'Gift title',
+          giftDescription: 'Gift description',
         },
       },
       words: {
