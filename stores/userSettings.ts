@@ -83,10 +83,14 @@ export const useUserSettingsStore = defineStore(
             async onRequest({ options }) {
               options.body = {
                 username: useUserStore().state.username,
-                accessToken: useUserStore().state.accessToken,
                 password: state.changePassword.form.currentPassword,
                 newPassword: state.changePassword.form.newPassword,
                 repeatedNewPass: state.changePassword.form.newRepeated,
+              };
+              options.headers = {
+                ...options.headers,
+                // @ts-ignore:next-line
+                Authorization: `Bearer ${useUserStore().state.accessToken}`,
               };
             },
             async onResponseError({ options, response }) {
@@ -145,8 +149,12 @@ export const useUserSettingsStore = defineStore(
             async onRequest({ options }) {
               options.body = {
                 username: useUserStore().state.username,
-                accessToken: useUserStore().state.accessToken,
                 socialNetworks: socialNetworkData,
+              };
+              options.headers = {
+                ...options.headers,
+                // @ts-ignore:next-line
+                Authorization: `Bearer ${useUserStore().state.accessToken}`,
               };
             },
             async onResponseError({ options, response }) {
