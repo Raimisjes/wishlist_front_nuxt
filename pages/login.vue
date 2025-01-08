@@ -25,7 +25,7 @@ const validationRules = {
 async function submitForm() {
   let validateStatus = await loginFormEl.value?.validate();
   if (!validateStatus || !validateStatus.valid) return;
-  authStore.login();
+  await authStore.login();
 }
 
 onUnmounted(() => {
