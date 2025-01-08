@@ -19,18 +19,19 @@ const handleFileSelect = (event: Event) => {
 
   const valid = validateFile(selectedFile);
   if (valid) {
-    createPreview(selectedFile);
+    emit('setImage', selectedFile);
   }
   target.value = '';
 };
 
 const handleDrop = (event: DragEvent) => {
   isDragging.value = false;
+  const selectedFile = event.dataTransfer?.files[0];
 
-  if (event.dataTransfer?.files) {
-    const valid = validateFile(event.dataTransfer?.files[0]);
+  if (selectedFile) {
+    const valid = validateFile(selectedFile);
     if (valid) {
-      createPreview(event.dataTransfer?.files[0]);
+      emit('setImage', selectedFile);
     }
   }
 };
@@ -54,20 +55,6 @@ const validateFile = (file: File): boolean => {
 };
 
 const emit = defineEmits(['setImage']);
-
-const createPreview = (file: File) => {
-  const reader = new FileReader();
-  reader.onload = (e) => {
-    if (e.target?.result) {
-      const image = {
-        type: file.type,
-        url: e.target.result,
-      };
-      emit('setImage', image);
-    }
-  };
-  reader.readAsDataURL(file);
-};
 </script>
 
 <template>

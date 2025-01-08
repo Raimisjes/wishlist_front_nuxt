@@ -78,6 +78,7 @@ export default {
           enterURL: 'Insert URL from the web',
           giftTitle: 'Gift title',
           giftDescription: 'Gift description',
+          addWishSuccess: 'Wish has been created successully.',
         },
       },
       words: {

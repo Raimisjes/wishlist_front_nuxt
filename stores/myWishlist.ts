@@ -3,6 +3,7 @@ import { reactive } from 'vue';
 import { useRuntimeConfig } from 'nuxt/app';
 import { useUserStore } from '@/stores/user';
 import { useAuthStore } from '@/stores/auth';
+import { useUIStore } from '@/stores/ui';
 
 interface MyWishlistState {
   checkURLForm: {
@@ -13,7 +14,9 @@ interface MyWishlistState {
   form: {
     title: string;
     description: string;
-    image: {};
+    image: {
+      url: string;
+    };
     isLoading: boolean;
     error: string;
     show: boolean;
@@ -25,7 +28,9 @@ interface WishlistItem {
   id: string;
   title: string;
   description: string;
-  image: {};
+  image: {
+    url: string;
+  };
 }
 
 function getInitialState(): MyWishlistState {
@@ -38,7 +43,9 @@ function getInitialState(): MyWishlistState {
     form: {
       title: '',
       description: '',
-      image: {},
+      image: {
+        url: '',
+      },
       isLoading: false,
       error: '',
       show: false,
@@ -58,6 +65,7 @@ export const useMyWishlistStore = defineStore(
       if (state.checkURLForm.isLoading) return;
 
       state.checkURLForm.isLoading = true;
+      state.form.error = '';
       state.checkURLForm.error = '';
 
       let fetchSuccess = false;
@@ -76,7 +84,11 @@ export const useMyWishlistStore = defineStore(
             async onRequest({ options }) {
               options.body = {
                 url: state.checkURLForm.url,
-                accessToken: useUserStore().state.accessToken,
+              };
+              options.headers = {
+                ...options.headers,
+                // @ts-ignore:next-line
+                Authorization: `Bearer ${useUserStore().state.accessToken}`,
               };
             },
             async onResponseError({ options, response }) {
@@ -107,6 +119,60 @@ export const useMyWishlistStore = defineStore(
       return fetchSuccess;
     }
 
+    async function addWish(formData: FormData) {
+      if (state.form.isLoading) return;
+
+      state.form.isLoading = true;
+      state.form.error = '';
+
+      let addWishSuccess = false;
+
+      try {
+        let refreshTokenSuccess: boolean;
+
+        const response = await $fetch<Promise<any>>(
+          `${config.public.API_URL}/listing/add`,
+          {
+            method: 'post',
+            timeout: 10000,
+            retryStatusCodes: [401],
+            retryDelay: 500,
+            retry: 0,
+            async onRequest({ options }) {
+              options.body = formData;
+              options.headers = {
+                ...options.headers,
+                // @ts-ignore:next-line
+                Authorization: `Bearer ${useUserStore().state.accessToken}`,
+              };
+            },
+            async onResponseError({ options, response }) {
+              refreshTokenSuccess = await useAuthStore().refreshToken({
+                options,
+                response,
+              });
+              if (refreshTokenSuccess) {
+                options.retry = 1;
+              }
+            },
+          },
+        );
+
+        addWishSuccess = response.status;
+        useUIStore().showSnackbar('pages.myWishlist.addWishSuccess');
+      } catch (error) {
+        let errorMessage = '';
+        !error.data
+          ? (errorMessage = 'errors.internal001')
+          : (errorMessage = `errors.${error.data.data}`);
+
+        state.form.error = errorMessage;
+      }
+
+      state.form.isLoading = false;
+      return addWishSuccess;
+    }
+
     function clearStore() {
       Object.assign(state, getInitialState());
     }
@@ -122,6 +188,7 @@ export const useMyWishlistStore = defineStore(
     return {
       state,
       checkURL,
+      addWish,
       clearStore,
       clearForm,
       clearCheckURLForm,
