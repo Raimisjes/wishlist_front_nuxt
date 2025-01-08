@@ -93,6 +93,7 @@ export default {
         checkURL: 'Check link',
         image: 'Image',
         close: 'Close',
+        remove: 'Remove',
       },
       errors: {
         undefined: 'Unexpected error. Try again later.',

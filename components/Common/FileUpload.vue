@@ -124,6 +124,9 @@ const createPreview = (file: File) => {
       border-color: $primary;
       background-color: rgba(0, 181, 101, 0.05);
     }
+    p {
+      text-align: center;
+    }
     p,
     .v-icon {
       color: $text_color_light;
