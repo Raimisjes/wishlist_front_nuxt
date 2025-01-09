@@ -8,7 +8,7 @@ export default {
           homepage: 'Homepage',
           logout: 'Log out',
           settings: 'Settings',
-          wishlist: 'Wishlist',
+          wishlists: 'Wishlists',
         },
         snackbar: {
           logout: 'You have been logged out.',
@@ -72,6 +72,13 @@ export default {
         changePasswordSuccess: {
           title: 'The password has been changed successfully.',
         },
+        wishlists: {
+          title: 'Wishlists',
+          addNewWishlist: 'Create wishlist',
+          wishlistTitle: 'Wishlist title',
+          wishlistDescription: 'Wishlist description',
+          addWishlistSuccess: 'Wishlist has been created successully.',
+        },
         myWishlist: {
           title: 'Wishlist',
           addNewWish: 'Add wish',
@@ -95,6 +102,8 @@ export default {
         image: 'Image',
         close: 'Close',
         remove: 'Remove',
+        public: 'Public',
+        private: 'Private',
       },
       errors: {
         undefined: 'Unexpected error. Try again later.',
