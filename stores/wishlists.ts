@@ -68,7 +68,7 @@ export const useWishlistsStore = defineStore(
                 title: state.form.title,
                 description: state.form.description,
                 availabilityStatus: state.form.availabilityStatus,
-                owner: useUserStore().state.username,
+                ownerId: useUserStore().state.id,
               };
               options.headers = {
                 ...options.headers,

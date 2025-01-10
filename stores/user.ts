@@ -2,6 +2,7 @@ import { defineStore } from 'pinia';
 import { reactive } from 'vue';
 
 interface UserState {
+  id: string;
   username: string;
   email: string;
   accessToken: string;
@@ -37,6 +38,7 @@ interface UserState {
 
 function getInitialState(): UserState {
   return {
+    id: '',
     username: '',
     email: '',
     accessToken: '',

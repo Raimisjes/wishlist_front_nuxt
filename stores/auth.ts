@@ -3,6 +3,7 @@ import { reactive } from 'vue';
 import _ from 'lodash';
 import { useRuntimeConfig } from 'nuxt/app';
 import { useUserStore } from '@/stores/user';
+import { useWishlistsStore } from '@/stores/wishlists';
 import { useRouter } from 'vue-router';
 import { useUIStore } from './ui';
 import { useUserSettingsStore } from './userSettings';
@@ -58,7 +59,8 @@ export const useAuthStore = defineStore(
         );
 
         if (response.status) {
-          _.merge(useUserStore().state, response.data);
+          useWishlistsStore().state.wishlists = response.data.wishlists;
+          _.merge(useUserStore().state, response.data.user);
           useUserStore().state.authenticated = true;
           router.push('/');
           return;
@@ -88,6 +90,7 @@ export const useAuthStore = defineStore(
         if (response.status) {
           useUserStore().clearStore();
           useUserSettingsStore().clearStore();
+          useWishlistsStore().clearStore();
           useUIStore().showSnackbar('components.snackbar.logout', 4000);
           router.push('/');
         }
