@@ -51,7 +51,7 @@ export default defineNuxtConfig({
       },
     },
   },
-  css: ['~/assets/styles.scss'],
+  css: ['~/assets/styles/styles.scss'],
   postcss: {
     plugins: {
       autoprefixer: {},
@@ -61,7 +61,7 @@ export default defineNuxtConfig({
     css: {
       preprocessorOptions: {
         scss: {
-          additionalData: `@use "@/assets/_variables.scss" as *;`,
+          additionalData: `@use "@/assets/styles/_variables.scss" as *;`,
           api: 'modern-compiler',
         },
       },
