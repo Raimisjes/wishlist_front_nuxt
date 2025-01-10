@@ -80,70 +80,7 @@ main {
     > h1 {
       margin: 0 0 20px 0;
     }
-    .wishlist-holder {
-      display: block;
-      column-count: 3;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 20px;
-
-      .wishlist-item {
-        max-width: 100%;
-        margin: 0 0 15px 0;
-        display: flex;
-        flex-flow: column nowrap;
-        justify-content: center;
-        align-items: center;
-        overflow: hidden;
-        padding: 10px;
-        border-radius: 8px;
-        box-shadow:
-          rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
-          rgba(60, 64, 67, 0.1) 0px 2px 6px 2px;
-        //border: 1px solid #e2e2e2;
-        cursor: pointer;
-        transition: all 0.2s ease-in-out;
-        background: white;
-        -webkit-transform-origin: 50% 51%;
-
-        &.add-new {
-          height: 150px;
-        }
-        img {
-          max-width: 100%;
-          background-color: #e1e1e1;
-          border-radius: 8px;
-          margin: 0 0 10px;
-        }
-        h5 {
-          color: $text_color_light;
-          font-weight: 500;
-          font-size: 12px;
-        }
-        &:hover {
-          // box-shadow:
-          //   rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
-          //   rgba(60, 64, 67, 0.1) 0px 2px 6px 2px;
-
-          &:nth-child(odd) {
-            transform: rotate(-1deg);
-          }
-          &:nth-child(even) {
-            transform: rotate(1deg);
-          }
-        }
-      }
-    }
     @media screen and (max-width: 600px) {
-      .wishlist-holder {
-        column-count: 2;
-        gap: 10px;
-
-        .wishlist-item {
-          padding: 7px;
-        }
-      }
-    }
-    @media screen and (max-width: 450px) {
       padding: 20px;
     }
   }

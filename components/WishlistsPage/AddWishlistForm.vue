@@ -102,4 +102,21 @@ const closeModal = () => {
   </v-form>
 </template>
 
-<style lang="scss"></style>
+<style lang="scss">
+.wishlist-dialog {
+  > .v-card {
+    padding: 25px;
+
+    h3 {
+      margin: 0 0 15px 0;
+    }
+    .form-box {
+      .button-holder {
+        button {
+          margin: 0 15px 0 0;
+        }
+      }
+    }
+  }
+}
+</style>

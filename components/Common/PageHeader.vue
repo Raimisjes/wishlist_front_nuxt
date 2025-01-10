@@ -41,11 +41,11 @@ const logout = async function (e: Event): Promise<void> {
         <v-list class="header-menu">
           <v-list-item>
             <NuxtLink
-              to="/mywishlist"
-              :aria-label="$t('components.header.wishlist')"
+              to="/wishlists"
+              :aria-label="$t('components.header.wishlists')"
             >
               <v-icon>mdi-heart</v-icon>
-              {{ $t('components.header.wishlist') }}
+              {{ $t('components.header.wishlists') }}
             </NuxtLink>
           </v-list-item>
           <v-list-item>
