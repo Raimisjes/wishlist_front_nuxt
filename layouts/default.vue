@@ -3,6 +3,7 @@
 <template>
   <div class="container">
     <CommonSnackbar />
+    <CommonConfirmationDialog />
     <CommonPageHeader />
     <NuxtPage />
     <CommonPageFooter />

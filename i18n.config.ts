@@ -78,6 +78,7 @@ export default {
           wishlistTitle: 'Wishlist title',
           wishlistDescription: 'Wishlist description',
           addWishlistSuccess: 'Wishlist has been created successully.',
+          removeWishlistSuccess: 'Wishlist has been successully removed.',
         },
         myWishlist: {
           title: 'Wishlist',
@@ -104,6 +105,7 @@ export default {
         remove: 'Remove',
         public: 'Public',
         private: 'Private',
+        submit: 'Submit',
       },
       errors: {
         undefined: 'Unexpected error. Try again later.',
@@ -170,6 +172,8 @@ export default {
           `Add your ${named('network')} link`,
         socialNetworkURLPlaceholder: ({ named }) =>
           `${named('network')} profile link`,
+        removeWishlist: ({ named }) =>
+          `Are you sure you want to remove <span>${named('wishlist')}</span> wishlist`,
       },
       $vuetify: {
         input: {

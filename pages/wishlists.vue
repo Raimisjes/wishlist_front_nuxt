@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { useWishlistsStore } from '@/stores/wishlists';
+import { useUIStore } from '@/stores/ui';
 import { ref, watch, onUnmounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { storeToRefs } from 'pinia';
@@ -13,6 +14,8 @@ const { t } = useI18n();
 
 const wishlistsStore = useWishlistsStore();
 const { state: wishlistsState } = storeToRefs(wishlistsStore);
+
+const UIStore = useUIStore();
 
 const viewAddWishlistDialog = ref(false);
 
@@ -67,7 +70,14 @@ onUnmounted(() => {
             small
             :aria-label="$t('words.remove')"
             color="remove"
-            @click=""
+            @click="
+              useUIStore().openConfirmationDialog(
+                $t('phrases.removeWishlist', {
+                  wishlist: `${wishlist.title}`,
+                }),
+                () => useWishlistsStore().removeWishlist(wishlist._id),
+              )
+            "
           ></v-btn>
           <v-btn
             density="comfortable"

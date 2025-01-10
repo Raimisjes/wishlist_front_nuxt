@@ -104,6 +104,57 @@ export const useWishlistsStore = defineStore(
       return addWishlistSuccess;
     }
 
+    async function removeWishlist(wishlistId: string) {
+      let removeWishlistSuccess = false;
+
+      try {
+        let refreshTokenSuccess: boolean;
+
+        const response = await $fetch<Promise<any>>(
+          `${config.public.API_URL}/wishlist/remove`,
+          {
+            method: 'post',
+            timeout: 10000,
+            retryStatusCodes: [401],
+            retryDelay: 500,
+            retry: 0,
+            async onRequest({ options }) {
+              options.body = {
+                wishlistId,
+                ownerId: useUserStore().state.id,
+              };
+              options.headers = {
+                ...options.headers,
+                // @ts-ignore:next-line
+                Authorization: `Bearer ${useUserStore().state.accessToken}`,
+              };
+            },
+            async onResponseError({ options, response }) {
+              refreshTokenSuccess = await useAuthStore().refreshToken({
+                options,
+                response,
+              });
+              if (refreshTokenSuccess) {
+                options.retry = 1;
+              }
+            },
+          },
+        );
+
+        removeWishlistSuccess = response.status;
+        const index = state.wishlists.findIndex(
+          (item) => item._id === wishlistId,
+        );
+        if (index !== -1) {
+          state.wishlists.splice(index, 1);
+        }
+        useUIStore().showSnackbar('pages.wishlists.removeWishlistSuccess');
+      } catch (error) {
+        throw new Error(error);
+      }
+      return removeWishlistSuccess;
+    }
+
     function clearStore() {
       Object.assign(state, getInitialState());
     }
@@ -115,6 +166,7 @@ export const useWishlistsStore = defineStore(
     return {
       state,
       addWishlist,
+      removeWishlist,
       clearStore,
       clearForm,
     };
