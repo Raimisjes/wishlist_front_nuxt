@@ -33,19 +33,23 @@
         width: 100%;
       }
     }
+    .remove-button,
+      .edit-button {
+        position: absolute;
+        top: 18px;
+        opacity: 0;
+        transition: opacity 0.5s ease-in-out;
+        --v-btn-height: 30px;
+
+        .v-icon {
+          --v-icon-size-multiplier: 0.8;
+        }
+      }
     .remove-button {
-      position: absolute;
-      top: 18px;
       right: 18px;
-      opacity: 0;
-      transition: opacity 0.5s ease-in-out;
     }
     .edit-button {
-      position: absolute;
-      top: 18px;
-      right: 62px;
-      opacity: 0;
-      transition: opacity 0.5s ease-in-out;
+      right: 54px;
     }
     .v-carousel,
     > img {
