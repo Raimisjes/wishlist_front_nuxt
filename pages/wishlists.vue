@@ -117,7 +117,7 @@ onUnmounted(() => {
           ></v-btn>
           <img
             src="@/assets/images/gift-placeholder.png"
-            v-if="!wishlist.photos"
+            v-if="!wishlist.photos?.length"
           />
           <v-carousel
             v-else
