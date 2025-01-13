@@ -75,9 +75,11 @@ export default {
         wishlists: {
           title: 'Wishlists',
           addNewWishlist: 'Create wishlist',
+          editWishlist: 'Edit wishlist',
           wishlistTitle: 'Wishlist title',
           wishlistDescription: 'Wishlist description',
           addWishlistSuccess: 'Wishlist has been created successully.',
+          editWishlistSuccess: 'Wishlist has been saved successully.',
           removeWishlistSuccess: 'Wishlist has been successully removed.',
         },
         myWishlist: {
@@ -96,6 +98,7 @@ export default {
         homepage: 'Homepage',
         change: 'Change',
         save: 'Save',
+        edit: 'Edit',
         link: 'link',
         email: 'E-mail',
         check: 'Check',

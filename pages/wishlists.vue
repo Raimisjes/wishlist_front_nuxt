@@ -10,6 +10,13 @@ definePageMeta({
   middleware: 'route-guard',
 });
 
+interface Wishlist {
+  title: string;
+  description: string;
+  availabilityStatus: 'public' | 'private';
+  _id: string;
+}
+
 const { t } = useI18n();
 
 const wishlistsStore = useWishlistsStore();
@@ -17,16 +24,34 @@ const { state: wishlistsState } = storeToRefs(wishlistsStore);
 
 const UIStore = useUIStore();
 
-const viewAddWishlistDialog = ref(false);
+const viewSaveWishlistDialog = ref(false);
+const saveModalAction = ref<null | string>(null);
 
-watch(viewAddWishlistDialog, (newValue) => {
+function openModal(action: string, selectedWishlist?: Wishlist): void {
+  if (action == 'edit' && selectedWishlist) {
+    formFill(selectedWishlist);
+  }
+  viewSaveWishlistDialog.value = true;
+  saveModalAction.value = action;
+}
+
+function formFill(wishlist: Wishlist): void {
+  wishlistsState.value.form.title = wishlist.title;
+  wishlistsState.value.form.description = wishlist.description;
+  wishlistsState.value.form.availabilityStatus = wishlist.availabilityStatus;
+  wishlistsState.value.form.selectedId = wishlist._id;
+}
+
+watch(viewSaveWishlistDialog, (newValue) => {
   if (!newValue) {
     wishlistsStore.clearForm();
+    saveModalAction.value = null;
   }
 });
 
 onUnmounted(() => {
   wishlistsStore.clearForm();
+  saveModalAction.value = null;
 });
 </script>
 
@@ -35,25 +60,27 @@ onUnmounted(() => {
     <div class="content-holder">
       <h1>{{ $t('pages.wishlists.title') }}</h1>
       <div class="wishlists-holder">
-        <div
-          class="wishlist-item add-new"
-          @click="viewAddWishlistDialog = true"
-        >
+        <div class="wishlist-item add-new" @click="openModal('add')">
           <v-icon color="primary" :size="50">mdi-plus-circle</v-icon>
           <h5>{{ $t('pages.wishlists.addNewWishlist') }}</h5>
         </div>
         <v-dialog
           max-width="500"
-          v-model="viewAddWishlistDialog"
+          v-model="viewSaveWishlistDialog"
           content-class="wishlist-dialog"
         >
           <v-card>
             <h3>
-              {{ $t('pages.wishlists.addNewWishlist') }}
+              {{
+                saveModalAction == 'add'
+                  ? $t('pages.wishlists.addNewWishlist')
+                  : $t('pages.wishlists.editWishlist')
+              }}
             </h3>
             <div class="form-box">
-              <WishlistsPageAddWishlistForm
-                @closeModal="viewAddWishlistDialog = false"
+              <WishlistsPageSaveWishlistForm
+                :saveModalAction="saveModalAction"
+                @closeModal="viewSaveWishlistDialog = false"
               />
             </div>
           </v-card>
@@ -86,7 +113,7 @@ onUnmounted(() => {
             small
             :aria-label="$t('words.edit')"
             color="primary"
-            @click=""
+            @click="openModal('edit', wishlist)"
           ></v-btn>
           <img
             src="@/assets/images/gift-placeholder.png"

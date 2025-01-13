@@ -6,6 +6,12 @@ import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
 
+const props = defineProps({
+  saveModalAction: {
+    type: String,
+  },
+});
+
 const wishlistsStore = useWishlistsStore();
 const { state: wishlistsState } = storeToRefs(wishlistsStore);
 
@@ -21,11 +27,17 @@ const validationRules = {
   ],
 };
 
-async function addWishlist() {
+async function saveWishlist() {
   let validateStatus = await addWishlistFormEl.value?.validate();
   if (!validateStatus || !validateStatus.valid) return;
 
-  const result = await wishlistsStore.addWishlist();
+  let result = null;
+  if (props.saveModalAction == 'add') {
+    result = await wishlistsStore.addWishlist();
+  }
+  if (props.saveModalAction == 'edit') {
+    result = await wishlistsStore.editWishlist();
+  }
   if (result) {
     closeModal();
   }
@@ -39,7 +51,7 @@ const closeModal = () => {
 </script>
 
 <template>
-  <v-form @submit.prevent="addWishlist()" ref="addWishlistFormEl">
+  <v-form @submit.prevent="saveWishlist()" ref="addWishlistFormEl">
     <div class="input-holder">
       <v-text-field
         v-model="wishlistsState.form.title"
