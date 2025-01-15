@@ -23,9 +23,9 @@ export default defineNuxtConfig({
     '@nuxt/eslint',
     'pinia-plugin-persistedstate/nuxt',
   ],
-  alias: {
-    pinia: '/node_modules/@pinia/nuxt/node_modules/pinia/dist/pinia.mjs',
-  },
+  // alias: {
+  //   pinia: '/node_modules/@pinia/nuxt/node_modules/pinia/dist/pinia.mjs',
+  // },
   i18n: {
     vueI18n: './i18n.config.ts',
   },
@@ -76,4 +76,5 @@ export default defineNuxtConfig({
       API_URL: process.env.NUXT_API_URL,
     },
   },
+  experimental: { appManifest: false },
 });

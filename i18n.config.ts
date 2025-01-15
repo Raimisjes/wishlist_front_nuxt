@@ -49,7 +49,8 @@ export default {
           socialNetworks: 'Social networks',
           changePassSuccess: 'The password has been changed successfully.',
           enablePublicView: 'Enable view on my page',
-          editSocialNetworkSuccess: 'Social network link added successfully.',
+          editSocialNetworkSuccess:
+            'Social network link info has been changed successfully.',
         },
         login: {
           forgotPassword: 'Forgot password?',

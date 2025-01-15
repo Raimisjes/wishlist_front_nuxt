@@ -119,5 +119,8 @@ const emit = defineEmits(['setImage']);
       color: $text_color_light;
     }
   }
+  input[type='file'] {
+    display: none;
+  }
 }
 </style>
