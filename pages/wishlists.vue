@@ -1,9 +1,10 @@
 <script lang="ts" setup>
 import { useWishlistsStore } from '@/stores/wishlists';
 import { useUIStore } from '@/stores/ui';
-import { ref, watch, onUnmounted } from 'vue';
+import { ref, watch, onUnmounted, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { storeToRefs } from 'pinia';
+import { useRouter } from 'vue-router';
 
 //@ts-ignore
 definePageMeta({
@@ -17,6 +18,7 @@ interface Wishlist {
   _id: string;
 }
 
+const router = useRouter();
 const { t } = useI18n();
 
 const wishlistsStore = useWishlistsStore();
@@ -42,11 +44,21 @@ function formFill(wishlist: Wishlist): void {
   wishlistsState.value.form.selectedId = wishlist._id;
 }
 
+function viewWishlist(wishlist: Wishlist) {
+  router.push({
+    path: `/mywishlist/${wishlist._id}`,
+  });
+}
+
 watch(viewSaveWishlistDialog, (newValue) => {
   if (!newValue) {
     wishlistsStore.clearForm();
     saveModalAction.value = null;
   }
+});
+
+onMounted(async () => {
+  await wishlistsStore.getWishlists();
 });
 
 onUnmounted(() => {
@@ -59,7 +71,15 @@ onUnmounted(() => {
   <main>
     <div class="content-holder">
       <h1>{{ $t('pages.wishlists.title') }}</h1>
-      <div class="wishlists-holder">
+      <div class="spinner-holder" v-if="wishlistsState.page?.isLoading">
+        <v-progress-circular
+          :size="35"
+          :width="2"
+          color="primary"
+          indeterminate
+        ></v-progress-circular>
+      </div>
+      <div class="wishlists-holder" v-else>
         <div class="wishlist-item add-new" @click="openModal('add')">
           <v-icon color="primary" :size="50">mdi-plus-circle</v-icon>
           <h5>{{ $t('pages.wishlists.addNewWishlist') }}</h5>
@@ -85,11 +105,7 @@ onUnmounted(() => {
             </div>
           </v-card>
         </v-dialog>
-        <div
-          class="wishlist-item"
-          v-for="wishlist of wishlistsState.wishlists"
-          @click=""
-        >
+        <div class="wishlist-item" v-for="wishlist of wishlistsState.wishlists">
           <v-btn
             density="comfortable"
             class="remove-button"
@@ -135,7 +151,7 @@ onUnmounted(() => {
             <span class="chip">
               {{ $t(`words.${wishlist.availabilityStatus}`) }}
             </span>
-            <h5>{{ wishlist.title }}</h5>
+            <h5 @click="viewWishlist(wishlist)">{{ wishlist.title }}</h5>
           </div>
         </div>
       </div>
@@ -156,6 +172,13 @@ main {
     width: 100%;
     margin: auto;
 
+    .spinner-holder {
+      width: 100%;
+      min-height: 250px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
     > h1 {
       margin: 0 0 20px 0;
     }

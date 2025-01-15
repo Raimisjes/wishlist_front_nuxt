@@ -15,6 +15,10 @@ interface WishlistsState {
     error: string;
   };
   wishlists: Wishlist[];
+  page: {
+    isLoading: boolean;
+    error: string;
+  };
 }
 
 interface Wishlist {
@@ -36,6 +40,10 @@ function getInitialState(): WishlistsState {
       error: '',
     },
     wishlists: [],
+    page: {
+      isLoading: true,
+      error: '',
+    },
   };
 }
 
@@ -225,6 +233,50 @@ export const useWishlistsStore = defineStore(
       return editWishlistSuccess;
     }
 
+    async function getWishlists() {
+      state.page.error = '';
+
+      let getWishlistsSuccess = false;
+
+      try {
+        let refreshTokenSuccess: boolean;
+
+        const response = await $fetch<Promise<any>>(
+          `${config.public.API_URL}/wishlist/getuserwishlists/${useUserStore().state.id}`,
+          {
+            method: 'get',
+            timeout: 10000,
+            retryStatusCodes: [401],
+            retryDelay: 500,
+            retry: 0,
+            async onRequest({ options }) {
+              options.headers = {
+                ...options.headers,
+                // @ts-ignore:next-line
+                Authorization: `Bearer ${useUserStore().state.accessToken}`,
+              };
+            },
+            async onResponseError({ options, response }) {
+              refreshTokenSuccess = await useAuthStore().refreshToken({
+                options,
+                response,
+              });
+              if (refreshTokenSuccess) {
+                options.retry = 1;
+              }
+            },
+          },
+        );
+
+        getWishlistsSuccess = response.status;
+        state.wishlists = response.data.wishlists;
+      } catch (error) {
+        throw new Error(error);
+      }
+      state.page.isLoading = false;
+      return getWishlistsSuccess;
+    }
+
     function clearStore() {
       Object.assign(state, getInitialState());
     }
@@ -238,11 +290,12 @@ export const useWishlistsStore = defineStore(
       addWishlist,
       editWishlist,
       removeWishlist,
+      getWishlists,
       clearStore,
       clearForm,
     };
   },
   {
-    persist: true,
+    persist: false,
   },
 );
