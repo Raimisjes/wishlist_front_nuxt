@@ -296,6 +296,6 @@ export const useWishlistsStore = defineStore(
     };
   },
   {
-    persist: false,
+    persist: true,
   },
 );

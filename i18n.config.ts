@@ -126,6 +126,8 @@ export default {
         internal005: 'Bad login credentials.',
         internal006: 'Unauthenticated.',
         internal007: 'Unexpected error. Try again later.',
+        internal008:
+          "You don't have the necessary permissions to perform this action.",
         validation001: 'Username is mandatory',
         validation002: 'Username is taken',
         validation003: 'Wrong username format.',
@@ -182,6 +184,11 @@ export default {
       $vuetify: {
         input: {
           appendAction: 'Append Action',
+        },
+        carousel: {
+          ariaLabel: {
+            delimiter: '',
+          },
         },
       },
     },

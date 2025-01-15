@@ -7,6 +7,12 @@ import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
 
+const props = defineProps({
+  wishlistId: {
+    type: String,
+  },
+});
+
 const myWishlistStore = useMyWishlistStore();
 const { state: myWishlistState } = storeToRefs(myWishlistStore);
 
@@ -30,12 +36,16 @@ async function addWish() {
   const formData = new FormData();
   if (selectedFile.value) {
     formData.append('photo', selectedFile.value);
-  } else {
-    formData.append('photo', myWishlistState.value.form.image.url);
+  }
+  if (!selectedFile.value && myWishlistState.value.form.photo !== '') {
+    formData.append('photo', myWishlistState.value.form.photo);
   }
   formData.append('title', myWishlistState.value.form.title);
   formData.append('description', myWishlistState.value.form.description);
-  formData.append('owner', useUserStore().state.username);
+  formData.append('ownerId', useUserStore().state.id);
+  if (props.wishlistId !== undefined) {
+    formData.append('wishlistId', props.wishlistId);
+  }
   formData.append('url', myWishlistState.value.checkURLForm.url);
 
   const result = await myWishlistStore.addWish(formData);
@@ -51,16 +61,14 @@ function setImage(image: File) {
 
 function removeImage() {
   selectedFile.value = null;
-  myWishlistState.value.form.image = {
-    url: '',
-  };
+  myWishlistState.value.form.photo = '';
 }
 
 function createPreview(file: File) {
   const reader = new FileReader();
   reader.onload = (e) => {
     if (e.target?.result) {
-      myWishlistState.value.form.image.url = e.target.result;
+      myWishlistState.value.form.photo = e.target.result;
     }
   };
   reader.readAsDataURL(file);
@@ -115,11 +123,10 @@ const closeModal = () => {
           <div
             class="image-holder"
             v-if="
-              myWishlistState.form.image?.url &&
-              myWishlistState.form.image.url !== ''
+              myWishlistState.form.photo && myWishlistState.form.photo !== ''
             "
           >
-            <img :src="myWishlistState.form.image.url" />
+            <img :src="myWishlistState.form.photo" />
             <v-btn
               density="comfortable"
               class="remove-button"
@@ -131,7 +138,7 @@ const closeModal = () => {
             ></v-btn>
           </div>
           <CommonFileUpload
-            v-if="!myWishlistState.form.image.url"
+            v-if="!myWishlistState.form.photo"
             @setImage="setImage"
           />
         </div>
@@ -183,6 +190,12 @@ const closeModal = () => {
           right: 10px;
           opacity: 0;
           transition: opacity 0.5s ease-in-out;
+          --v-btn-height: 30px;
+          z-index: 1;
+
+          .v-icon {
+            --v-icon-size-multiplier: 0.8;
+          }
         }
         &:hover {
           .remove-button {
