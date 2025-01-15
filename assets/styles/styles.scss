@@ -83,3 +83,15 @@ a {
   font-weight: 500;
   transition: color 0.2s ease-in-out;
 }
+
+main {
+  > .content-holder {
+    > .spinner-holder {
+      width: 100%;
+      min-height: 250px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+}

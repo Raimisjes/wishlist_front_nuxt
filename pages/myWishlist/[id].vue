@@ -1,7 +1,9 @@
 <script lang="ts" setup>
 import { useMyWishlistStore } from '@/stores/myWishlist';
-import { ref, watch, onUnmounted } from 'vue';
+import { ref, watch, onUnmounted, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { useRoute } from 'vue-router';
+import { storeToRefs } from 'pinia';
 
 //@ts-ignore
 definePageMeta({
@@ -9,8 +11,10 @@ definePageMeta({
 });
 
 const { t } = useI18n();
+const route = useRoute();
 
 const myWishlistStore = useMyWishlistStore();
+const { state: myWishlistState } = storeToRefs(myWishlistStore);
 
 const viewAddWishDialog = ref(false);
 
@@ -21,6 +25,10 @@ watch(viewAddWishDialog, (newValue) => {
   }
 });
 
+onMounted(async () => {
+  await myWishlistStore.getWishlistData(route.params.id);
+});
+
 onUnmounted(() => {
   myWishlistStore.clearStore();
 });
@@ -29,9 +37,33 @@ onUnmounted(() => {
 <template>
   <main>
     <div class="content-holder">
-      <h1>{{ $t('pages.myWishlist.title') }}</h1>
-      <div class="wishlist-holder">
-        <div class="wishlist-item add-new" @click="viewAddWishDialog = true">
+      <h1
+        v-if="
+          myWishlistState.currentWishlist.title != '' &&
+          !myWishlistState.page?.isLoading
+        "
+      >
+        {{ myWishlistState.currentWishlist.title }}
+      </h1>
+      <p
+        class="wishlist-description"
+        v-if="
+          myWishlistState.currentWishlist.description != '' &&
+          !myWishlistState.page?.isLoading
+        "
+      >
+        {{ myWishlistState.currentWishlist.description }}
+      </p>
+      <div class="spinner-holder" v-if="myWishlistState.page?.isLoading">
+        <v-progress-circular
+          :size="35"
+          :width="2"
+          color="primary"
+          indeterminate
+        ></v-progress-circular>
+      </div>
+      <div class="wish-holder" v-else>
+        <div class="wish-item add-new" @click="viewAddWishDialog = true">
           <v-icon color="primary" :size="50">mdi-plus-circle</v-icon>
           <h5>{{ $t('pages.myWishlist.addNewWish') }}</h5>
         </div>
@@ -47,18 +79,26 @@ onUnmounted(() => {
             <div class="form-box">
               <MyWishlistPageCheckURLForm />
               <MyWishlistPageAddWishForm
+                :wishlistId="route.params.id"
                 @closeModal="viewAddWishDialog = false"
               />
             </div>
           </v-card>
         </v-dialog>
-        <!-- placeholder for wishlist items -->
-        <!-- <div class="wishlist-item">
+        <div
+          class="wishlist-item"
+          v-if="myWishlistState.currentWishlist.listings?.length > 0"
+          v-for="listing of myWishlistState.currentWishlist.listings"
+        >
           <img
-            src="https://www.varle.lt/static/uploads/products/572/gru/gruzdintuve-gift-xiaomi-sound-pocket-0df27f1049.png"
+            src="@/assets/images/gift-placeholder.png"
+            v-if="!listing['photo']"
           />
-          <h5>Nešiojama kolonėlė Xiaomi Sound Pocket 5W IP67</h5>
-        </div> -->
+          <img v-else :src="listing['photo']" />
+          <div class="info">
+            <h5>{{ listing['title'] }}</h5>
+          </div>
+        </div>
       </div>
     </div>
   </main>
@@ -82,23 +122,6 @@ main {
     }
     @media screen and (max-width: 600px) {
       padding: 20px;
-    }
-  }
-}
-
-.wishlist-dialog {
-  > .v-card {
-    padding: 25px;
-
-    h3 {
-      margin: 0 0 15px 0;
-    }
-    .form-box {
-      .button-holder {
-        button {
-          margin: 0 15px 0 0;
-        }
-      }
     }
   }
 }

@@ -14,23 +14,17 @@ interface MyWishlistState {
   form: {
     title: string;
     description: string;
-    image: {
-      url: string;
-    };
+    photo: string;
+    wishlistId: string;
     isLoading: boolean;
     error: string;
     show: boolean;
   };
-  wishlist: WishlistItem[];
-}
-
-interface WishlistItem {
-  id: string;
-  title: string;
-  description: string;
-  image: {
-    url: string;
+  page: {
+    isLoading: boolean;
+    error: string;
   };
+  currentWishlist: {};
 }
 
 function getInitialState(): MyWishlistState {
@@ -43,14 +37,17 @@ function getInitialState(): MyWishlistState {
     form: {
       title: '',
       description: '',
-      image: {
-        url: '',
-      },
+      photo: '',
+      wishlistId: '',
       isLoading: false,
       error: '',
       show: false,
     },
-    wishlist: [],
+    page: {
+      isLoading: true,
+      error: '',
+    },
+    currentWishlist: {},
   };
 }
 
@@ -77,7 +74,7 @@ export const useMyWishlistStore = defineStore(
           `${config.public.API_URL}/global/geturlinfo`,
           {
             method: 'post',
-            timeout: 10000,
+            timeout: 20000,
             retryStatusCodes: [401],
             retryDelay: 500,
             retry: 0,
@@ -105,7 +102,9 @@ export const useMyWishlistStore = defineStore(
         fetchSuccess = response.status;
         state.form.title = response.data.title;
         state.form.description = response.data.description;
-        state.form.image = response.data.image;
+        if (response.data.photo) {
+          state.form.photo = response.data.photo;
+        }
       } catch (error) {
         let errorMessage = '';
         !error.data
@@ -134,7 +133,7 @@ export const useMyWishlistStore = defineStore(
           `${config.public.API_URL}/listing/add`,
           {
             method: 'post',
-            timeout: 10000,
+            timeout: 20000,
             retryStatusCodes: [401],
             retryDelay: 500,
             retry: 0,
@@ -159,6 +158,10 @@ export const useMyWishlistStore = defineStore(
         );
 
         addWishSuccess = response.status;
+        //needs refactoring
+        if (addWishSuccess) {
+          console.log(response.data);
+        }
         useUIStore().showSnackbar('pages.myWishlist.addWishSuccess');
       } catch (error) {
         let errorMessage = '';
@@ -171,6 +174,53 @@ export const useMyWishlistStore = defineStore(
 
       state.form.isLoading = false;
       return addWishSuccess;
+    }
+
+    async function getWishlistData(wishlistId: string) {
+      state.page.error = '';
+
+      let getWishlistDataSuccess = false;
+
+      try {
+        let refreshTokenSuccess: boolean;
+
+        const response = await $fetch<Promise<any>>(
+          `${config.public.API_URL}/wishlist/getoneinfo/${useUserStore().state.id}`,
+          {
+            method: 'get',
+            timeout: 10000,
+            retryStatusCodes: [401],
+            retryDelay: 500,
+            retry: 0,
+            async onRequest({ options }) {
+              options.headers = {
+                ...options.headers,
+                // @ts-ignore:next-line
+                Authorization: `Bearer ${useUserStore().state.accessToken}`,
+              };
+              options.query = {
+                wishlistId,
+              };
+            },
+            async onResponseError({ options, response }) {
+              refreshTokenSuccess = await useAuthStore().refreshToken({
+                options,
+                response,
+              });
+              if (refreshTokenSuccess) {
+                options.retry = 1;
+              }
+            },
+          },
+        );
+
+        getWishlistDataSuccess = response.status;
+        state.currentWishlist = response.data;
+      } catch (error) {
+        throw new Error(error);
+      }
+      state.page.isLoading = false;
+      return getWishlistDataSuccess;
     }
 
     function clearStore() {
@@ -189,6 +239,7 @@ export const useMyWishlistStore = defineStore(
       state,
       checkURL,
       addWish,
+      getWishlistData,
       clearStore,
       clearForm,
       clearCheckURLForm,

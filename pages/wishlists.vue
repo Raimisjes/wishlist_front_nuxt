@@ -172,13 +172,6 @@ main {
     width: 100%;
     margin: auto;
 
-    .spinner-holder {
-      width: 100%;
-      min-height: 250px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
     > h1 {
       margin: 0 0 20px 0;
     }

@@ -242,7 +242,7 @@ export const useWishlistsStore = defineStore(
         let refreshTokenSuccess: boolean;
 
         const response = await $fetch<Promise<any>>(
-          `${config.public.API_URL}/wishlist/getuserwishlists/${useUserStore().state.id}`,
+          `${config.public.API_URL}/wishlist/getall/${useUserStore().state.id}`,
           {
             method: 'get',
             timeout: 10000,
