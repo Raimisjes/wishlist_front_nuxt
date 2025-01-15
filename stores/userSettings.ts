@@ -86,6 +86,7 @@ export const useUserSettingsStore = defineStore(
                 password: state.changePassword.form.currentPassword,
                 newPassword: state.changePassword.form.newPassword,
                 repeatedNewPass: state.changePassword.form.newRepeated,
+                ownerId: useUserStore().state.id,
               };
               options.headers = {
                 ...options.headers,
@@ -150,6 +151,7 @@ export const useUserSettingsStore = defineStore(
               options.body = {
                 username: useUserStore().state.username,
                 socialNetworks: socialNetworkData,
+                ownerId: useUserStore().state.id,
               };
               options.headers = {
                 ...options.headers,
