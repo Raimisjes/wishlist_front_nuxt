@@ -208,10 +208,14 @@ export const useWishlistsStore = defineStore(
         const index = state.wishlists.findIndex(
           (item) => item._id === state.form.selectedId,
         );
+        const editedWLData = {
+          ...response.data,
+          photos: state.wishlists[index].photos,
+        };
         if (index !== -1) {
           state.wishlists.splice(index, 1);
         }
-        state.wishlists.unshift(response.data);
+        state.wishlists.unshift(editedWLData);
         useUIStore().showSnackbar('pages.wishlists.editWishlistSuccess');
       } catch (error) {
         let errorMessage = '';

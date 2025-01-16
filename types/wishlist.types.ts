@@ -4,4 +4,5 @@ export interface Wishlist {
   description: string;
   availabilityStatus: 'public' | 'private';
   ownerId: string;
+  photos: string[];
 }
