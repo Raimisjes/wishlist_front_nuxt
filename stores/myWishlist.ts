@@ -4,13 +4,7 @@ import { useRuntimeConfig } from 'nuxt/app';
 import { useUserStore } from '@/stores/user';
 import { useAuthStore } from '@/stores/auth';
 import { useUIStore } from '@/stores/ui';
-
-interface Listing {
-  _id: string;
-  title: string;
-  wishlistId: string;
-  photo: string;
-}
+import type { Listing } from '@/types/listing.types';
 
 interface MyWishlistState {
   checkURLForm: {
@@ -26,6 +20,7 @@ interface MyWishlistState {
     isLoading: boolean;
     error: string;
     show: boolean;
+    selectedId: string;
   };
   page: {
     isLoading: boolean;
@@ -51,6 +46,7 @@ function getInitialState(): MyWishlistState {
       isLoading: false,
       error: '',
       show: false,
+      selectedId: '',
     },
     page: {
       isLoading: true,
@@ -184,6 +180,67 @@ export const useMyWishlistStore = defineStore(
       return addWishSuccess;
     }
 
+    async function editListing(formData: FormData) {
+      if (state.form.isLoading) return;
+
+      state.form.isLoading = true;
+      state.form.error = '';
+
+      let editWishSuccess = false;
+
+      try {
+        let refreshTokenSuccess: boolean;
+
+        const response = await $fetch<Promise<any>>(
+          `${config.public.API_URL}/listing/edit`,
+          {
+            method: 'post',
+            timeout: 20000,
+            retryStatusCodes: [401],
+            retryDelay: 500,
+            retry: 0,
+            async onRequest({ options }) {
+              options.body = formData;
+              options.headers = {
+                ...options.headers,
+                // @ts-ignore:next-line
+                Authorization: `Bearer ${useUserStore().state.accessToken}`,
+              };
+            },
+            async onResponseError({ options, response }) {
+              refreshTokenSuccess = await useAuthStore().refreshToken({
+                options,
+                response,
+              });
+              if (refreshTokenSuccess) {
+                options.retry = 1;
+              }
+            },
+          },
+        );
+
+        editWishSuccess = response.status;
+        const index = state.currentWishlist.listings.findIndex(
+          (item) => item._id === state.form.selectedId,
+        );
+        if (index !== -1) {
+          state.currentWishlist.listings.splice(index, 1);
+        }
+        state.currentWishlist.listings.unshift(response.data as Listing);
+        useUIStore().showSnackbar('pages.myWishlist.editListingSuccess');
+      } catch (error) {
+        let errorMessage = '';
+        !error.data
+          ? (errorMessage = 'errors.internal001')
+          : (errorMessage = `errors.${error.data.data}`);
+
+        state.form.error = errorMessage;
+      }
+
+      state.form.isLoading = false;
+      return editWishSuccess;
+    }
+
     async function removeListing(listingId: string) {
       let removeListingSuccess = false;
 
@@ -298,6 +355,7 @@ export const useMyWishlistStore = defineStore(
       state,
       checkURL,
       addListing,
+      editListing,
       removeListing,
       getWishlistData,
       clearStore,

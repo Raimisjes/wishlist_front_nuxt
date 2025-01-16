@@ -5,18 +5,12 @@ import { ref, watch, onUnmounted, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { storeToRefs } from 'pinia';
 import { useRouter } from 'vue-router';
+import type { Wishlist } from '@/types/wishlist.types';
 
 //@ts-ignore
 definePageMeta({
   middleware: 'route-guard',
 });
-
-interface Wishlist {
-  title: string;
-  description: string;
-  availabilityStatus: 'public' | 'private';
-  _id: string;
-}
 
 const router = useRouter();
 const { t } = useI18n();

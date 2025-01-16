@@ -4,6 +4,7 @@ import { useRuntimeConfig } from 'nuxt/app';
 import { useUserStore } from '@/stores/user';
 import { useAuthStore } from '@/stores/auth';
 import { useUIStore } from '@/stores/ui';
+import type { Wishlist } from '@/types/wishlist.types';
 
 interface WishlistsState {
   form: {
@@ -19,14 +20,6 @@ interface WishlistsState {
     isLoading: boolean;
     error: string;
   };
-}
-
-interface Wishlist {
-  _id: string;
-  title: string;
-  description: string;
-  availabilityStatus: 'private' | 'public';
-  owner: string;
 }
 
 function getInitialState(): WishlistsState {

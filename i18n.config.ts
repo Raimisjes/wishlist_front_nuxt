@@ -91,6 +91,7 @@ export default {
           giftDescription: 'Gift description',
           addWishSuccess: 'Wish has been created successully.',
           removeListingSuccess: 'Wish has been successully removed.',
+          editListingSuccess: 'Wish has been saved successully.',
         },
       },
       words: {

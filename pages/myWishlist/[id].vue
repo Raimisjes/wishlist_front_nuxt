@@ -5,6 +5,7 @@ import { ref, watch, onUnmounted, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
 import { storeToRefs } from 'pinia';
+import type { Listing } from '@/types/listing.types';
 
 //@ts-ignore
 definePageMeta({
@@ -17,9 +18,27 @@ const route = useRoute();
 const myWishlistStore = useMyWishlistStore();
 const { state: myWishlistState } = storeToRefs(myWishlistStore);
 
-const viewAddWishDialog = ref(false);
+const viewSaveWishDialog = ref(false);
+const saveModalAction = ref<null | string>(null);
 
-watch(viewAddWishDialog, (newValue) => {
+function openModal(action: string, selectedListing?: Listing): void {
+  if (action == 'edit' && selectedListing) {
+    formFill(selectedListing);
+  }
+  viewSaveWishDialog.value = true;
+  saveModalAction.value = action;
+}
+
+function formFill(listing: Listing): void {
+  myWishlistState.value.form.show = true;
+  myWishlistState.value.checkURLForm.url = listing.url;
+  myWishlistState.value.form.title = listing.title;
+  myWishlistState.value.form.description = listing.description;
+  myWishlistState.value.form.selectedId = listing._id;
+  myWishlistState.value.form.photo = listing.photo;
+}
+
+watch(viewSaveWishDialog, (newValue) => {
   if (!newValue) {
     myWishlistStore.clearForm();
     myWishlistStore.clearCheckURLForm();
@@ -32,6 +51,7 @@ onMounted(async () => {
 
 onUnmounted(() => {
   myWishlistStore.clearStore();
+  saveModalAction.value = null;
 });
 </script>
 
@@ -71,13 +91,13 @@ onUnmounted(() => {
         ></v-progress-circular>
       </div>
       <div class="wish-holder" v-else>
-        <div class="wish-item add-new" @click="viewAddWishDialog = true">
+        <div class="wish-item add-new" @click="openModal('add')">
           <v-icon color="primary" :size="50">mdi-plus-circle</v-icon>
           <h5>{{ $t('pages.myWishlist.addNewWish') }}</h5>
         </div>
         <v-dialog
           max-width="500"
-          v-model="viewAddWishDialog"
+          v-model="viewSaveWishDialog"
           content-class="wishlist-dialog"
         >
           <v-card>
@@ -86,9 +106,10 @@ onUnmounted(() => {
             </h3>
             <div class="form-box">
               <MyWishlistPageCheckURLForm />
-              <MyWishlistPageAddWishForm
+              <MyWishlistPageSaveWishForm
+                :saveModalAction="saveModalAction"
                 :wishlistId="route.params.id"
-                @closeModal="viewAddWishDialog = false"
+                @closeModal="viewSaveWishDialog = false"
               />
             </div>
           </v-card>
@@ -114,13 +135,22 @@ onUnmounted(() => {
               )
             "
           ></v-btn>
+          <v-btn
+            density="comfortable"
+            class="edit-button"
+            icon="mdi-pencil"
+            small
+            :aria-label="$t('words.edit')"
+            color="primary"
+            @click="openModal('edit', listing)"
+          ></v-btn>
           <img
             src="@/assets/images/gift-placeholder.png"
-            v-if="!listing['photo']"
+            v-if="!listing?.photo"
           />
-          <img v-else :src="listing['photo']" />
+          <img v-else :src="listing?.photo" />
           <div class="info">
-            <h5>{{ listing['title'] }}</h5>
+            <h5>{{ listing?.title }}</h5>
           </div>
         </div>
       </div>

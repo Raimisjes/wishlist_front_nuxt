@@ -11,6 +11,9 @@ const props = defineProps({
   wishlistId: {
     type: String,
   },
+  saveModalAction: {
+    type: String,
+  },
 });
 
 const myWishlistStore = useMyWishlistStore();
@@ -40,6 +43,7 @@ async function addWish() {
   if (!selectedFile.value && myWishlistState.value.form.photo !== '') {
     formData.append('photo', myWishlistState.value.form.photo);
   }
+  formData.append('id', myWishlistState.value.form.selectedId);
   formData.append('title', myWishlistState.value.form.title);
   formData.append('description', myWishlistState.value.form.description);
   formData.append('ownerId', useUserStore().state.id);
@@ -48,7 +52,13 @@ async function addWish() {
   }
   formData.append('url', myWishlistState.value.checkURLForm.url);
 
-  const result = await myWishlistStore.addListing(formData);
+  let result = null;
+  if (props.saveModalAction === 'add') {
+    result = await myWishlistStore.addListing(formData);
+  }
+  if (props.saveModalAction === 'edit') {
+    result = await myWishlistStore.editListing(formData);
+  }
   if (result) {
     closeModal();
   }
