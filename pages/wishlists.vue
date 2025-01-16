@@ -18,8 +18,6 @@ const { t } = useI18n();
 const wishlistsStore = useWishlistsStore();
 const { state: wishlistsState } = storeToRefs(wishlistsStore);
 
-const UIStore = useUIStore();
-
 const viewSaveWishlistDialog = ref(false);
 const saveModalAction = ref<null | string>(null);
 

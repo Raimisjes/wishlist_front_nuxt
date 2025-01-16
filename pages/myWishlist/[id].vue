@@ -38,6 +38,10 @@ function formFill(listing: Listing): void {
   myWishlistState.value.form.photo = listing.photo;
 }
 
+function openUrl(url: string) {
+  window.open(url, '_blank', 'noopener,noreferrer');
+}
+
 watch(viewSaveWishDialog, (newValue) => {
   if (!newValue) {
     myWishlistStore.clearForm();
@@ -150,7 +154,9 @@ onUnmounted(() => {
           />
           <img v-else :src="listing?.photo" />
           <div class="info">
-            <h5>{{ listing?.title }}</h5>
+            <h5 @click="openUrl(listing.url)">
+              {{ listing?.title }}
+            </h5>
           </div>
         </div>
       </div>
