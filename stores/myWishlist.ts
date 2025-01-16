@@ -6,6 +6,7 @@ import { useAuthStore } from '@/stores/auth';
 import { useUIStore } from '@/stores/ui';
 
 interface Listing {
+  _id: string;
   title: string;
   wishlistId: string;
   photo: string;
@@ -128,7 +129,7 @@ export const useMyWishlistStore = defineStore(
       return fetchSuccess;
     }
 
-    async function addWish(formData: FormData) {
+    async function addListing(formData: FormData) {
       if (state.form.isLoading) return;
 
       state.form.isLoading = true;
@@ -181,6 +182,57 @@ export const useMyWishlistStore = defineStore(
 
       state.form.isLoading = false;
       return addWishSuccess;
+    }
+
+    async function removeListing(listingId: string) {
+      let removeListingSuccess = false;
+
+      try {
+        let refreshTokenSuccess: boolean;
+
+        const response = await $fetch<Promise<any>>(
+          `${config.public.API_URL}/listing/remove`,
+          {
+            method: 'post',
+            timeout: 10000,
+            retryStatusCodes: [401],
+            retryDelay: 500,
+            retry: 0,
+            async onRequest({ options }) {
+              options.body = {
+                listingId,
+                ownerId: useUserStore().state.id,
+              };
+              options.headers = {
+                ...options.headers,
+                // @ts-ignore:next-line
+                Authorization: `Bearer ${useUserStore().state.accessToken}`,
+              };
+            },
+            async onResponseError({ options, response }) {
+              refreshTokenSuccess = await useAuthStore().refreshToken({
+                options,
+                response,
+              });
+              if (refreshTokenSuccess) {
+                options.retry = 1;
+              }
+            },
+          },
+        );
+
+        removeListingSuccess = response.status;
+        const index = state.currentWishlist.listings.findIndex(
+          (item) => item._id === listingId,
+        );
+        if (index !== -1) {
+          state.currentWishlist.listings.splice(index, 1);
+        }
+        useUIStore().showSnackbar('pages.myWishlist.removeListingSuccess');
+      } catch (error) {
+        throw new Error(error);
+      }
+      return removeListingSuccess;
     }
 
     async function getWishlistData(wishlistId: string) {
@@ -245,7 +297,8 @@ export const useMyWishlistStore = defineStore(
     return {
       state,
       checkURL,
-      addWish,
+      addListing,
+      removeListing,
       getWishlistData,
       clearStore,
       clearForm,

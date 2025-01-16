@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { useMyWishlistStore } from '@/stores/myWishlist';
+import { useUIStore } from '@/stores/ui';
 import { ref, watch, onUnmounted, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
@@ -44,6 +45,13 @@ onUnmounted(() => {
         "
       >
         {{ myWishlistState.currentWishlist.title }}
+        <NuxtLink
+          to="/wishlists"
+          :aria-label="$t('words.back')"
+          class="back-link"
+          ><v-icon color="primary" size="15">mdi-arrow-left</v-icon
+          >{{ $t('words.back') }}</NuxtLink
+        >
       </h1>
       <p
         class="wishlist-description"
@@ -90,6 +98,22 @@ onUnmounted(() => {
           v-if="myWishlistState.currentWishlist.listings?.length > 0"
           v-for="listing of myWishlistState.currentWishlist.listings"
         >
+          <v-btn
+            density="comfortable"
+            class="remove-button"
+            icon="mdi-delete"
+            small
+            :aria-label="$t('words.remove')"
+            color="remove"
+            @click="
+              useUIStore().openConfirmationDialog(
+                $t('phrases.removeListing', {
+                  listing: `${listing.title}`,
+                }),
+                () => myWishlistStore.removeListing(listing._id),
+              )
+            "
+          ></v-btn>
           <img
             src="@/assets/images/gift-placeholder.png"
             v-if="!listing['photo']"
@@ -119,6 +143,25 @@ main {
 
     > h1 {
       margin: 0 0 20px 0;
+      position: relative;
+
+      a {
+        position: absolute;
+        right: 0;
+        top: 15px;
+        font-size: 14px;
+
+        .v-icon {
+          margin-right: 5px;
+          bottom: 1px;
+          transition: all 0.2s ease-in-out;
+        }
+        &:hover {
+          .v-icon {
+            transform: translateX(-3px);
+          }
+        }
+      }
     }
     @media screen and (max-width: 600px) {
       padding: 20px;

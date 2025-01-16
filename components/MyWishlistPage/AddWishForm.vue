@@ -48,7 +48,7 @@ async function addWish() {
   }
   formData.append('url', myWishlistState.value.checkURLForm.url);
 
-  const result = await myWishlistStore.addWish(formData);
+  const result = await myWishlistStore.addListing(formData);
   if (result) {
     closeModal();
   }

@@ -90,6 +90,7 @@ export default {
           giftTitle: 'Gift title',
           giftDescription: 'Gift description',
           addWishSuccess: 'Wish has been created successully.',
+          removeListingSuccess: 'Wish has been successully removed.',
         },
       },
       words: {
@@ -179,7 +180,9 @@ export default {
         socialNetworkURLPlaceholder: ({ named }) =>
           `${named('network')} profile link`,
         removeWishlist: ({ named }) =>
-          `Are you sure you want to remove <span>${named('wishlist')}</span> wishlist`,
+          `Are you sure you want to remove <span>${named('wishlist')}</span> wishlist?`,
+        removeListing: ({ named }) =>
+          `Are you sure you want to remove <span>${named('listing')}</span> wish?`,
       },
       $vuetify: {
         input: {
