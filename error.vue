@@ -9,7 +9,7 @@ function goBack(): void {
 </script>
 
 <template>
-  <div class="container">
+  <div class="container default-layout">
     <CommonPageHeader />
     <main>
       <div>
