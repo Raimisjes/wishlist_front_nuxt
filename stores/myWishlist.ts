@@ -5,6 +5,12 @@ import { useUserStore } from '@/stores/user';
 import { useAuthStore } from '@/stores/auth';
 import { useUIStore } from '@/stores/ui';
 
+interface Listing {
+  title: string;
+  wishlistId: string;
+  photo: string;
+}
+
 interface MyWishlistState {
   checkURLForm: {
     url: string;
@@ -24,7 +30,9 @@ interface MyWishlistState {
     isLoading: boolean;
     error: string;
   };
-  currentWishlist: {};
+  currentWishlist: {
+    listings: Listing[];
+  };
 }
 
 function getInitialState(): MyWishlistState {
@@ -47,7 +55,9 @@ function getInitialState(): MyWishlistState {
       isLoading: true,
       error: '',
     },
-    currentWishlist: {},
+    currentWishlist: {
+      listings: [],
+    },
   };
 }
 
@@ -158,10 +168,7 @@ export const useMyWishlistStore = defineStore(
         );
 
         addWishSuccess = response.status;
-        //needs refactoring
-        if (addWishSuccess) {
-          console.log(response.data);
-        }
+        state.currentWishlist.listings.unshift(response.data as Listing);
         useUIStore().showSnackbar('pages.myWishlist.addWishSuccess');
       } catch (error) {
         let errorMessage = '';
