@@ -22,11 +22,15 @@ const props = defineProps({
   },
   btnSize: {
     type: String,
-    default: '',
+    default: 'default',
   },
   onClick: {
     type: Function,
     default: () => {},
+  },
+  color: {
+    type: String,
+    default: 'primary',
   },
 });
 
@@ -47,7 +51,7 @@ function handleOnClick() {
     :aria-label="props.title"
     :size="props.btnSize"
     @click="handleOnClick()"
-    color="primary"
+    :color="color"
     >{{ props.title }}</v-btn
   >
 </template>

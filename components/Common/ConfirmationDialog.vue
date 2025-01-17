@@ -21,14 +21,12 @@ onUnmounted(() => {
       <v-form>
         <h3 v-html="UIState.confirmationDialog.message"></h3>
         <div class="button-holder">
-          <v-btn
-            :loading="UIState.confirmationDialog.isLoading"
-            :disabled="UIState.confirmationDialog.isLoading"
+          <UIElementsButton
+            :is-disabled="UIState.confirmationDialog.isLoading"
+            :is-loading="UIState.confirmationDialog.isLoading"
             :title="$t('words.submit')"
-            color="primary"
-            @click="useUIStore().runProvidedAction()"
-            >{{ $t('words.submit') }}</v-btn
-          >
+            :on-click="() => useUIStore().runProvidedAction()"
+          />
           <v-btn
             :title="$t('words.close')"
             @click="UIState.confirmationDialog.show = false"

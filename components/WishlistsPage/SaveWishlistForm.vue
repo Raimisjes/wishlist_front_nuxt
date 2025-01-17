@@ -88,9 +88,7 @@ const closeModal = () => {
       <UIElementsButton
         :is-disabled="wishlistsState.form.isLoading"
         :is-loading="wishlistsState.form.isLoading"
-        :is-block="false"
         :title="$t('words.save')"
-        :btn-size="'default'"
       />
       <v-btn :text="$t('words.close')" @click="closeModal()"></v-btn>
     </div>

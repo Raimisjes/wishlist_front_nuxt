@@ -35,9 +35,7 @@ async function checkURL() {
       <UIElementsButton
         :is-disabled="myWishlistState.checkURLForm.isLoading"
         :is-loading="myWishlistState.checkURLForm.isLoading"
-        :is-block="false"
         :title="$t('words.checkURL')"
-        :btn-size="'default'"
       />
     </div>
     <div class="form-error-holder" v-if="myWishlistState.checkURLForm.error">
