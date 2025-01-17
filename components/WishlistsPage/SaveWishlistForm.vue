@@ -106,7 +106,7 @@ const closeModal = () => {
         type="submit"
         >{{ $t('words.save') }}</v-btn
       >
-      <v-btn text="Close" @click="closeModal()"></v-btn>
+      <v-btn :text="$t('words.close')" @click="closeModal()"></v-btn>
     </div>
     <div class="form-error-holder" v-if="wishlistsState.form.error">
       {{ $t(wishlistsState.form.error) }}

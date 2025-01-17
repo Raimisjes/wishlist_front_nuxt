@@ -3,6 +3,7 @@ import { useI18n } from 'vue-i18n';
 import { useTemplateRef, onUnmounted } from 'vue';
 import { useAuthStore } from '@/stores/auth';
 import { storeToRefs } from 'pinia';
+import { createValidationRules } from '@/utils/validationRules';
 
 const { t } = useI18n();
 
@@ -17,10 +18,7 @@ const { state: authState } = storeToRefs(authStore);
 
 const loginFormEl = useTemplateRef('loginForm');
 
-const validationRules = {
-  usernameRules: [(v: string) => !!v || t('errors.validation001')],
-  passwordRules: [(v: string) => !!v || t('errors.validation007')],
-};
+const validationRules = createValidationRules(t);
 
 async function submitForm() {
   let validateStatus = await loginFormEl.value?.validate();
@@ -39,47 +37,36 @@ onUnmounted(() => {
       <h1 v-html="$t('words.login')"></h1>
       <v-form @submit.prevent="submitForm()" ref="loginForm">
         <div class="input-holder">
-          <v-text-field
-            v-model="authState.form.username"
+          <UIElementsTextField
+            :state="authState.form"
+            :model-path="'username'"
             :label="$t('pages.registration.username')"
             :rules="validationRules.usernameRules"
-            hide-details="auto"
-            validate-on="blur"
-            variant="underlined"
-            color="primary"
-            theme="default"
-          ></v-text-field>
+          />
         </div>
         <div class="input-holder">
-          <v-text-field
-            v-model="authState.form.password"
+          <UIElementsTextField
+            :state="authState.form"
+            :model-path="'password'"
             :label="$t('pages.registration.password')"
             :rules="validationRules.passwordRules"
             :append-icon="
               authState.form.hidePassword ? 'mdi-eye' : 'mdi-eye-off'
             "
-            hide-details="auto"
-            validate-on="blur"
-            variant="underlined"
-            color="primary"
-            theme="default"
-            :type="authState.form.hidePassword ? 'password' : 'text'"
-            @click:append="
+            :field-type="authState.form.hidePassword ? 'password' : 'text'"
+            :on-click-append="
               () => (authState.form.hidePassword = !authState.form.hidePassword)
             "
-          ></v-text-field>
+          />
         </div>
         <div class="button-holder">
-          <v-btn
-            :disabled="authState.form.isLoading"
-            :loading="authState.form.isLoading"
-            color="primary"
-            size="large"
-            block
+          <UIElementsButton
+            :is-disabled="authState.form.isLoading"
+            :is-loading="authState.form.isLoading"
+            :is-block="true"
             :title="$t('words.login')"
-            type="submit"
-            >{{ $t('words.login') }}</v-btn
-          >
+            :btn-size="'large'"
+          />
         </div>
         <div class="form-error-holder" v-if="authState.form.error">
           {{ $t(authState.form.error) }}

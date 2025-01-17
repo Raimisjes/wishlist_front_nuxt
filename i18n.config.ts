@@ -130,10 +130,10 @@ export default {
         internal007: 'Unexpected error. Try again later.',
         internal008:
           "You don't have the necessary permissions to perform this action.",
-        validation001: 'Username is mandatory',
+        validation001: 'Username is required',
         validation002: 'Username is taken',
         validation003: 'Wrong username format.',
-        validation004: 'E-mail is mandatory',
+        validation004: 'E-mail is required',
         validation005: 'E-mail is already registered',
         validation006: 'Bad e-mail format',
         validation007: 'Password is required',
