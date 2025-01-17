@@ -3,6 +3,7 @@ import { useWishlistsStore } from '@/stores/wishlists';
 import { useTemplateRef } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useI18n } from 'vue-i18n';
+import { createValidationRules } from '@/utils/validationRules';
 
 const { t } = useI18n();
 
@@ -12,20 +13,12 @@ const props = defineProps({
   },
 });
 
+const validationRules = createValidationRules(t);
+
 const wishlistsStore = useWishlistsStore();
 const { state: wishlistsState } = storeToRefs(wishlistsStore);
 
 const addWishlistFormEl = useTemplateRef('addWishlistFormEl');
-
-const validationRules = {
-  titleRules: [
-    (v: string) => !!v || t('errors.validation013'),
-    (v: string) => v.length <= 160 || t('errors.validation014'),
-  ],
-  descriptionRules: [
-    (v: string) => v.length <= 500 || t('errors.validation015'),
-  ],
-};
 
 async function saveWishlist() {
   let validateStatus = await addWishlistFormEl.value?.validate();
@@ -53,18 +46,12 @@ const closeModal = () => {
 <template>
   <v-form @submit.prevent="saveWishlist()" ref="addWishlistFormEl">
     <div class="input-holder">
-      <v-text-field
-        v-model="wishlistsState.form.title"
+      <UIElementsTextField
+        :state="wishlistsState.form"
+        :model-path="'title'"
         :label="$t('pages.wishlists.wishlistTitle')"
         :rules="validationRules.titleRules"
-        hide-details="auto"
-        validate-on="blur"
-        variant="underlined"
-        color="primary"
-        theme="default"
-        type="text"
-        maxlength="160"
-      ></v-text-field>
+      />
     </div>
     <div class="input-holder">
       <v-textarea
@@ -98,14 +85,13 @@ const closeModal = () => {
       ></v-switch>
     </div>
     <div class="button-holder">
-      <v-btn
-        :disabled="wishlistsState.form.isLoading"
-        :loading="wishlistsState.form.isLoading"
-        color="primary"
+      <UIElementsButton
+        :is-disabled="wishlistsState.form.isLoading"
+        :is-loading="wishlistsState.form.isLoading"
+        :is-block="false"
         :title="$t('words.save')"
-        type="submit"
-        >{{ $t('words.save') }}</v-btn
-      >
+        :btn-size="'default'"
+      />
       <v-btn :text="$t('words.close')" @click="closeModal()"></v-btn>
     </div>
     <div class="form-error-holder" v-if="wishlistsState.form.error">

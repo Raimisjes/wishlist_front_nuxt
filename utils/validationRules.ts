@@ -24,4 +24,11 @@ export const createValidationRules = (t: (key: string) => string) => ({
       ) || t('errors.validation006'),
   ],
   termsAcceptedRules: [(v: string) => !!v || t('errors.validation009')],
+  titleRules: [
+    (v: string) => !!v || t('errors.validation013'),
+    (v: string) => v.length <= 160 || t('errors.validation014'),
+  ],
+  descriptionRules: [
+    (v: string) => v.length <= 500 || t('errors.validation015'),
+  ],
 });

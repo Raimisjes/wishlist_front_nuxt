@@ -88,6 +88,10 @@ const props = defineProps({
     type: String as () => ValidateOnType,
     default: 'blur',
   },
+  maxLength: {
+    type: Number,
+    default: 160,
+  },
 });
 
 const modelValue = computed({
@@ -124,6 +128,7 @@ function handleOnInput() {
     @input="handleOnInput()"
     :hint="props.hint"
     :validate-on="props.validateOn"
+    :maxlength="props.maxLength"
     hide-details="auto"
     variant="underlined"
     color="primary"
