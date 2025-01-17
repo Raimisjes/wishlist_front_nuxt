@@ -42,6 +42,15 @@ function openUrl(url: string) {
   window.open(url, '_blank', 'noopener,noreferrer');
 }
 
+function openConfirmationDialog(listing: Listing) {
+  useUIStore().openConfirmationDialog(
+    t('phrases.removeListing', {
+      listing: `${listing.title}`,
+    }),
+    () => myWishlistStore.removeListing(listing._id),
+  );
+}
+
 watch(viewSaveWishDialog, (newValue) => {
   if (!newValue) {
     myWishlistStore.clearForm();
@@ -63,6 +72,7 @@ onUnmounted(() => {
   <main>
     <div class="content-holder">
       <h1
+        class="title-with-back-button"
         v-if="
           myWishlistState.currentWishlist.title != '' &&
           !myWishlistState.page?.isLoading
@@ -123,31 +133,20 @@ onUnmounted(() => {
           v-if="myWishlistState.currentWishlist.listings?.length > 0"
           v-for="listing of myWishlistState.currentWishlist.listings"
         >
-          <v-btn
-            density="comfortable"
-            class="remove-button"
-            icon="mdi-delete"
-            small
-            :aria-label="$t('words.remove')"
-            color="remove"
-            @click="
-              useUIStore().openConfirmationDialog(
-                $t('phrases.removeListing', {
-                  listing: `${listing.title}`,
-                }),
-                () => myWishlistStore.removeListing(listing._id),
-              )
-            "
-          ></v-btn>
-          <v-btn
-            density="comfortable"
-            class="edit-button"
-            icon="mdi-pencil"
-            small
-            :aria-label="$t('words.edit')"
-            color="primary"
-            @click="openModal('edit', listing)"
-          ></v-btn>
+          <UIElementsActionButton
+            :class="'edit-button'"
+            :icon="'mdi-pencil'"
+            :title="$t('words.edit')"
+            :color="'primary'"
+            @click="() => openModal('edit', listing)"
+          />
+          <UIElementsActionButton
+            :class="'remove-button'"
+            :icon="'mdi-delete'"
+            :title="$t('words.remove')"
+            :color="'remove'"
+            @click="() => openConfirmationDialog(listing)"
+          />
           <img
             src="@/assets/images/gift-placeholder.png"
             v-if="!listing?.photo"
