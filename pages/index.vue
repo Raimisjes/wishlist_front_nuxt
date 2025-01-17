@@ -6,9 +6,12 @@ import { useRegistrationStore } from '@/stores/registration';
 import { useUserStore } from '@/stores/user';
 import { useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
+import { createValidationRules } from '@/utils/validationRules';
 
 const router = useRouter();
 const { t } = useI18n();
+
+const validationRules = createValidationRules(t);
 
 const homepageStore = useHomepageStore();
 const registrationStore = useRegistrationStore();
@@ -17,16 +20,6 @@ const userStore = useUserStore();
 const { state: homepageState } = storeToRefs(homepageStore);
 
 const usernameCheckFormEl = useTemplateRef('usernameCheckFormEl');
-
-const usernameCheck = {
-  rules: {
-    minLength: (v: String) =>
-      v.length >= 3 || t('errors.homepage.usernameCheck.minLength'),
-    match: (v: String) =>
-      v.match(/^[a-zA-Z0-9_.-]{3,20}$/) != null ||
-      t('errors.homepage.usernameCheck.wrongFormat'),
-  },
-};
 
 function submitForm() {
   if (!usernameCheckFormEl.value?.isValid) return;
@@ -59,38 +52,36 @@ onUnmounted(() => {
           ref="usernameCheckFormEl"
           v-if="!userStore.state.authenticated"
         >
-          <v-text-field
-            v-model="homepageState.usernameCheck.form.username"
-            @input="onInputUsername()"
-            @click:append-inner="submitForm()"
-            :loading="homepageState.usernameCheck.form.isLoading"
-            :disabled="homepageState.usernameCheck.form.isLoading"
+          <UIElementsTextField
+            :state="homepageState.usernameCheck.form"
+            :model-path="'username'"
+            :label="''"
+            :placeholder="$t('pages.index.usernameCheckPlaceholder')"
+            :rules="validationRules.usernameCheckRules"
+            :append-inner-icon="'mdi-magnify'"
+            :on-click-append-inner="() => submitForm()"
             :prefix="$t('pages.index.usernameCheckPrefix')"
             :error-messages="
               homepageState.usernameCheck.form.error != ''
                 ? $t(homepageState.usernameCheck.form.error)
                 : ''
             "
-            :placeholder="$t('pages.index.usernameCheckPlaceholder')"
-            :rules="[usernameCheck.rules.minLength, usernameCheck.rules.match]"
-            variant="underlined"
-            color="primary"
-            theme="default"
-            append-inner-icon="mdi-magnify"
-          ></v-text-field>
+            :is-loading="homepageState.usernameCheck.form.isLoading"
+            :is-disabled="homepageState.usernameCheck.form.isLoading"
+            :on-input="() => onInputUsername()"
+          />
           <Transition name="fade">
             <div
               class="button-holder"
               v-if="homepageState.usernameCheck.usernameExists == false"
               mode="in-out"
             >
-              <v-btn
-                color="primary"
-                @click="goRegister()"
-                size="small"
+              <UIElementsButton
+                :btn-type="'button'"
                 :title="$t('words.signup')"
-                >{{ $t('words.signup') }}</v-btn
-              >
+                :btn-size="'small'"
+                :on-click="() => goRegister()"
+              />
             </div>
           </Transition>
         </v-form>
@@ -126,7 +117,7 @@ main {
         max-height: 77px;
       }
       .button-holder {
-        padding: 20px 0 0 15px;
+        padding: 5px 0 0 15px;
 
         .v-btn {
           width: 120px;

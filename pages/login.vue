@@ -50,11 +50,11 @@ onUnmounted(() => {
             :model-path="'password'"
             :label="$t('pages.registration.password')"
             :rules="validationRules.passwordRules"
-            :append-icon="
+            :append-inner-icon="
               authState.form.hidePassword ? 'mdi-eye' : 'mdi-eye-off'
             "
             :field-type="authState.form.hidePassword ? 'password' : 'text'"
-            :on-click-append="
+            :on-click-append-inner="
               () => (authState.form.hidePassword = !authState.form.hidePassword)
             "
           />

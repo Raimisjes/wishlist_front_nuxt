@@ -2,9 +2,11 @@
 const props = defineProps({
   isLoading: {
     type: Boolean,
+    default: false,
   },
   isDisabled: {
     type: Boolean,
+    default: false,
   },
   isBlock: {
     type: Boolean,
@@ -16,21 +18,34 @@ const props = defineProps({
   },
   title: {
     type: String,
+    default: '',
   },
   btnSize: {
     type: String,
+    default: '',
+  },
+  onClick: {
+    type: Function,
+    default: () => {},
   },
 });
+
+function handleOnClick() {
+  if (props.onClick) {
+    props.onClick();
+  }
+}
 </script>
 
 <template>
   <v-btn
-    :disabled="props.isDisabled"
     :loading="props.isLoading"
+    :disabled="props.isDisabled"
     :block="props.isBlock"
-    :title="props.title"
     :type="props.btnType"
+    :title="props.title"
     :size="props.btnSize"
+    @click="handleOnClick()"
     color="primary"
     >{{ props.title }}</v-btn
   >
