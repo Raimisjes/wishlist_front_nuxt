@@ -2,6 +2,30 @@
 import { computed } from 'vue';
 
 type ValidationRule = (value: any) => boolean | string;
+// prettier-ignore
+type ValidateOnType =
+| 'eager'
+  | 'lazy'
+  | 'blur'
+  | 'input'
+  | 'submit'
+  | 'invalid-input'
+  | 'blur lazy'
+  | 'input lazy'
+  | 'submit lazy'
+  | 'invalid-input lazy'
+  | 'blur eager'
+  | 'input eager'
+  | 'submit eager'
+  | 'invalid-input eager'
+  | 'lazy blur'
+  | 'lazy input'
+  | 'lazy submit'
+  | 'lazy invalid-input'
+  | 'eager blur'
+  | 'eager input'
+  | 'eager submit'
+  | 'eager invalid-input';
 
 const props = defineProps({
   modelPath: {
@@ -56,6 +80,14 @@ const props = defineProps({
     type: Function,
     default: () => {},
   },
+  hint: {
+    type: String,
+    default: '',
+  },
+  validateOn: {
+    type: String as () => ValidateOnType,
+    default: 'blur',
+  },
 });
 
 const modelValue = computed({
@@ -90,6 +122,9 @@ function handleOnInput() {
     :loading="props.isLoading"
     :disabled="props.isDisabled"
     @input="handleOnInput()"
+    :hint="props.hint"
+    :validate-on="props.validateOn"
+    hide-details="auto"
     variant="underlined"
     color="primary"
     theme="default"

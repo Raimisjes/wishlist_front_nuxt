@@ -3,6 +3,7 @@ import { useI18n } from 'vue-i18n';
 import { useTemplateRef, onUnmounted } from 'vue';
 import { useRegistrationStore } from '@/stores/registration';
 import { storeToRefs } from 'pinia';
+import { createValidationRules } from '@/utils/validationRules';
 
 const { t } = useI18n();
 
@@ -11,32 +12,13 @@ definePageMeta({
   middleware: 'route-guard',
 });
 
+const validationRules = createValidationRules(t);
+
 const registrationStore = useRegistrationStore();
 
 const { state: registrationState } = storeToRefs(registrationStore);
 
 const registrationFormEl = useTemplateRef('registrationForm');
-
-const validationRules = {
-  usernameRules: [
-    (v: string) => !!v || t('errors.validation001'),
-    (v: string) => /^[a-zA-Z0-9]{3,20}$/.test(v) || t('errors.validation003'),
-  ],
-  emailRules: [
-    (v: string) => !!v || t('errors.validation004'),
-    (v: string) =>
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
-        v,
-      ) || t('errors.validation006'),
-  ],
-  passwordRules: [
-    (v: string) => !!v || t('errors.validation007'),
-    (v: string) =>
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).\S{6,15}$/.test(v) ||
-      t('errors.validation008'),
-  ],
-  termsAcceptedRules: [(v: string) => !!v || t('errors.validation009')],
-};
 
 async function submitForm() {
   let validateStatus = await registrationFormEl.value?.validate();
@@ -55,51 +37,41 @@ onUnmounted(() => {
       <h1 v-html="$t('words.signup')"></h1>
       <v-form @submit.prevent="submitForm()" ref="registrationForm">
         <div class="input-holder">
-          <v-text-field
-            v-model="registrationState.form.email"
+          <UIElementsTextField
+            :model-path="'email'"
+            :state="registrationState.form"
             :label="$t('pages.registration.email')"
             :rules="validationRules.emailRules"
-            hide-details="auto"
-            validate-on="blur"
-            variant="underlined"
-            color="primary"
-            theme="default"
-          ></v-text-field>
+          />
         </div>
         <div class="input-holder">
-          <v-text-field
-            v-model="registrationState.form.username"
+          <UIElementsTextField
+            :model-path="'username'"
+            :state="registrationState.form"
             :label="$t('pages.registration.username')"
             :rules="validationRules.usernameRules"
             :hint="$t('pages.registration.usernameHint')"
-            hide-details="auto"
-            validate-on="blur"
-            variant="underlined"
-            color="primary"
-            theme="default"
-          ></v-text-field>
+          />
         </div>
         <div class="input-holder">
-          <v-text-field
-            v-model="registrationState.form.password"
+          <UIElementsTextField
+            :model-path="'password'"
+            :state="registrationState.form"
             :label="$t('pages.registration.password')"
             :rules="validationRules.passwordRules"
-            :append-icon="
+            :append-inner-icon="
               registrationState.form.hidePassword ? 'mdi-eye' : 'mdi-eye-off'
             "
-            :hint="$t('pages.registration.passwordHint')"
-            hide-details="auto"
-            validate-on="blur"
-            variant="underlined"
-            color="primary"
-            theme="default"
-            :type="registrationState.form.hidePassword ? 'password' : 'text'"
-            @click:append="
+            :field-type="
+              registrationState.form.hidePassword ? 'password' : 'text'
+            "
+            :on-click-append-inner="
               () =>
                 (registrationState.form.hidePassword =
                   !registrationState.form.hidePassword)
             "
-          ></v-text-field>
+            :hint="$t('pages.registration.passwordHint')"
+          />
         </div>
         <div class="input-holder">
           <v-checkbox

@@ -69,6 +69,7 @@ onUnmounted(() => {
             :is-loading="homepageState.usernameCheck.form.isLoading"
             :is-disabled="homepageState.usernameCheck.form.isLoading"
             :on-input="() => onInputUsername()"
+            :validate-on="'lazy'"
           />
           <Transition name="fade">
             <div

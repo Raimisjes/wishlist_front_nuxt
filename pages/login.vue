@@ -41,7 +41,7 @@ onUnmounted(() => {
             :state="authState.form"
             :model-path="'username'"
             :label="$t('pages.registration.username')"
-            :rules="validationRules.usernameRules"
+            :rules="[validationRules.usernameRules[0]]"
           />
         </div>
         <div class="input-holder">
@@ -49,7 +49,7 @@ onUnmounted(() => {
             :state="authState.form"
             :model-path="'password'"
             :label="$t('pages.registration.password')"
-            :rules="validationRules.passwordRules"
+            :rules="[validationRules.passwordRules[0]]"
             :append-inner-icon="
               authState.form.hidePassword ? 'mdi-eye' : 'mdi-eye-off'
             "
