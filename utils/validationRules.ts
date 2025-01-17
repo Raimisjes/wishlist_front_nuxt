@@ -31,4 +31,10 @@ export const createValidationRules = (t: (key: string) => string) => ({
   descriptionRules: [
     (v: string) => v.length <= 500 || t('errors.validation015'),
   ],
+  urlRules: [
+    (v: string) =>
+      /^(?:(?:(?:https?|ftp):\/\/)?(?:www\.)?[a-z0-9-]+(?:\.[a-z0-9-]+)+[^\s]*)?$/i.test(
+        v,
+      ) || t('errors.validation011'),
+  ],
 });

@@ -3,6 +3,7 @@ import { useMyWishlistStore } from '@/stores/myWishlist';
 import { useTemplateRef } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useI18n } from 'vue-i18n';
+import { createValidationRules } from '@/utils/validationRules';
 
 const { t } = useI18n();
 
@@ -11,14 +12,7 @@ const { state: myWishlistState } = storeToRefs(myWishlistStore);
 
 const checkURLForm = useTemplateRef('checkURLFormEl');
 
-const validationRules = {
-  urlRules: [
-    (v: string) =>
-      /^(?:(?:(?:https?|ftp):\/\/)?(?:www\.)?[a-z0-9-]+(?:\.[a-z0-9-]+)+[^\s]*)?$/i.test(
-        v,
-      ) || t('errors.validation011'),
-  ],
-};
+const validationRules = createValidationRules(t);
 
 async function checkURL() {
   let validateStatus = await checkURLForm.value?.validate();
@@ -31,26 +25,20 @@ async function checkURL() {
 <template>
   <v-form @submit.prevent="checkURL()" ref="checkURLFormEl">
     <div class="input-holder row">
-      <v-text-field
-        v-model="myWishlistState.checkURLForm.url"
+      <UIElementsTextField
+        :state="myWishlistState.checkURLForm"
+        :model-path="'url'"
         :label="$t('pages.myWishlist.enterURL')"
         :rules="validationRules.urlRules"
-        placeholder="https://"
-        hide-details="auto"
-        validate-on="blur"
-        variant="underlined"
-        color="primary"
-        theme="default"
-        type="text"
-      ></v-text-field>
-      <v-btn
-        :disabled="myWishlistState.checkURLForm.isLoading"
-        :loading="myWishlistState.checkURLForm.isLoading"
-        color="primary"
+        :placeholder="'https://'"
+      />
+      <UIElementsButton
+        :is-disabled="myWishlistState.checkURLForm.isLoading"
+        :is-loading="myWishlistState.checkURLForm.isLoading"
+        :is-block="false"
         :title="$t('words.checkURL')"
-        type="submit"
-        >{{ $t('words.checkURL') }}</v-btn
-      >
+        :btn-size="'default'"
+      />
     </div>
     <div class="form-error-holder" v-if="myWishlistState.checkURLForm.error">
       {{ $t(myWishlistState.checkURLForm.error) }}
