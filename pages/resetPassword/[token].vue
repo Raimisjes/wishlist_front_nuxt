@@ -4,6 +4,7 @@ import { useChangePasswordStore } from '@/stores/changePassword';
 import { storeToRefs } from 'pinia';
 import { ref, onUnmounted, onMounted, useTemplateRef } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { createValidationRules } from '@/utils/validationRules';
 
 // @ts-ignore
 definePageMeta({
@@ -14,6 +15,8 @@ const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
 
+const validationRules = createValidationRules(t);
+
 const changePassStore = useChangePasswordStore();
 
 const { state: changePassState } = storeToRefs(changePassStore);
@@ -23,19 +26,10 @@ const pageLoading = ref(true);
 
 const changePassFormEl = useTemplateRef('changePasswordForm');
 
-const validationRules = {
-  passwordRules: [
-    (v: string) => !!v || t('errors.validation033'),
-    (v: string) =>
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).\S{6,15}$/.test(v) ||
-      t('errors.validation008'),
-  ],
-  passwordRepeatRules: [
-    (v: string) =>
-      v === useChangePasswordStore().state.form.newPassword ||
-      t('errors.validation034'),
-  ],
-};
+const passwordRepeatRules = [
+  (v: string) =>
+    v === changePassState.value.form.newPassword || t('errors.validation034'),
+];
 
 onMounted(async () => {
   viewChangePassForm.value = await changePassStore.checkToken(
@@ -66,71 +60,61 @@ async function submitForm() {
           <h1 v-html="$t('pages.changePassword.title')"></h1>
           <v-form @submit.prevent="submitForm()" ref="changePasswordForm">
             <div class="input-holder">
-              <v-text-field
-                v-model="changePassState.form.newPassword"
+              <UIElementsTextField
+                :model-path="'newPassword'"
+                :state="changePassState.form"
                 :label="$t('pages.changePassword.newPassword')"
                 :rules="validationRules.passwordRules"
-                :append-icon="
+                :append-inner-icon="
                   changePassState.form.hideNewPassword
                     ? 'mdi-eye'
                     : 'mdi-eye-off'
                 "
-                hide-details="auto"
-                validate-on="blur"
-                variant="underlined"
-                color="primary"
-                theme="default"
-                :type="
+                :field-type="
                   changePassState.form.hideNewPassword ? 'password' : 'text'
                 "
-                @click:append="
+                :on-click-append-inner="
                   () =>
                     (changePassState.form.hideNewPassword =
                       !changePassState.form.hideNewPassword)
                 "
-              ></v-text-field>
+                :hint="$t('pages.registration.passwordHint')"
+              />
             </div>
             <div class="input-holder">
-              <v-text-field
-                v-model="changePassState.form.repeatedNewPass"
+              <UIElementsTextField
+                :model-path="'repeatedNewPass'"
+                :state="changePassState.form"
                 :label="$t('pages.changePassword.newRepeatedPassword')"
                 :rules="[
                   ...validationRules.passwordRules,
-                  ...validationRules.passwordRepeatRules,
+                  ...passwordRepeatRules,
                 ]"
-                :append-icon="
+                :append-inner-icon="
                   changePassState.form.hideRepeatedPassword
                     ? 'mdi-eye'
                     : 'mdi-eye-off'
                 "
-                hide-details="auto"
-                validate-on="blur"
-                variant="underlined"
-                color="primary"
-                theme="default"
-                :type="
+                :field-type="
                   changePassState.form.hideRepeatedPassword
                     ? 'password'
                     : 'text'
                 "
-                @click:append="
+                :on-click-append-inner="
                   () =>
                     (changePassState.form.hideRepeatedPassword =
                       !changePassState.form.hideRepeatedPassword)
                 "
-              ></v-text-field>
+              />
             </div>
             <div class="button-holder">
-              <v-btn
-                :disabled="changePassState.form.isLoading"
-                :loading="changePassState.form.isLoading"
-                color="primary"
-                size="large"
-                block
+              <UIElementsButton
+                :is-disabled="changePassState.form.isLoading"
+                :is-loading="changePassState.form.isLoading"
+                :is-block="true"
                 :title="$t('pages.changePassword.buttonTitle')"
-                type="submit"
-                >{{ $t('pages.changePassword.buttonTitle') }}</v-btn
-              >
+                :btn-size="'large'"
+              />
             </div>
             <div class="form-error-holder" v-if="changePassState.form.error">
               {{ $t(changePassState.form.error) }}

@@ -89,16 +89,13 @@ onUnmounted(() => {
           </v-checkbox>
         </div>
         <div class="button-holder">
-          <v-btn
-            :disabled="registrationState.form.isLoading"
-            :loading="registrationState.form.isLoading"
-            color="primary"
-            size="large"
-            block
+          <UIElementsButton
+            :is-disabled="registrationState.form.isLoading"
+            :is-loading="registrationState.form.isLoading"
+            :is-block="true"
             :title="$t('words.signup')"
-            type="submit"
-            >{{ $t('words.signup') }}</v-btn
-          >
+            :btn-size="'large'"
+          />
         </div>
         <div class="form-error-holder" v-if="registrationState.form.error">
           {{ $t(registrationState.form.error) }}
