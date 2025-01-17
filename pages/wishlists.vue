@@ -42,6 +42,15 @@ function viewWishlist(wishlist: Wishlist) {
   });
 }
 
+function openConfirmationDialog(wishlist: Wishlist) {
+  useUIStore().openConfirmationDialog(
+    t('phrases.removeWishlist', {
+      wishlist: `${wishlist.title}`,
+    }),
+    () => useWishlistsStore().removeWishlist(wishlist._id),
+  );
+}
+
 watch(viewSaveWishlistDialog, (newValue) => {
   if (!newValue) {
     wishlistsStore.clearForm();
@@ -98,31 +107,20 @@ onUnmounted(() => {
           </v-card>
         </v-dialog>
         <div class="wishlist-item" v-for="wishlist of wishlistsState.wishlists">
-          <v-btn
-            density="comfortable"
-            class="remove-button"
-            icon="mdi-delete"
-            small
-            :aria-label="$t('words.remove')"
-            color="remove"
-            @click="
-              useUIStore().openConfirmationDialog(
-                $t('phrases.removeWishlist', {
-                  wishlist: `${wishlist.title}`,
-                }),
-                () => useWishlistsStore().removeWishlist(wishlist._id),
-              )
-            "
-          ></v-btn>
-          <v-btn
-            density="comfortable"
-            class="edit-button"
-            icon="mdi-pencil"
-            small
-            :aria-label="$t('words.edit')"
-            color="primary"
-            @click="openModal('edit', wishlist)"
-          ></v-btn>
+          <UIElementsActionButton
+            :class="'edit-button'"
+            :icon="'mdi-pencil'"
+            :title="$t('words.edit')"
+            :color="'primary'"
+            @click="() => openModal('edit', wishlist)"
+          />
+          <UIElementsActionButton
+            :class="'remove-button'"
+            :icon="'mdi-delete'"
+            :title="$t('words.remove')"
+            :color="'remove'"
+            @click="() => openConfirmationDialog(wishlist)"
+          />
           <img
             src="@/assets/images/gift-placeholder.png"
             v-if="!wishlist.photos?.length"

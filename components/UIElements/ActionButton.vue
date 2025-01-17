@@ -1,26 +1,22 @@
 <script lang="ts" setup>
 const props = defineProps({
-  isLoading: {
-    type: Boolean,
-    default: false,
-  },
-  isDisabled: {
-    type: Boolean,
-    default: false,
-  },
-  isBlock: {
-    type: Boolean,
-    default: false,
-  },
-  btnType: {
+  class: {
     type: String,
-    default: 'submit',
+    default: '',
+  },
+  icon: {
+    type: String,
+    default: '',
+  },
+  size: {
+    type: String,
+    default: 'small',
   },
   title: {
     type: String,
     default: '',
   },
-  btnSize: {
+  color: {
     type: String,
     default: '',
   },
@@ -39,17 +35,15 @@ function handleOnClick() {
 
 <template>
   <v-btn
-    :loading="props.isLoading"
-    :disabled="props.isDisabled"
-    :block="props.isBlock"
-    :type="props.btnType"
+    :class="props.class"
+    :icon="props.icon"
+    :size="props.size"
     :title="props.title"
     :aria-label="props.title"
-    :size="props.btnSize"
+    :color="props.color"
     @click="handleOnClick()"
-    color="primary"
-    >{{ props.title }}</v-btn
-  >
+    density="comfortable"
+  ></v-btn>
 </template>
 
 <style lang="scss" scoped></style>
