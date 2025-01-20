@@ -4,6 +4,7 @@ import { useUserStore } from '@/stores/user';
 import { storeToRefs } from 'pinia';
 import { reactive, ref, watch, useTemplateRef } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { createValidationRules } from '@/utils/validationRules';
 
 const { t } = useI18n();
 
@@ -17,6 +18,7 @@ interface SocialNetwork {
 const viewSocialsDialog = ref(false);
 
 let selectedSocialNetwork = reactive(initialSelectedNetwork());
+const validationRules = createValidationRules(t);
 
 const userSettingsStore = useUserSettingsStore();
 const { state: userSettingsState } = storeToRefs(userSettingsStore);
@@ -25,15 +27,6 @@ const userStore = useUserStore();
 const { state: userState } = storeToRefs(userStore);
 
 const socialNetworkFormEl = useTemplateRef('socialNetworkFormEl');
-
-const validationRules = {
-  urlRules: [
-    (v: string) =>
-      /^(?:(?:(?:https?|ftp):\/\/)?(?:www\.)?[a-z0-9-]+(?:\.[a-z0-9-]+)+[^\s]*)?$/i.test(
-        v,
-      ) || t('errors.validation011'),
-  ],
-};
 
 function initialSelectedNetwork(): SocialNetwork {
   return {
@@ -99,22 +92,17 @@ watch(viewSocialsDialog, (newValue) => {
       <v-form @submit.prevent="saveSocialNetwork()" ref="socialNetworkFormEl">
         <div class="form-box">
           <div class="input-holder">
-            <v-text-field
-              v-model="userSettingsState.socialNetworks.form.url"
+            <UIElementsTextField
+              :state="userSettingsState.socialNetworks.form"
+              :model-path="'url'"
               :label="
                 $t('phrases.socialNetworkURLPlaceholder', {
                   network: $t(`socialNetworks.${selectedSocialNetwork.key}`),
                 })
               "
-              :prepend-icon="selectedSocialNetwork.icon"
               :rules="validationRules.urlRules"
-              hide-details="auto"
-              validate-on="blur"
-              variant="underlined"
-              color="primary"
-              theme="default"
-              type="text"
-            ></v-text-field>
+              :prepend-icon="selectedSocialNetwork.icon"
+            />
             <v-switch
               v-model="userSettingsState.socialNetworks.form.active"
               color="primary"
@@ -123,15 +111,16 @@ watch(viewSocialsDialog, (newValue) => {
             ></v-switch>
           </div>
           <div class="button-holder">
-            <v-btn
-              :disabled="userSettingsState.socialNetworks.form.isLoading"
-              :loading="userSettingsState.socialNetworks.form.isLoading"
-              color="primary"
+            <UIElementsButton
+              :is-disabled="userSettingsState.socialNetworks.form.isLoading"
+              :is-loading="userSettingsState.socialNetworks.form.isLoading"
               :title="$t('words.save')"
-              type="submit"
-              >{{ $t('words.save') }}</v-btn
+            />
+            <v-btn
+              :title="$t('words.close')"
+              @click="viewSocialsDialog = false"
+              >{{ $t('words.close') }}</v-btn
             >
-            <v-btn text="Close" @click="viewSocialsDialog = false"></v-btn>
           </div>
           <div
             class="form-error-holder"

@@ -92,6 +92,10 @@ const props = defineProps({
     type: Number,
     default: 160,
   },
+  prependIcon: {
+    type: String,
+    default: '',
+  },
 });
 
 const hidePass = ref(true);
@@ -148,6 +152,7 @@ function handleOnInput() {
     :hint="props.hint"
     :validate-on="props.validateOn"
     :maxlength="props.maxLength"
+    :prepend-icon="props.prependIcon"
     hide-details="auto"
     variant="underlined"
     color="primary"
