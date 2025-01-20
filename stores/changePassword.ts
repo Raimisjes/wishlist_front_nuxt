@@ -6,9 +6,7 @@ import { useRouter, useRoute } from 'vue-router';
 interface ChangePasswordState {
   form: {
     newPassword: string;
-    hideNewPassword: boolean;
     repeatedNewPass: string;
-    hideRepeatedPassword: boolean;
     isLoading: boolean;
     error: string;
   };
@@ -18,9 +16,7 @@ function getInitialState(): ChangePasswordState {
   return {
     form: {
       newPassword: '',
-      hideNewPassword: true,
       repeatedNewPass: '',
-      hideRepeatedPassword: true,
       isLoading: false,
       error: '',
     },

@@ -59,17 +59,7 @@ onUnmounted(() => {
             :state="registrationState.form"
             :label="$t('pages.registration.password')"
             :rules="validationRules.passwordRules"
-            :append-inner-icon="
-              registrationState.form.hidePassword ? 'mdi-eye' : 'mdi-eye-off'
-            "
-            :field-type="
-              registrationState.form.hidePassword ? 'password' : 'text'
-            "
-            :on-click-append-inner="
-              () =>
-                (registrationState.form.hidePassword =
-                  !registrationState.form.hidePassword)
-            "
+            :field-type="'password'"
             :hint="$t('pages.registration.passwordHint')"
           />
         </div>

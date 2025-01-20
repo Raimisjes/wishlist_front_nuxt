@@ -8,7 +8,6 @@ interface RegistrationState {
     username: string;
     email: string;
     password: string;
-    hidePassword: boolean;
     termsAccepted: Boolean;
     isLoading: boolean;
     error: string;
@@ -25,7 +24,6 @@ function getInitialState(): RegistrationState {
       username: '',
       email: '',
       password: '',
-      hidePassword: true,
       termsAccepted: false,
       isLoading: false,
       error: '',

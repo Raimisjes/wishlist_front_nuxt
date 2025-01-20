@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 
 type ValidationRule = (value: any) => boolean | string;
 // prettier-ignore
@@ -94,12 +94,31 @@ const props = defineProps({
   },
 });
 
+const hidePass = ref(true);
+
 const modelValue = computed({
   get: () => props.state[props.modelPath],
   set: (value) => (props.state[props.modelPath] = value),
 });
 
+function getInnerIcon() {
+  if (props.fieldType === 'password') {
+    return hidePass.value ? 'mdi-eye' : 'mdi-eye-off';
+  }
+  return props.appendInnerIcon;
+}
+
+function getFieldType() {
+  if (props.fieldType === 'password') {
+    return hidePass.value ? 'password' : 'text';
+  }
+  return props.fieldType;
+}
+
 function handleAppendInnerClick() {
+  if (props.fieldType === 'password') {
+    hidePass.value = !hidePass.value;
+  }
   if (props.onClickAppendInner) {
     props.onClickAppendInner();
   }
@@ -118,8 +137,8 @@ function handleOnInput() {
     :label="props.label"
     :rules="props.rules"
     :placeholder="props.placeholder"
-    :append-inner-icon="props.appendInnerIcon"
-    :type="props.fieldType"
+    :append-inner-icon="getInnerIcon()"
+    :type="getFieldType()"
     @click:append-inner="handleAppendInnerClick()"
     :prefix="props.prefix"
     :error-messages="props.errorMessages"

@@ -95,18 +95,12 @@ const closeModal = () => {
   <v-form @submit.prevent="addWish()" class="add-wish-form" ref="addWishFormEl">
     <div v-if="myWishlistState.form.show" class="additional-fields">
       <div class="input-holder">
-        <v-text-field
-          v-model="myWishlistState.form.title"
+        <UIElementsTextField
+          :state="myWishlistState.form"
+          :model-path="'title'"
           :label="$t('pages.myWishlist.giftTitle')"
           :rules="validationRules.titleRules"
-          hide-details="auto"
-          validate-on="blur"
-          variant="underlined"
-          color="primary"
-          theme="default"
-          type="text"
-          maxlength="160"
-        ></v-text-field>
+        />
       </div>
       <div class="input-holder">
         <v-textarea
@@ -155,15 +149,12 @@ const closeModal = () => {
       </div>
     </div>
     <div class="button-holder">
-      <v-btn
+      <UIElementsButton
         v-if="myWishlistState.form.show"
-        :loading="myWishlistState.form.isLoading"
-        :disabled="myWishlistState.form.isLoading"
+        :is-disabled="myWishlistState.form.isLoading"
+        :is-loading="myWishlistState.form.isLoading"
         :title="$t('words.save')"
-        color="primary"
-        type="submit"
-        >{{ $t('words.save') }}</v-btn
-      >
+      />
       <v-btn :title="$t('words.close')" @click="closeModal">{{
         $t('words.close')
       }}</v-btn>

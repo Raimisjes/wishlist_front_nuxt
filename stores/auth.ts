@@ -12,7 +12,6 @@ interface AuthState {
   form: {
     username: string;
     password: string;
-    hidePassword: boolean;
     isLoading: boolean;
     error: string;
   };
@@ -23,7 +22,6 @@ function getInitialState(): AuthState {
     form: {
       username: '',
       password: '',
-      hidePassword: true,
       isLoading: false,
       error: '',
     },
@@ -130,7 +128,6 @@ export const useAuthStore = defineStore(
       Object.assign(state.form, {
         username: '',
         password: '',
-        hidePassword: true,
         isLoading: false,
         error: '',
       });

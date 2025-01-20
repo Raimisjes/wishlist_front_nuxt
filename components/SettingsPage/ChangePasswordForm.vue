@@ -3,6 +3,7 @@ import { useUserSettingsStore } from '@/stores/userSettings';
 import { storeToRefs } from 'pinia';
 import { useTemplateRef, onUnmounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { createValidationRules } from '@/utils/validationRules';
 
 const { t } = useI18n();
 
@@ -13,19 +14,13 @@ let showChangePassForm = ref(false);
 
 const changePassFormEl = useTemplateRef('changePassFormEl');
 
-const validationRules = {
-  passwordRules: [
-    (v: string) => !!v || t('errors.validation033'),
-    (v: string) =>
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).\S{6,15}$/.test(v) ||
-      t('errors.validation008'),
-  ],
-  passwordRepeatRules: [
-    (v: string) =>
-      v === useUserSettingsStore().state.changePassword.form.newPassword ||
-      t('errors.validation034'),
-  ],
-};
+const validationRules = createValidationRules(t);
+
+const passwordRepeatRules = [
+  (v: string) =>
+    v === userSettingsState.value.changePassword.form.newPassword ||
+    t('errors.validation034'),
+];
 
 async function submitChangePass() {
   let validateStatus = await changePassFormEl.value?.validate();
@@ -50,99 +45,39 @@ onUnmounted(() => {
     <Transition name="expand">
       <div v-if="showChangePassForm" class="form-box">
         <div class="input-holder">
-          <v-text-field
-            v-model="userSettingsState.changePassword.form.currentPassword"
+          <UIElementsTextField
+            :state="userSettingsState.changePassword.form"
+            :model-path="'currentPassword'"
             :label="$t('pages.settings.currentPassword')"
             :rules="[validationRules.passwordRules[0]]"
-            :append-icon="
-              userSettingsState.changePassword.form.hideCurrentPassword
-                ? 'mdi-eye'
-                : 'mdi-eye-off'
-            "
-            hide-details="auto"
-            validate-on="blur"
-            variant="underlined"
-            color="primary"
-            theme="default"
-            :type="
-              userSettingsState.changePassword.form.hideCurrentPassword
-                ? 'password'
-                : 'text'
-            "
-            @click:append="
-              () =>
-                (userSettingsState.changePassword.form.hideCurrentPassword =
-                  !userSettingsState.changePassword.form.hideCurrentPassword)
-            "
-          ></v-text-field>
+            :field-type="'password'"
+          />
         </div>
         <div class="input-holder">
-          <v-text-field
-            v-model="userSettingsState.changePassword.form.newPassword"
+          <UIElementsTextField
+            :state="userSettingsState.changePassword.form"
+            :model-path="'newPassword'"
             :label="$t('pages.settings.newPassword')"
             :rules="validationRules.passwordRules"
-            :append-icon="
-              userSettingsState.changePassword.form.hideNewPassword
-                ? 'mdi-eye'
-                : 'mdi-eye-off'
-            "
-            hide-details="auto"
-            validate-on="blur"
-            variant="underlined"
-            color="primary"
-            theme="default"
-            :type="
-              userSettingsState.changePassword.form.hideNewPassword
-                ? 'password'
-                : 'text'
-            "
-            @click:append="
-              () =>
-                (userSettingsState.changePassword.form.hideNewPassword =
-                  !userSettingsState.changePassword.form.hideNewPassword)
-            "
-          ></v-text-field>
+            :field-type="'password'"
+          />
         </div>
         <div class="input-holder">
-          <v-text-field
-            v-model="userSettingsState.changePassword.form.newRepeated"
+          <UIElementsTextField
+            :state="userSettingsState.changePassword.form"
+            :model-path="'newRepeated'"
             :label="$t('pages.settings.newRepeatedPassword')"
-            :rules="[
-              ...validationRules.passwordRules,
-              ...validationRules.passwordRepeatRules,
-            ]"
-            :append-icon="
-              userSettingsState.changePassword.form.hideRepeatedPassword
-                ? 'mdi-eye'
-                : 'mdi-eye-off'
-            "
-            hide-details="auto"
-            validate-on="blur"
-            variant="underlined"
-            color="primary"
-            theme="default"
-            :type="
-              userSettingsState.changePassword.form.hideRepeatedPassword
-                ? 'password'
-                : 'text'
-            "
-            @click:append="
-              () =>
-                (userSettingsState.changePassword.form.hideRepeatedPassword =
-                  !userSettingsState.changePassword.form.hideRepeatedPassword)
-            "
-          ></v-text-field>
+            :rules="[...validationRules.passwordRules, ...passwordRepeatRules]"
+            :field-type="'password'"
+          />
         </div>
         <div class="button-holder">
-          <v-btn
-            :disabled="userSettingsState.changePassword.form.isLoading"
-            :loading="userSettingsState.changePassword.form.isLoading"
-            color="primary"
-            block
+          <UIElementsButton
+            :is-disabled="userSettingsState.changePassword.form.isLoading"
+            :is-loading="userSettingsState.changePassword.form.isLoading"
+            :is-block="true"
             :title="$t('words.change')"
-            type="submit"
-            >{{ $t('words.change') }}</v-btn
-          >
+          />
         </div>
         <div
           class="form-error-holder"

@@ -10,11 +10,8 @@ interface UserSettingsState {
   changePassword: {
     form: {
       currentPassword: string;
-      hideCurrentPassword: boolean;
       newPassword: string;
-      hideNewPassword: boolean;
       newRepeated: string;
-      hideRepeatedPassword: boolean;
       isLoading: boolean;
       error: string;
     };
@@ -34,11 +31,8 @@ function getInitialState(): UserSettingsState {
     changePassword: {
       form: {
         currentPassword: '',
-        hideCurrentPassword: true,
         newPassword: '',
-        hideNewPassword: true,
         newRepeated: '',
-        hideRepeatedPassword: true,
         isLoading: false,
         error: '',
       },

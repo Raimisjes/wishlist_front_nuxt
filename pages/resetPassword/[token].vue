@@ -65,19 +65,7 @@ async function submitForm() {
                 :state="changePassState.form"
                 :label="$t('pages.changePassword.newPassword')"
                 :rules="validationRules.passwordRules"
-                :append-inner-icon="
-                  changePassState.form.hideNewPassword
-                    ? 'mdi-eye'
-                    : 'mdi-eye-off'
-                "
-                :field-type="
-                  changePassState.form.hideNewPassword ? 'password' : 'text'
-                "
-                :on-click-append-inner="
-                  () =>
-                    (changePassState.form.hideNewPassword =
-                      !changePassState.form.hideNewPassword)
-                "
+                :field-type="'password'"
                 :hint="$t('pages.registration.passwordHint')"
               />
             </div>
@@ -90,21 +78,7 @@ async function submitForm() {
                   ...validationRules.passwordRules,
                   ...passwordRepeatRules,
                 ]"
-                :append-inner-icon="
-                  changePassState.form.hideRepeatedPassword
-                    ? 'mdi-eye'
-                    : 'mdi-eye-off'
-                "
-                :field-type="
-                  changePassState.form.hideRepeatedPassword
-                    ? 'password'
-                    : 'text'
-                "
-                :on-click-append-inner="
-                  () =>
-                    (changePassState.form.hideRepeatedPassword =
-                      !changePassState.form.hideRepeatedPassword)
-                "
+                :field-type="'password'"
               />
             </div>
             <div class="button-holder">
