@@ -28,14 +28,7 @@ onUnmounted(() => {
 <template>
   <main>
     <div class="content-holder user-page">
-      <div class="spinner-holder" v-if="userPageState.page?.isLoading">
-        <v-progress-circular
-          :size="35"
-          :width="2"
-          color="primary"
-          indeterminate
-        ></v-progress-circular>
-      </div>
+      <CommonSpinner v-if="userPageState.page?.isLoading" />
       <div v-else>
         <div
           class="page-error"
@@ -104,9 +97,6 @@ onUnmounted(() => {
 
 <style lang="scss" scoped>
 .user-page {
-  .spinner-holder {
-    min-height: 400px;
-  }
   .page-error {
     text-align: center;
 

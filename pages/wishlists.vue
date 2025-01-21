@@ -72,14 +72,7 @@ onUnmounted(() => {
   <main>
     <div class="content-holder">
       <h1>{{ $t('pages.wishlists.title') }}</h1>
-      <div class="spinner-holder" v-if="wishlistsState.page?.isLoading">
-        <v-progress-circular
-          :size="35"
-          :width="2"
-          color="primary"
-          indeterminate
-        ></v-progress-circular>
-      </div>
+      <CommonSpinner v-if="wishlistsState.page?.isLoading" />
       <div class="wishlists-holder" v-else>
         <div class="wishlist-item add-new" @click="openModal('add')">
           <v-icon color="primary" :size="50">mdi-plus-circle</v-icon>

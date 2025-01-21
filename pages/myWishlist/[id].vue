@@ -96,14 +96,7 @@ onUnmounted(() => {
       >
         {{ myWishlistState.currentWishlist.description }}
       </p>
-      <div class="spinner-holder" v-if="myWishlistState.page?.isLoading">
-        <v-progress-circular
-          :size="35"
-          :width="2"
-          color="primary"
-          indeterminate
-        ></v-progress-circular>
-      </div>
+      <CommonSpinner v-if="myWishlistState.page?.isLoading" />
       <div class="wish-holder" v-else>
         <div class="wish-item add-new" @click="openModal('add')">
           <v-icon color="primary" :size="50">mdi-plus-circle</v-icon>
