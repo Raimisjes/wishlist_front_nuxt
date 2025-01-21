@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { onMounted, onUnmounted } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import { useI18n } from 'vue-i18n';
 import { useUserPageStore } from '@/stores/userPage';
@@ -8,6 +8,7 @@ import { navigateTo } from 'nuxt/app';
 
 const { t } = useI18n();
 const route = useRoute();
+const router = useRouter();
 
 const userPageStore = useUserPageStore();
 const { state: userPageState } = storeToRefs(userPageStore);
@@ -45,7 +46,9 @@ onUnmounted(() => {
           v-if="!userPageState.page.error && userPageState.username != ''"
         >
           <div class="user-info-block">
-            <h1>{{ userPageState.username }}</h1>
+            <h1 @click="router.push(`/@${userPageState.username}`)">
+              {{ userPageState.username }}
+            </h1>
             <div class="social-networks">
               <v-icon
                 v-for="network of userPageState.socialNetworks"
@@ -112,6 +115,7 @@ onUnmounted(() => {
       h1 {
         text-align: center;
         margin: 0 0 15px 0;
+        cursor: pointer;
       }
       h4.nothing-to-show {
         text-align: center;
