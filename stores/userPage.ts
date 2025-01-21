@@ -3,6 +3,7 @@ import { reactive } from 'vue';
 import { useRuntimeConfig } from 'nuxt/app';
 import _ from 'lodash';
 import type { SocialNetwork } from '@/types/socialNetwork.types';
+import type { Wishlist } from '@/types/wishlist.types';
 
 export interface UserPageState {
   username: string;
@@ -14,6 +15,7 @@ export interface UserPageState {
   };
   wishlists: [];
   newListings: [];
+  currentWishlist: Wishlist;
   page: {
     isLoading: boolean;
     error: string;
@@ -51,6 +53,14 @@ function getInitialState(): UserPageState {
     },
     wishlists: [],
     newListings: [],
+    currentWishlist: {
+      _id: '',
+      title: '',
+      description: '',
+      availabilityStatus: 'private',
+      ownerId: '',
+      photos: [],
+    },
     page: {
       isLoading: true,
       error: '',
@@ -102,6 +112,43 @@ export const useUserPageStore = defineStore(
       return getUserDataSuccess;
     }
 
+    async function getWishlistData(wishlistId: string) {
+      state.page.error = '';
+
+      let getWishlistDataSuccess = false;
+
+      try {
+        const response = await $fetch<Promise<any>>(
+          `${config.public.API_URL}/wishlist/getoneinfo/public/${wishlistId}`,
+          {
+            method: 'get',
+            timeout: 10000,
+            retryStatusCodes: [401],
+            retryDelay: 500,
+            retry: 0,
+            async onRequest({ options }) {
+              options.headers = {
+                ...options.headers,
+              };
+            },
+          },
+        );
+
+        getWishlistDataSuccess = response.status;
+        _.merge(state, response.data);
+      } catch (error) {
+        let errorMessage = '';
+        !error.data
+          ? (errorMessage = 'errors.internal001')
+          : (errorMessage = `errors.${error.data.data}`);
+
+        state.page.error = errorMessage;
+      }
+
+      state.page.isLoading = false;
+      return getWishlistDataSuccess;
+    }
+
     function clearStore() {
       Object.assign(state, getInitialState());
     }
@@ -109,6 +156,7 @@ export const useUserPageStore = defineStore(
     return {
       state,
       getUserData,
+      getWishlistData,
       clearStore,
     };
   },

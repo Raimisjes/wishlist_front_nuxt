@@ -60,7 +60,7 @@ onUnmounted(() => {
             :rules="validationRules.usernameCheckRules"
             :append-inner-icon="'mdi-magnify'"
             :on-click-append-inner="() => submitForm()"
-            :prefix="$t('pages.index.usernameCheckPrefix')"
+            :prefix="`${$t('pages.index.usernameCheckPrefix')}@`"
             :error-messages="
               homepageState.usernameCheck.form.error != ''
                 ? $t(homepageState.usernameCheck.form.error)

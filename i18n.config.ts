@@ -20,8 +20,8 @@ export default {
       pages: {
         index: {
           slogan: 'Let your friends know exactly what would make you smile!',
-          usernameCheckPrefix: 'gftme.one/',
-          usernameCheckPlaceholder: 'nickname',
+          usernameCheckPrefix: `gftme.one/`,
+          usernameCheckPlaceholder: 'username',
         },
         error: {
           title: 'Sorry, the page you are looking for, could not be found',

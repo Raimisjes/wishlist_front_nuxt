@@ -1,15 +1,17 @@
 <script lang="ts" setup>
 import { onMounted, onUnmounted } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import { useI18n } from 'vue-i18n';
 import { useUserPageStore } from '@/stores/userPage';
 import { navigateTo } from 'nuxt/app';
 import 'vue3-carousel/carousel.css';
 import { Carousel, Slide, Navigation } from 'vue3-carousel';
+import type { Wishlist } from '@/types/wishlist.types';
 
 const { t } = useI18n();
 const route = useRoute();
+const router = useRouter();
 
 const userPageStore = useUserPageStore();
 const { state: userPageState } = storeToRefs(userPageStore);
@@ -29,8 +31,14 @@ const carouselConfig = {
   },
 };
 
+function viewWishlist(wishlist: Wishlist) {
+  router.push({
+    path: `/w${wishlist._id}`,
+  });
+}
+
 onMounted(async () => {
-  const response = await userPageStore.getUserData(route.params.username);
+  await userPageStore.getUserData(route.params.username);
 });
 
 onUnmounted(() => {
@@ -151,7 +159,7 @@ onUnmounted(() => {
                     ></v-carousel-item>
                   </v-carousel>
                   <div class="info">
-                    <h5 @click="">
+                    <h5 @click="viewWishlist(wishlist)">
                       {{ wishlist.title }}
                     </h5>
                   </div>
@@ -232,8 +240,8 @@ onUnmounted(() => {
         .wish-item {
           max-width: 260px;
         }
-        .carousel__viewport {
-          padding: 10px 0;
+        ::v-deep(.carousel__viewport) {
+          padding: 5px 0;
         }
       }
       .user-wishlists {
