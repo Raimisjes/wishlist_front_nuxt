@@ -22,6 +22,7 @@
     "pinia-plugin-persistedstate": "^4.2.0",
     "vue": "^3.2.45",
     "vue-router": "^4.1.6",
+    "vue3-carousel": "^0.13.0",
     "vuetify-nuxt-module": "^0.18.3"
   },
   "devDependencies": {

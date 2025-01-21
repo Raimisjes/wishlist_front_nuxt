@@ -5,15 +5,9 @@ import { storeToRefs } from 'pinia';
 import { reactive, ref, watch, useTemplateRef } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { createValidationRules } from '@/utils/validationRules';
+import type { SocialNetwork } from '@/types/socialNetwork.types';
 
 const { t } = useI18n();
-
-interface SocialNetwork {
-  url: string;
-  active: boolean;
-  key: string;
-  icon: string;
-}
 
 const viewSocialsDialog = ref(false);
 

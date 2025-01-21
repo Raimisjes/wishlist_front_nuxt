@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import { reactive } from 'vue';
+import type { SocialNetwork } from '@/types/socialNetwork.types';
 
 interface UserState {
   id: string;
@@ -9,30 +10,10 @@ interface UserState {
   role: string;
   authenticated: boolean;
   socialNetworks: {
-    facebook: {
-      url: string;
-      active: boolean;
-      key: string;
-      icon: string;
-    };
-    instagram: {
-      url: string;
-      active: boolean;
-      key: string;
-      icon: string;
-    };
-    youtube: {
-      url: string;
-      active: boolean;
-      key: string;
-      icon: string;
-    };
-    tiktok: {
-      url: string;
-      active: boolean;
-      key: string;
-      icon: string;
-    };
+    facebook: SocialNetwork;
+    instagram: SocialNetwork;
+    youtube: SocialNetwork;
+    tiktok: SocialNetwork;
   };
 }
 

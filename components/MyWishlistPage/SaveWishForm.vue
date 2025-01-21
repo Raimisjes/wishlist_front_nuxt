@@ -51,6 +51,10 @@ async function addWish() {
     formData.append('wishlistId', props.wishlistId);
   }
   formData.append('url', myWishlistState.value.checkURLForm.url);
+  formData.append(
+    'availabilityStatus',
+    myWishlistState.value.currentWishlist.availabilityStatus,
+  );
 
   let result = null;
   if (props.saveModalAction === 'add') {

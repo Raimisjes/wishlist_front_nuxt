@@ -93,6 +93,9 @@ export default {
           removeListingSuccess: 'Wish has been successully removed.',
           editListingSuccess: 'Wish has been saved successully.',
         },
+        usersPublic: {
+          nothingToShow: 'Nothing to show',
+        },
       },
       words: {
         login: 'Log in',
@@ -112,6 +115,7 @@ export default {
         public: 'Public',
         private: 'Private',
         submit: 'Submit',
+        wishes: 'Wishes',
       },
       errors: {
         undefined: 'Unexpected error. Try again later.',
@@ -151,23 +155,24 @@ export default {
         validation019: 'File upload error. Try again later.',
         validation020: 'File too large',
         validation021: 'Incorrect file format',
-        // validation022: 'Per daug failų',
-        // validation023: 'Noras nerastas',
-        // validation024: 'Neteisingas noro savininkas',
-        // validation025: 'Norų sąrašo pavadinimas privalomas',
-        // validation026: 'Norų sąrašo pavadinimas per ilgas',
-        // validation027: 'Norų sąrašo aprašymas per ilgas',
-        // validation028: 'Norų sąrašo statusas privalomas',
-        // validation029: 'Norų sąrašo statusas neegzistuoja',
-        // validation030: 'Norų sąrašo savininkas privalomas',
-        // validation031: 'Norų sąrašas nerastas',
-        // validation032: 'Nenurodytas norų sąrašo savininkas',
+        validation022: 'File count exceeded.',
+        validation023: 'Wish not found',
+        validation024: 'Wrong listing owner',
+        validation025: 'Wishlist title is required.',
+        validation026: 'Wishlist title is too long.',
+        validation027: 'Wishlist description is too long.',
+        validation028: 'Wishlist status is required.',
+        validation029: `Wishlist status doens't exist.`,
+        validation030: 'Wishlist owner is required.',
+        validation031: 'Wishlist not found.',
+        validation032: 'Wrong wishlist owner',
         validation033: 'Field is required',
         validation034: 'New password should be equal in both fields.',
         validation035: 'Incorrect current password.',
         validation036: `The provided email address does not match any existing user account.`,
         validation037:
           'Too much password reset attempts. Please, try again later.',
+        validation038: `User not found.`,
       },
       socialNetworks: {
         facebook: 'Facebook',
@@ -184,6 +189,10 @@ export default {
           `Are you sure you want to remove <span>${named('wishlist')}</span> wishlist?`,
         removeListing: ({ named }) =>
           `Are you sure you want to remove <span>${named('listing')}</span> wish?`,
+        newListingsTitle: ({ named }) =>
+          `<span>${named('username')}'s</span> most recent picks`,
+        userWishlists: ({ named }) =>
+          `<span>${named('username')}'s</span> wishlists`,
       },
       $vuetify: {
         input: {
