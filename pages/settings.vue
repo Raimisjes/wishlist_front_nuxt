@@ -19,19 +19,6 @@ definePageMeta({
 <style lang="scss">
 main {
   .content-holder {
-    background-color: #f8fffd;
-    border-radius: 20px;
-    padding: 40px;
-    box-shadow:
-      rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
-      rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
-    max-width: 800px;
-    width: 100%;
-    margin: auto;
-
-    > h1 {
-      margin: 0 0 20px 0;
-    }
     form {
       max-width: 250px;
 
@@ -50,9 +37,6 @@ main {
       .button-holder {
         margin: 15px 0 0 0;
       }
-    }
-    @media screen and (max-width: 450px) {
-      padding: 20px;
     }
   }
 }

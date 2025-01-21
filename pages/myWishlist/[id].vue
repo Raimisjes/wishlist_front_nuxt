@@ -156,44 +156,4 @@ onUnmounted(() => {
   </main>
 </template>
 
-<style lang="scss">
-main {
-  .content-holder {
-    background-color: #f8fffd;
-    border-radius: 20px;
-    padding: 40px;
-    box-shadow:
-      rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
-      rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
-    max-width: 800px;
-    width: 100%;
-    margin: auto;
-
-    > h1 {
-      margin: 0 0 20px 0;
-      position: relative;
-
-      a {
-        position: absolute;
-        right: 0;
-        top: 15px;
-        font-size: 14px;
-
-        .v-icon {
-          margin-right: 5px;
-          bottom: 1px;
-          transition: all 0.2s ease-in-out;
-        }
-        &:hover {
-          .v-icon {
-            transform: translateX(-3px);
-          }
-        }
-      }
-    }
-    @media screen and (max-width: 600px) {
-      padding: 20px;
-    }
-  }
-}
-</style>
+<style lang="scss"></style>
