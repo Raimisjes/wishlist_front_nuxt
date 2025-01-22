@@ -5,48 +5,8 @@ import { useUserStore } from '@/stores/user';
 import { useAuthStore } from '@/stores/auth';
 import { useUIStore } from '@/stores/ui';
 import DOMPurify from 'dompurify';
-
-interface UserSettingsState {
-  changePassword: {
-    form: {
-      currentPassword: string;
-      newPassword: string;
-      newRepeated: string;
-      isLoading: boolean;
-      error: string;
-    };
-  };
-  socialNetworks: {
-    form: {
-      url: string;
-      active: boolean;
-      isLoading: boolean;
-      error: string;
-    };
-  };
-}
-
-function getInitialState(): UserSettingsState {
-  return {
-    changePassword: {
-      form: {
-        currentPassword: '',
-        newPassword: '',
-        newRepeated: '',
-        isLoading: false,
-        error: '',
-      },
-    },
-    socialNetworks: {
-      form: {
-        url: '',
-        active: false,
-        isLoading: false,
-        error: '',
-      },
-    },
-  };
-}
+import { getInitialState } from '@/stores/state/userSettingsState';
+import type { UserSettingsState } from '@/stores/state/userSettingsState';
 
 export const useUserSettingsStore = defineStore(
   'userSettings',

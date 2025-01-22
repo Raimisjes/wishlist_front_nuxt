@@ -2,26 +2,8 @@ import { defineStore } from 'pinia';
 import { reactive } from 'vue';
 import { useRuntimeConfig } from 'nuxt/app';
 import { useRouter, useRoute } from 'vue-router';
-
-interface ChangePasswordState {
-  form: {
-    newPassword: string;
-    repeatedNewPass: string;
-    isLoading: boolean;
-    error: string;
-  };
-}
-
-function getInitialState(): ChangePasswordState {
-  return {
-    form: {
-      newPassword: '',
-      repeatedNewPass: '',
-      isLoading: false,
-      error: '',
-    },
-  };
-}
+import { getInitialState } from '@/stores/state/changePasswordState';
+import type { ChangePasswordState } from '@/stores/state/changePasswordState';
 
 export const useChangePasswordStore = defineStore(
   'changePassword',

@@ -7,26 +7,8 @@ import { useWishlistsStore } from '@/stores/wishlists';
 import { useRouter } from 'vue-router';
 import { useUIStore } from './ui';
 import { useUserSettingsStore } from './userSettings';
-
-interface AuthState {
-  form: {
-    username: string;
-    password: string;
-    isLoading: boolean;
-    error: string;
-  };
-}
-
-function getInitialState(): AuthState {
-  return {
-    form: {
-      username: '',
-      password: '',
-      isLoading: false,
-      error: '',
-    },
-  };
-}
+import { getInitialState } from '@/stores/state/authState';
+import type { AuthState } from '@/stores/state/authState';
 
 export const useAuthStore = defineStore(
   'auth',

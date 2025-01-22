@@ -2,34 +2,11 @@ import { defineStore } from 'pinia';
 import { reactive } from 'vue';
 import { useRouter } from 'vue-router';
 import { useRuntimeConfig } from 'nuxt/app';
-
-interface RegistrationState {
-  form: {
-    username: string;
-    email: string;
-    password: string;
-    termsAccepted: Boolean;
-    isLoading: boolean;
-    error: string;
-  };
-}
-
-interface RegistrationRes {
-  status: boolean;
-}
-
-function getInitialState(): RegistrationState {
-  return {
-    form: {
-      username: '',
-      email: '',
-      password: '',
-      termsAccepted: false,
-      isLoading: false,
-      error: '',
-    },
-  };
-}
+import { getInitialState } from '@/stores/state/registrationState';
+import type {
+  RegistrationState,
+  RegistrationRes,
+} from '@/stores/state/registrationState';
 
 export const useRegistrationStore = defineStore(
   'registration',

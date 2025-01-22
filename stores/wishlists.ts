@@ -4,41 +4,8 @@ import { useRuntimeConfig } from 'nuxt/app';
 import { useUserStore } from '@/stores/user';
 import { useAuthStore } from '@/stores/auth';
 import { useUIStore } from '@/stores/ui';
-import type { Wishlist } from '@/types/wishlist.types';
-
-interface WishlistsState {
-  form: {
-    title: string;
-    description: string;
-    availabilityStatus: 'private' | 'public';
-    selectedId: string;
-    isLoading: boolean;
-    error: string;
-  };
-  wishlists: Wishlist[];
-  page: {
-    isLoading: boolean;
-    error: string;
-  };
-}
-
-function getInitialState(): WishlistsState {
-  return {
-    form: {
-      title: '',
-      description: '',
-      availabilityStatus: 'private',
-      selectedId: '',
-      isLoading: false,
-      error: '',
-    },
-    wishlists: [],
-    page: {
-      isLoading: true,
-      error: '',
-    },
-  };
-}
+import { getInitialState } from '@/stores/state/wishlistsState';
+import type { WishlistsState } from '@/stores/state/wishlistsState';
 
 export const useWishlistsStore = defineStore(
   'wishlists',

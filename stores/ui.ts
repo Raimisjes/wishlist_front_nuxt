@@ -1,35 +1,7 @@
 import { defineStore } from 'pinia';
 import { reactive, watch } from 'vue';
-
-interface UIState {
-  snackbar: {
-    show: boolean;
-    message: string;
-    timeout: number;
-  };
-  confirmationDialog: {
-    show: boolean;
-    message: string;
-    isLoading: boolean;
-    error: string;
-  };
-}
-
-function getInitialState(): UIState {
-  return {
-    snackbar: {
-      show: false,
-      message: '',
-      timeout: 0,
-    },
-    confirmationDialog: {
-      show: false,
-      message: '',
-      isLoading: false,
-      error: '',
-    },
-  };
-}
+import { getInitialState } from '@/stores/state/uiState';
+import type { UIState } from '@/stores/state/uiState';
 
 export const useUIStore = defineStore(
   'ui',

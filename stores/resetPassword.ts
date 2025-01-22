@@ -2,24 +2,8 @@ import { defineStore } from 'pinia';
 import { reactive } from 'vue';
 import { useRuntimeConfig } from 'nuxt/app';
 import { useRouter } from 'vue-router';
-
-interface ResetPasswordState {
-  form: {
-    email: string;
-    isLoading: boolean;
-    error: string;
-  };
-}
-
-function getInitialState(): ResetPasswordState {
-  return {
-    form: {
-      email: '',
-      isLoading: false,
-      error: '',
-    },
-  };
-}
+import { getInitialState } from '@/stores/state/resetPasswordState';
+import type { ResetPasswordState } from '@/stores/state/resetPasswordState';
 
 export const useResetPasswordStore = defineStore(
   'resetPassword',

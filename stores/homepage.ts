@@ -1,37 +1,11 @@
 import { defineStore } from 'pinia';
 import { reactive } from 'vue';
 import { useRuntimeConfig } from 'nuxt/app';
-
-interface HomepageState {
-  usernameCheck: {
-    form: {
-      username: string;
-      isLoading: boolean;
-      error: string;
-    };
-    usernameExists: null | boolean;
-  };
-}
-
-interface UsernameCheckRes {
-  status: boolean;
-  data: {
-    usernameExists: boolean;
-  };
-}
-
-function getInitialState(): HomepageState {
-  return {
-    usernameCheck: {
-      form: {
-        username: '',
-        isLoading: false,
-        error: '',
-      },
-      usernameExists: null,
-    },
-  };
-}
+import { getInitialState } from '@/stores/state/homepageState';
+import type {
+  HomepageState,
+  UsernameCheckRes,
+} from '@/stores/state/homepageState';
 
 export const useHomepageStore = defineStore(
   'homepage',
