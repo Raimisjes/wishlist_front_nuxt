@@ -9,10 +9,6 @@ export interface RegistrationState {
   };
 }
 
-export interface RegistrationRes {
-  status: boolean;
-}
-
 export function getInitialState(): RegistrationState {
   return {
     form: {

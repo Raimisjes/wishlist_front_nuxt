@@ -9,12 +9,14 @@ import { useUIStore } from './ui';
 import { useUserSettingsStore } from './userSettings';
 import { getInitialState } from '@/stores/state/authState';
 import type { AuthState } from '@/stores/state/authState';
+import { useApiService } from '@/composables/useApiService';
 
 export const useAuthStore = defineStore(
   'auth',
   () => {
     const router = useRouter();
     const config = useRuntimeConfig();
+    const { apiFetch, formatApiError } = useApiService();
 
     const state = reactive<AuthState>(getInitialState());
 
@@ -25,7 +27,7 @@ export const useAuthStore = defineStore(
       state.form.error = '';
 
       try {
-        const response = await $fetch<Promise<any>>(
+        const response = await apiFetch<Promise<any>>(
           `${config.public.API_URL}/user/login`,
           {
             method: 'post',
@@ -34,8 +36,10 @@ export const useAuthStore = defineStore(
               password: state.form.password,
             },
             timeout: 10000,
+            retry: 0,
             credentials: 'include',
           },
+          false,
         );
 
         if (response.status) {
@@ -43,28 +47,25 @@ export const useAuthStore = defineStore(
           _.merge(useUserStore().state, response.data.user);
           useUserStore().state.authenticated = true;
           router.push('/');
-          return;
         }
       } catch (error) {
-        let errorMessage = '';
-        !error.data
-          ? (errorMessage = 'errors.internal001')
-          : (errorMessage = `errors.${error.data.data}`);
-
-        state.form.error = errorMessage;
+        state.form.error = formatApiError(error);
+      } finally {
+        state.form.isLoading = false;
       }
-      state.form.isLoading = false;
     }
 
     async function logout() {
       try {
-        const response = await $fetch<any>(
+        const response = await apiFetch<Promise<any>>(
           `${config.public.API_URL}/user/logout`,
           {
             method: 'get',
             timeout: 10000,
+            retry: 0,
             credentials: 'include',
           },
+          false,
         );
 
         if (response.status) {
@@ -75,24 +76,24 @@ export const useAuthStore = defineStore(
           router.push('/');
         }
       } catch (error) {
-        let errorMessage;
-        !error.data
-          ? (errorMessage = 'errors.internal001')
-          : (errorMessage = `errors.${error.data.data}`);
+        useUIStore().showSnackbar(formatApiError(error), 4000);
       }
     }
 
     async function refreshToken({ response }: { response: any }) {
       if (response.status === 401 && response._data.data == 'internal004') {
         try {
-          const response = await $fetch<any>(
+          const response = await apiFetch<Promise<any>>(
             `${config.public.API_URL}/user/refresh`,
             {
               method: 'post',
               timeout: 10000,
+              retry: 0,
               credentials: 'include',
             },
+            false,
           );
+
           useUserStore().state.accessToken = response.data.accessToken;
           return true;
         } catch (error) {

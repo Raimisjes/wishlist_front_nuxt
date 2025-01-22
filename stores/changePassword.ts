@@ -2,8 +2,10 @@ import { defineStore } from 'pinia';
 import { reactive } from 'vue';
 import { useRuntimeConfig } from 'nuxt/app';
 import { useRouter, useRoute } from 'vue-router';
+import { useUIStore } from '@/stores/ui';
 import { getInitialState } from '@/stores/state/changePasswordState';
 import type { ChangePasswordState } from '@/stores/state/changePasswordState';
+import { useApiService } from '@/composables/useApiService';
 
 export const useChangePasswordStore = defineStore(
   'changePassword',
@@ -11,6 +13,7 @@ export const useChangePasswordStore = defineStore(
     const route = useRoute();
     const router = useRouter();
     const config = useRuntimeConfig();
+    const { apiFetch, formatApiError } = useApiService();
 
     const state = reactive<ChangePasswordState>(getInitialState());
 
@@ -18,7 +21,7 @@ export const useChangePasswordStore = defineStore(
       let isTokenValid = false;
 
       try {
-        const response = await $fetch<Promise<any>>(
+        const response = await apiFetch<Promise<any>>(
           `${config.public.API_URL}/user/resetpassword/tokencheck`,
           {
             method: 'post',
@@ -26,15 +29,17 @@ export const useChangePasswordStore = defineStore(
               token,
             },
             timeout: 10000,
+            retry: 0,
           },
+          false,
         );
 
         isTokenValid = response.status;
       } catch (error) {
-        console.error(error);
+        useUIStore().showSnackbar(formatApiError(error), 4000);
+      } finally {
+        return isTokenValid;
       }
-
-      return isTokenValid;
     }
 
     async function changePassword() {
@@ -44,7 +49,7 @@ export const useChangePasswordStore = defineStore(
       state.form.error = '';
 
       try {
-        const response = await $fetch<Promise<any>>(
+        const response = await apiFetch<Promise<any>>(
           `${config.public.API_URL}/user/resetpassword/createnew`,
           {
             method: 'post',
@@ -54,21 +59,19 @@ export const useChangePasswordStore = defineStore(
               token: route.params.token,
             },
             timeout: 10000,
+            retry: 0,
           },
+          false,
         );
 
         if (response.status) {
           router.push('/resetpassword/changesuccess');
         }
       } catch (error) {
-        let errorMessage = '';
-        !error.data
-          ? (errorMessage = 'errors.internal001')
-          : (errorMessage = `errors.${error.data.data}`);
-
-        state.form.error = errorMessage;
+        state.form.error = formatApiError(error);
+      } finally {
+        state.form.isLoading = false;
       }
-      state.form.isLoading = false;
     }
 
     function clearStore() {

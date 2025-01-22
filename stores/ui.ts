@@ -2,11 +2,14 @@ import { defineStore } from 'pinia';
 import { reactive, watch } from 'vue';
 import { getInitialState } from '@/stores/state/uiState';
 import type { UIState } from '@/stores/state/uiState';
+import { useApiService } from '@/composables/useApiService';
 
 export const useUIStore = defineStore(
   'ui',
   () => {
     const state = reactive<UIState>(getInitialState());
+
+    const { formatApiError } = useApiService();
 
     let providedAction: Function | null;
 
@@ -53,15 +56,10 @@ export const useUIStore = defineStore(
             state.confirmationDialog.show = false;
           }
         } catch (error) {
-          let errorMessage = '';
-          !error.data
-            ? (errorMessage = 'errors.internal001')
-            : (errorMessage = `errors.${error.data.data}`);
-
-          state.confirmationDialog.error = errorMessage;
+          state.confirmationDialog.error = formatApiError(error);
+        } finally {
+          state.confirmationDialog.isLoading = false;
         }
-
-        state.confirmationDialog.isLoading = false;
       }
     }
 

@@ -2,11 +2,11 @@ import { defineStore } from 'pinia';
 import { reactive } from 'vue';
 import { useRuntimeConfig } from 'nuxt/app';
 import { useUserStore } from '@/stores/user';
-import { useAuthStore } from '@/stores/auth';
 import { useUIStore } from '@/stores/ui';
 import DOMPurify from 'dompurify';
 import { getInitialState } from '@/stores/state/userSettingsState';
 import type { UserSettingsState } from '@/stores/state/userSettingsState';
+import { useApiService } from '@/composables/useApiService';
 
 export const useUserSettingsStore = defineStore(
   'userSettings',
@@ -14,6 +14,7 @@ export const useUserSettingsStore = defineStore(
     const state = reactive<UserSettingsState>(getInitialState());
 
     const config = useRuntimeConfig();
+    const { apiFetch, formatApiError } = useApiService();
 
     async function changePassword() {
       if (state.changePassword.form.isLoading) return;
@@ -24,56 +25,36 @@ export const useUserSettingsStore = defineStore(
       let passChangeSuccess = false;
 
       try {
-        let refreshTokenSuccess: boolean;
-
-        const response = await $fetch<Promise<any>>(
+        const response = await apiFetch<Promise<any>>(
           `${config.public.API_URL}/user/edit/password`,
           {
             method: 'post',
+            body: {
+              username: useUserStore().state.username,
+              password: state.changePassword.form.currentPassword,
+              newPassword: state.changePassword.form.newPassword,
+              repeatedNewPass: state.changePassword.form.newRepeated,
+              ownerId: useUserStore().state.id,
+            },
             timeout: 10000,
             retryStatusCodes: [401],
             retryDelay: 500,
             retry: 0,
-            async onRequest({ options }) {
-              options.body = {
-                username: useUserStore().state.username,
-                password: state.changePassword.form.currentPassword,
-                newPassword: state.changePassword.form.newPassword,
-                repeatedNewPass: state.changePassword.form.newRepeated,
-                ownerId: useUserStore().state.id,
-              };
-              options.headers = {
-                ...options.headers,
-                // @ts-ignore:next-line
-                Authorization: `Bearer ${useUserStore().state.accessToken}`,
-              };
-            },
-            async onResponseError({ options, response }) {
-              refreshTokenSuccess = await useAuthStore().refreshToken({
-                options,
-                response,
-              });
-              if (refreshTokenSuccess) {
-                options.retry = 1;
-              }
-            },
           },
+          true,
         );
 
-        passChangeSuccess = response.status;
-        useUIStore().showSnackbar('pages.settings.changePassSuccess', 7000);
-        clearChangePasswordForm();
+        if (response.status) {
+          passChangeSuccess = response.status;
+          useUIStore().showSnackbar('pages.settings.changePassSuccess', 7000);
+          clearChangePasswordForm();
+        }
       } catch (error) {
-        let errorMessage = '';
-        !error.data
-          ? (errorMessage = 'errors.internal001')
-          : (errorMessage = `errors.${error.data.data}`);
-
-        state.changePassword.form.error = errorMessage;
+        state.changePassword.form.error = formatApiError(error);
+      } finally {
+        state.changePassword.form.isLoading = false;
+        return passChangeSuccess;
       }
-
-      state.changePassword.form.isLoading = false;
-      return passChangeSuccess;
     }
 
     async function editSocialNetwork(socialNetworkKey: string) {
@@ -85,44 +66,27 @@ export const useUserSettingsStore = defineStore(
       let editSocialNetworkSuccess = false;
 
       try {
-        let refreshTokenSuccess: boolean;
-
         let socialNetworkData: any = {};
         socialNetworkData[socialNetworkKey] = {
           url: DOMPurify.sanitize(state.socialNetworks.form.url),
           active: state.socialNetworks.form.active,
         };
 
-        const response = await $fetch<Promise<any>>(
+        const response = await apiFetch<Promise<any>>(
           `${config.public.API_URL}/user/edit`,
           {
             method: 'post',
+            body: {
+              username: useUserStore().state.username,
+              socialNetworks: socialNetworkData,
+              ownerId: useUserStore().state.id,
+            },
             timeout: 10000,
             retryStatusCodes: [401],
             retryDelay: 500,
             retry: 0,
-            async onRequest({ options }) {
-              options.body = {
-                username: useUserStore().state.username,
-                socialNetworks: socialNetworkData,
-                ownerId: useUserStore().state.id,
-              };
-              options.headers = {
-                ...options.headers,
-                // @ts-ignore:next-line
-                Authorization: `Bearer ${useUserStore().state.accessToken}`,
-              };
-            },
-            async onResponseError({ options, response }) {
-              refreshTokenSuccess = await useAuthStore().refreshToken({
-                options,
-                response,
-              });
-              if (refreshTokenSuccess) {
-                options.retry = 1;
-              }
-            },
           },
+          true,
         );
 
         editSocialNetworkSuccess = response.status;
@@ -136,16 +100,11 @@ export const useUserSettingsStore = defineStore(
           state.socialNetworks.form.active;
         clearSocialNetworksForm();
       } catch (error) {
-        let errorMessage = '';
-        !error.data
-          ? (errorMessage = 'errors.internal001')
-          : (errorMessage = `errors.${error.data.data}`);
-
-        state.socialNetworks.form.error = errorMessage;
+        state.socialNetworks.form.error = formatApiError(error);
+      } finally {
+        state.socialNetworks.form.isLoading = false;
+        return editSocialNetworkSuccess;
       }
-
-      state.socialNetworks.form.isLoading = false;
-      return editSocialNetworkSuccess;
     }
 
     function clearStore() {

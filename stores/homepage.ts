@@ -2,15 +2,14 @@ import { defineStore } from 'pinia';
 import { reactive } from 'vue';
 import { useRuntimeConfig } from 'nuxt/app';
 import { getInitialState } from '@/stores/state/homepageState';
-import type {
-  HomepageState,
-  UsernameCheckRes,
-} from '@/stores/state/homepageState';
+import type { HomepageState } from '@/stores/state/homepageState';
+import { useApiService } from '@/composables/useApiService';
 
 export const useHomepageStore = defineStore(
   'homepage',
   () => {
     const config = useRuntimeConfig();
+    const { apiFetch, formatApiError } = useApiService();
 
     const state = reactive<HomepageState>(getInitialState());
 
@@ -21,7 +20,7 @@ export const useHomepageStore = defineStore(
 
       state.usernameCheck.form.isLoading = true;
       try {
-        const response = await $fetch<UsernameCheckRes>(
+        const response = await apiFetch<Promise<any>>(
           `${config.public.API_URL}/user/checkusername`,
           {
             method: 'post',
@@ -29,18 +28,19 @@ export const useHomepageStore = defineStore(
               username: state.usernameCheck.form.username,
             },
             timeout: 10000,
+            retry: 0,
           },
+          false,
         );
-        state.usernameCheck.usernameExists = response.data.usernameExists;
-      } catch (error) {
-        let errorMessage = '';
-        !error.data
-          ? (errorMessage = 'errors.internal001')
-          : (errorMessage = `errors.${error.data.data}`);
 
-        state.usernameCheck.form.error = errorMessage;
+        if (response.status) {
+          state.usernameCheck.usernameExists = response.data.usernameExists;
+        }
+      } catch (error) {
+        state.usernameCheck.form.error = formatApiError(error);
+      } finally {
+        state.usernameCheck.form.isLoading = false;
       }
-      state.usernameCheck.form.isLoading = false;
     }
 
     function clearStore() {

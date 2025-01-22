@@ -9,13 +9,6 @@ export interface HomepageState {
   };
 }
 
-export interface UsernameCheckRes {
-  status: boolean;
-  data: {
-    usernameExists: boolean;
-  };
-}
-
 export function getInitialState(): HomepageState {
   return {
     usernameCheck: {

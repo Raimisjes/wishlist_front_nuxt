@@ -4,6 +4,7 @@ import { useRuntimeConfig } from 'nuxt/app';
 import _ from 'lodash';
 import { getInitialState } from '@/stores/state/userPageState';
 import type { UserPageState } from '@/stores/state/userPageState';
+import { useApiService } from '@/composables/useApiService';
 
 export const useUserPageStore = defineStore(
   'userPage',
@@ -11,6 +12,7 @@ export const useUserPageStore = defineStore(
     const state = reactive<UserPageState>(getInitialState());
 
     const config = useRuntimeConfig();
+    const { apiFetch, formatApiError } = useApiService();
 
     async function getUserData(username: string) {
       state.page.error = '';
@@ -18,35 +20,24 @@ export const useUserPageStore = defineStore(
       let getUserDataSuccess = false;
 
       try {
-        const response = await $fetch<Promise<any>>(
+        const response = await apiFetch<Promise<any>>(
           `${config.public.API_URL}/user/getoneinfo/${username}`,
           {
             method: 'get',
             timeout: 10000,
-            retryStatusCodes: [401],
-            retryDelay: 500,
             retry: 0,
-            async onRequest({ options }) {
-              options.headers = {
-                ...options.headers,
-              };
-            },
           },
+          false,
         );
 
         getUserDataSuccess = response.status;
         _.merge(state, response.data);
       } catch (error) {
-        let errorMessage = '';
-        !error.data
-          ? (errorMessage = 'errors.internal001')
-          : (errorMessage = `errors.${error.data.data}`);
-
-        state.page.error = errorMessage;
+        state.page.error = formatApiError(error);
+      } finally {
+        state.page.isLoading = false;
+        return getUserDataSuccess;
       }
-
-      state.page.isLoading = false;
-      return getUserDataSuccess;
     }
 
     async function getWishlistData(wishlistId: string) {
@@ -55,35 +46,24 @@ export const useUserPageStore = defineStore(
       let getWishlistDataSuccess = false;
 
       try {
-        const response = await $fetch<Promise<any>>(
+        const response = await apiFetch<Promise<any>>(
           `${config.public.API_URL}/wishlist/getoneinfo/public/${wishlistId}`,
           {
             method: 'get',
             timeout: 10000,
-            retryStatusCodes: [401],
-            retryDelay: 500,
             retry: 0,
-            async onRequest({ options }) {
-              options.headers = {
-                ...options.headers,
-              };
-            },
           },
+          false,
         );
 
         getWishlistDataSuccess = response.status;
         _.merge(state, response.data);
       } catch (error) {
-        let errorMessage = '';
-        !error.data
-          ? (errorMessage = 'errors.internal001')
-          : (errorMessage = `errors.${error.data.data}`);
-
-        state.page.error = errorMessage;
+        state.page.error = formatApiError(error);
+      } finally {
+        state.page.isLoading = false;
+        return getWishlistDataSuccess;
       }
-
-      state.page.isLoading = false;
-      return getWishlistDataSuccess;
     }
 
     function clearStore() {

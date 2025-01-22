@@ -4,12 +4,14 @@ import { useRuntimeConfig } from 'nuxt/app';
 import { useRouter } from 'vue-router';
 import { getInitialState } from '@/stores/state/resetPasswordState';
 import type { ResetPasswordState } from '@/stores/state/resetPasswordState';
+import { useApiService } from '@/composables/useApiService';
 
 export const useResetPasswordStore = defineStore(
   'resetPassword',
   () => {
     const router = useRouter();
     const config = useRuntimeConfig();
+    const { apiFetch, formatApiError } = useApiService();
 
     const state = reactive<ResetPasswordState>(getInitialState());
 
@@ -20,7 +22,7 @@ export const useResetPasswordStore = defineStore(
       state.form.error = '';
 
       try {
-        const response = await $fetch<Promise<any>>(
+        const response = await apiFetch<Promise<any>>(
           `${config.public.API_URL}/user/resetpassword/init`,
           {
             method: 'post',
@@ -28,21 +30,19 @@ export const useResetPasswordStore = defineStore(
               email: state.form.email,
             },
             timeout: 10000,
+            retry: 0,
           },
+          false,
         );
 
         if (response.status) {
           router.push('/resetpassword/success');
         }
       } catch (error) {
-        let errorMessage = '';
-        !error.data
-          ? (errorMessage = 'errors.internal001')
-          : (errorMessage = `errors.${error.data.data}`);
-
-        state.form.error = errorMessage;
+        state.form.error = formatApiError(error);
+      } finally {
+        state.form.isLoading = false;
       }
-      state.form.isLoading = false;
     }
 
     function clearStore() {

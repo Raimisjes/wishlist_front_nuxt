@@ -7,11 +7,13 @@ import { useUIStore } from '@/stores/ui';
 import type { Listing } from '@/types/listing.types';
 import { getInitialState } from '@/stores/state/myWishlistState';
 import type { MyWishlistState } from '@/stores/state/myWishlistState';
+import { useApiService } from '@/composables/useApiService';
 
 export const useMyWishlistStore = defineStore(
   'myWishlist',
   () => {
     const config = useRuntimeConfig();
+    const { apiFetch, formatApiError } = useApiService();
 
     const state = reactive<MyWishlistState>(getInitialState());
 
@@ -25,54 +27,35 @@ export const useMyWishlistStore = defineStore(
       let fetchSuccess = false;
 
       try {
-        let refreshTokenSuccess: boolean;
-
-        const response = await $fetch<Promise<any>>(
+        const response = await apiFetch<Promise<any>>(
           `${config.public.API_URL}/global/geturlinfo`,
           {
             method: 'post',
-            timeout: 20000,
+            body: {
+              url: state.checkURLForm.url,
+            },
+            timeout: 15000,
             retryStatusCodes: [401],
             retryDelay: 500,
             retry: 0,
-            async onRequest({ options }) {
-              options.body = {
-                url: state.checkURLForm.url,
-              };
-              options.headers = {
-                ...options.headers,
-                // @ts-ignore:next-line
-                Authorization: `Bearer ${useUserStore().state.accessToken}`,
-              };
-            },
-            async onResponseError({ options, response }) {
-              refreshTokenSuccess = await useAuthStore().refreshToken({
-                options,
-                response,
-              });
-              if (refreshTokenSuccess) {
-                options.retry = 1;
-              }
-            },
           },
+          true,
         );
-        fetchSuccess = response.status;
-        state.form.title = response.data.title;
-        state.form.description = response.data.description;
-        if (response.data.photo) {
-          state.form.photo = response.data.photo;
+
+        if (response.status) {
+          fetchSuccess = response.status;
+          state.form.title = response.data.title;
+          state.form.description = response.data.description;
+          if (response.data.photo) {
+            state.form.photo = response.data.photo;
+          }
         }
       } catch (error) {
-        let errorMessage = '';
-        !error.data
-          ? (errorMessage = 'errors.internal001')
-          : (errorMessage = `errors.${error.data.data}`);
-
-        state.checkURLForm.error = errorMessage;
+        state.checkURLForm.error = formatApiError(error);
+      } finally {
+        state.checkURLForm.isLoading = false;
+        return fetchSuccess;
       }
-
-      state.checkURLForm.isLoading = false;
-      return fetchSuccess;
     }
 
     async function addListing(formData: FormData) {
@@ -84,50 +67,30 @@ export const useMyWishlistStore = defineStore(
       let addWishSuccess = false;
 
       try {
-        let refreshTokenSuccess: boolean;
-
-        const response = await $fetch<Promise<any>>(
+        const response = await apiFetch<Promise<any>>(
           `${config.public.API_URL}/listing/add`,
           {
             method: 'post',
-            timeout: 20000,
+            body: formData,
+            timeout: 10000,
             retryStatusCodes: [401],
             retryDelay: 500,
             retry: 0,
-            async onRequest({ options }) {
-              options.body = formData;
-              options.headers = {
-                ...options.headers,
-                // @ts-ignore:next-line
-                Authorization: `Bearer ${useUserStore().state.accessToken}`,
-              };
-            },
-            async onResponseError({ options, response }) {
-              refreshTokenSuccess = await useAuthStore().refreshToken({
-                options,
-                response,
-              });
-              if (refreshTokenSuccess) {
-                options.retry = 1;
-              }
-            },
           },
+          true,
         );
 
-        addWishSuccess = response.status;
-        state.currentWishlist.listings.unshift(response.data as Listing);
-        useUIStore().showSnackbar('pages.myWishlist.addWishSuccess');
+        if (response.status) {
+          addWishSuccess = response.status;
+          state.currentWishlist.listings.unshift(response.data as Listing);
+          useUIStore().showSnackbar('pages.myWishlist.addWishSuccess');
+        }
       } catch (error) {
-        let errorMessage = '';
-        !error.data
-          ? (errorMessage = 'errors.internal001')
-          : (errorMessage = `errors.${error.data.data}`);
-
-        state.form.error = errorMessage;
+        state.form.error = formatApiError(error);
+      } finally {
+        state.form.isLoading = false;
+        return addWishSuccess;
       }
-
-      state.form.isLoading = false;
-      return addWishSuccess;
     }
 
     async function editListing(formData: FormData) {
@@ -139,107 +102,73 @@ export const useMyWishlistStore = defineStore(
       let editWishSuccess = false;
 
       try {
-        let refreshTokenSuccess: boolean;
-
-        const response = await $fetch<Promise<any>>(
+        const response = await apiFetch<Promise<any>>(
           `${config.public.API_URL}/listing/edit`,
           {
             method: 'post',
-            timeout: 20000,
+            body: formData,
+            timeout: 10000,
             retryStatusCodes: [401],
             retryDelay: 500,
             retry: 0,
-            async onRequest({ options }) {
-              options.body = formData;
-              options.headers = {
-                ...options.headers,
-                // @ts-ignore:next-line
-                Authorization: `Bearer ${useUserStore().state.accessToken}`,
-              };
-            },
-            async onResponseError({ options, response }) {
-              refreshTokenSuccess = await useAuthStore().refreshToken({
-                options,
-                response,
-              });
-              if (refreshTokenSuccess) {
-                options.retry = 1;
-              }
-            },
           },
+          true,
         );
 
-        editWishSuccess = response.status;
-        const index = state.currentWishlist.listings.findIndex(
-          (item) => item._id === state.form.selectedId,
-        );
-        if (index !== -1) {
-          state.currentWishlist.listings.splice(index, 1);
+        if (response.status) {
+          editWishSuccess = response.status;
+          const index = state.currentWishlist.listings.findIndex(
+            (item) => item._id === state.form.selectedId,
+          );
+          if (index !== -1) {
+            state.currentWishlist.listings.splice(index, 1);
+          }
+          state.currentWishlist.listings.unshift(response.data as Listing);
+          useUIStore().showSnackbar('pages.myWishlist.editListingSuccess');
         }
-        state.currentWishlist.listings.unshift(response.data as Listing);
-        useUIStore().showSnackbar('pages.myWishlist.editListingSuccess');
       } catch (error) {
-        let errorMessage = '';
-        !error.data
-          ? (errorMessage = 'errors.internal001')
-          : (errorMessage = `errors.${error.data.data}`);
-
-        state.form.error = errorMessage;
+        state.form.error = formatApiError(error);
+      } finally {
+        state.form.isLoading = false;
+        return editWishSuccess;
       }
-
-      state.form.isLoading = false;
-      return editWishSuccess;
     }
 
     async function removeListing(listingId: string) {
       let removeListingSuccess = false;
 
       try {
-        let refreshTokenSuccess: boolean;
-
-        const response = await $fetch<Promise<any>>(
+        const response = await apiFetch<Promise<any>>(
           `${config.public.API_URL}/listing/remove`,
           {
             method: 'post',
+            body: {
+              listingId,
+              ownerId: useUserStore().state.id,
+            },
             timeout: 10000,
             retryStatusCodes: [401],
             retryDelay: 500,
             retry: 0,
-            async onRequest({ options }) {
-              options.body = {
-                listingId,
-                ownerId: useUserStore().state.id,
-              };
-              options.headers = {
-                ...options.headers,
-                // @ts-ignore:next-line
-                Authorization: `Bearer ${useUserStore().state.accessToken}`,
-              };
-            },
-            async onResponseError({ options, response }) {
-              refreshTokenSuccess = await useAuthStore().refreshToken({
-                options,
-                response,
-              });
-              if (refreshTokenSuccess) {
-                options.retry = 1;
-              }
-            },
           },
+          true,
         );
 
-        removeListingSuccess = response.status;
-        const index = state.currentWishlist.listings.findIndex(
-          (item) => item._id === listingId,
-        );
-        if (index !== -1) {
-          state.currentWishlist.listings.splice(index, 1);
+        if (response.status) {
+          removeListingSuccess = response.status;
+          const index = state.currentWishlist.listings.findIndex(
+            (item) => item._id === listingId,
+          );
+          if (index !== -1) {
+            state.currentWishlist.listings.splice(index, 1);
+          }
+          useUIStore().showSnackbar('pages.myWishlist.removeListingSuccess');
         }
-        useUIStore().showSnackbar('pages.myWishlist.removeListingSuccess');
       } catch (error) {
-        throw new Error(error);
+        useUIStore().showSnackbar(formatApiError(error), 4000);
+      } finally {
+        return removeListingSuccess;
       }
-      return removeListingSuccess;
     }
 
     async function getWishlistData(wishlistId: string) {
@@ -248,45 +177,31 @@ export const useMyWishlistStore = defineStore(
       let getWishlistDataSuccess = false;
 
       try {
-        let refreshTokenSuccess: boolean;
-
-        const response = await $fetch<Promise<any>>(
+        const response = await apiFetch<Promise<any>>(
           `${config.public.API_URL}/wishlist/getoneinfo/${useUserStore().state.id}`,
           {
             method: 'get',
+            query: {
+              wishlistId,
+            },
             timeout: 10000,
             retryStatusCodes: [401],
             retryDelay: 500,
             retry: 0,
-            async onRequest({ options }) {
-              options.headers = {
-                ...options.headers,
-                // @ts-ignore:next-line
-                Authorization: `Bearer ${useUserStore().state.accessToken}`,
-              };
-              options.query = {
-                wishlistId,
-              };
-            },
-            async onResponseError({ options, response }) {
-              refreshTokenSuccess = await useAuthStore().refreshToken({
-                options,
-                response,
-              });
-              if (refreshTokenSuccess) {
-                options.retry = 1;
-              }
-            },
           },
+          true,
         );
 
-        getWishlistDataSuccess = response.status;
-        state.currentWishlist = response.data;
+        if (response.status) {
+          getWishlistDataSuccess = response.status;
+          state.currentWishlist = response.data;
+        }
       } catch (error) {
-        throw new Error(error);
+        useUIStore().showSnackbar(formatApiError(error), 4000);
+      } finally {
+        state.page.isLoading = false;
+        return getWishlistDataSuccess;
       }
-      state.page.isLoading = false;
-      return getWishlistDataSuccess;
     }
 
     function clearStore() {

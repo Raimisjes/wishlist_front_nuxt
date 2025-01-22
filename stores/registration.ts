@@ -3,16 +3,15 @@ import { reactive } from 'vue';
 import { useRouter } from 'vue-router';
 import { useRuntimeConfig } from 'nuxt/app';
 import { getInitialState } from '@/stores/state/registrationState';
-import type {
-  RegistrationState,
-  RegistrationRes,
-} from '@/stores/state/registrationState';
+import type { RegistrationState } from '@/stores/state/registrationState';
+import { useApiService } from '@/composables/useApiService';
 
 export const useRegistrationStore = defineStore(
   'registration',
   () => {
     const router = useRouter();
     const config = useRuntimeConfig();
+    const { apiFetch, formatApiError } = useApiService();
 
     const state = reactive<RegistrationState>(getInitialState());
 
@@ -23,7 +22,7 @@ export const useRegistrationStore = defineStore(
       state.form.error = '';
 
       try {
-        const response = await $fetch<RegistrationRes>(
+        const response = await apiFetch<Promise<any>>(
           `${config.public.API_URL}/user/add`,
           {
             method: 'post',
@@ -34,21 +33,19 @@ export const useRegistrationStore = defineStore(
               termsAccepted: state.form.termsAccepted,
             },
             timeout: 10000,
+            retry: 0,
           },
+          false,
         );
 
         if (response.status) {
           router.push('/registration/success');
         }
       } catch (error) {
-        let errorMessage = '';
-        !error.data
-          ? (errorMessage = 'errors.internal001')
-          : (errorMessage = `errors.${error.data.data}`);
-
-        state.form.error = errorMessage;
+        state.form.error = formatApiError(error);
+      } finally {
+        state.form.isLoading = false;
       }
-      state.form.isLoading = false;
     }
 
     function clearStore() {
