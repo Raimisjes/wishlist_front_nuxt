@@ -244,6 +244,14 @@ onUnmounted(() => {
           margin: 0 0 15px 0;
         }
       }
+      .new-wishes,
+      .user-wishlists {
+        h3 {
+          @media screen and (max-width: 600px) {
+            text-align: center;
+          }
+        }
+      }
     }
   }
 }

@@ -46,8 +46,10 @@ onUnmounted(() => {
           v-if="!userPageState.page.error && userPageState.username != ''"
         >
           <div class="user-info-block">
-            <h1 @click="router.push(`/@${userPageState.username}`)">
-              {{ userPageState.username }}
+            <h1>
+              <span @click="router.push(`/@${userPageState.username}`)">{{
+                userPageState.username
+              }}</span>
             </h1>
             <div class="social-networks">
               <v-icon
@@ -72,8 +74,9 @@ onUnmounted(() => {
                 >
                   <img
                     src="@/assets/images/gift-placeholder.png"
-                    v-if="!listing.photos?.length"
+                    v-if="!listing?.photo"
                   />
+                  <img v-else :src="listing?.photo" />
                   <div class="info">
                     <h5 @click="openUrl(listing.url)">
                       {{ listing.title }}

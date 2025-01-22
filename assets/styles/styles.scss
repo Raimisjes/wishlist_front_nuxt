@@ -130,6 +130,10 @@ main {
       padding-right: 65px;
     }
     @media screen and (max-width: 600px) {
+      max-width: calc(100vw - 80px);
+    }
+    @media screen and (max-width: 600px) {
+      max-width: calc(100vw - 40px);
       padding: 20px;
     }
   }
