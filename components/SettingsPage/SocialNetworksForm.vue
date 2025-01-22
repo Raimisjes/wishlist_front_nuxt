@@ -4,7 +4,7 @@ import { useUserStore } from '@/stores/user';
 import { storeToRefs } from 'pinia';
 import { reactive, ref, watch, useTemplateRef } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { createValidationRules } from '@/utils/validationRules';
+import { createValidationRules } from '~/composables/validationRules';
 import type { SocialNetwork } from '@/types/socialNetwork.types';
 
 const { t } = useI18n();

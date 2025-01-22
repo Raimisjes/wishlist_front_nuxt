@@ -4,7 +4,7 @@ import { useChangePasswordStore } from '@/stores/changePassword';
 import { storeToRefs } from 'pinia';
 import { ref, onUnmounted, onMounted, useTemplateRef } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { createValidationRules } from '@/utils/validationRules';
+import { createValidationRules } from '~/composables/validationRules';
 
 // @ts-ignore
 definePageMeta({

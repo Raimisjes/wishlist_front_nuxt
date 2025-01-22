@@ -3,7 +3,7 @@ import { useWishlistsStore } from '@/stores/wishlists';
 import { useTemplateRef } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useI18n } from 'vue-i18n';
-import { createValidationRules } from '@/utils/validationRules';
+import { createValidationRules } from '~/composables/validationRules';
 
 const { t } = useI18n();
 

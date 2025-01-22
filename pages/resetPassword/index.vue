@@ -3,7 +3,7 @@ import { useI18n } from 'vue-i18n';
 import { useTemplateRef, onUnmounted } from 'vue';
 import { useResetPasswordStore } from '@/stores/resetPassword';
 import { storeToRefs } from 'pinia';
-import { createValidationRules } from '@/utils/validationRules';
+import { createValidationRules } from '~/composables/validationRules';
 
 // @ts-ignore
 definePageMeta({

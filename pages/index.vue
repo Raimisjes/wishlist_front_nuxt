@@ -6,7 +6,7 @@ import { useRegistrationStore } from '@/stores/registration';
 import { useUserStore } from '@/stores/user';
 import { useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
-import { createValidationRules } from '@/utils/validationRules';
+import { createValidationRules } from '~/composables/validationRules';
 
 const router = useRouter();
 const { t } = useI18n();

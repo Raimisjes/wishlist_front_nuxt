@@ -3,7 +3,7 @@ import { useUserSettingsStore } from '@/stores/userSettings';
 import { storeToRefs } from 'pinia';
 import { useTemplateRef, onUnmounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { createValidationRules } from '@/utils/validationRules';
+import { createValidationRules } from '~/composables/validationRules';
 
 const { t } = useI18n();
 
