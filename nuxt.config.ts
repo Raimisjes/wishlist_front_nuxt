@@ -13,6 +13,9 @@ export default defineNuxtConfig({
         },
       ],
       title: 'gftme.one',
+      script: [
+        { src: 'https://cdn-cookieyes.com/client_data/2de31b287f52e239c90e7fa0/script.js', async: false, defer: false, id: 'cookieyes' },
+      ],
     },
     pageTransition: { name: 'fade', mode: 'out-in' },
   },
