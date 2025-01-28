@@ -2,3 +2,4 @@ node_modules/
 .nuxt/
 dist/
 .history/**
+./locales/en_terms_of_use_text.json

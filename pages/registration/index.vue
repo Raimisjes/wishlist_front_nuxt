@@ -73,7 +73,17 @@ onUnmounted(() => {
             <template v-slot:label>
               <div class="tnc-text">
                 {{ $t('pages.registration.conditionsLabel1') }}
-                <a to="/">{{ $t('pages.registration.conditionsLabel2') }}</a>
+                <NuxtLink
+                  :aria-label="$t('pages.registration.conditionsLabel2')"
+                  to="/termsofuse"
+                  >{{ $t('pages.registration.conditionsLabel2') }}</NuxtLink
+                >
+                {{ $t('words.and') }}
+                <NuxtLink
+                  :aria-label="$t('pages.registration.privacyPolicy')"
+                  to="/privacypolicy"
+                  >{{ $t('pages.registration.privacyPolicy') }}</NuxtLink
+                >
               </div>
             </template>
           </v-checkbox>

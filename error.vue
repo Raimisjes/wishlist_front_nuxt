@@ -15,7 +15,7 @@ function goBack(): void {
       <div>
         <v-icon color="primary">mdi-emoticon-cry-outline</v-icon>
         <h2>{{ $t('pages.error.title') }}</h2>
-        <v-btn color="primary" @click="goBack">{{
+        <v-btn color="primary" @click="goBack()">{{
           $t('words.homepage')
         }}</v-btn>
       </div>

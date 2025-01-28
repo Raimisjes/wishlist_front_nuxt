@@ -7,7 +7,7 @@ const UIStore = useUIStore();
 const { state: UIState } = storeToRefs(UIStore);
 
 onUnmounted(() => {
-  useUIStore.clearConfirmationDialog();
+  UIStore.clearConfirmationDialog();
 });
 </script>
 
