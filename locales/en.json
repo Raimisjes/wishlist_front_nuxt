@@ -1,4 +1,7 @@
 {
+  "meta": {
+    "description": "Create and share your perfect wishlist with ease! myTop.gift helps you collect, organize, and send gift ideas to friends and family—making every occasion special."
+  },
   "components": {
     "header": {
       "homepage": "Homepage",
@@ -20,7 +23,7 @@
   "pages": {
     "index": {
       "slogan": "Let your friends know exactly what would make you smile!",
-      "usernameCheckPrefix": "gftme.one/",
+      "usernameCheckPrefix": "mytop.gift/",
       "usernameCheckPlaceholder": "username"
     },
     "error": {
@@ -32,7 +35,7 @@
       "usernameHint": "Available symbols: letters A-Z, numbers 0-9",
       "password": "Password",
       "passwordHint": "Password should include at least one capital letter and at least one number.",
-      "conditionsLabel1": "By selecting I confirm that I've read and accept gftme.one",
+      "conditionsLabel1": "By selecting I confirm that I've read and accept mytop.gift",
       "conditionsLabel2": "Terms of Use",
       "privacyPolicy": "Privacy policy"
     },

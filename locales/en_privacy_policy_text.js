@@ -1,7 +1,7 @@
 let privacyPolicy = {
-  intro: `This Privacy Policy outlines how we handle your personal data ("Personal Data") collected through your use of our website, gftme.one. It also explains how we process your Personal Data and under what circumstances we may disclose it to third parties. Collectively, the Website are referred to as the "Services". By using the Services and providing your Personal Data, you confirm that you have received and read this Privacy Policy. This Privacy Policy is effective as of January 28, 2025.`,
+  intro: `This Privacy Policy outlines how we handle your personal data ("Personal Data") collected through your use of our website, myTop.gift. It also explains how we process your Personal Data and under what circumstances we may disclose it to third parties. Collectively, the Website are referred to as the "Services". By using the Services and providing your Personal Data, you confirm that you have received and read this Privacy Policy. This Privacy Policy is effective as of January 28, 2025.`,
   collectedDataTitle: `Data we collect`,
-  cdDetailsTitle: `When you create a gftme.one profile, we collect these details:`,
+  cdDetailsTitle: `When you create a myTop.gift profile, we collect these details:`,
   cdBasic: `Your basic information: username, email, password`,
   cdserviceUse: `How you use our service, including wishes and wishlists you create.`,
   cdOutro: `We call all this information "Personal Data." We don't collect any special or sensitive personal information.`,
@@ -35,7 +35,7 @@ let privacyPolicy = {
   ddInvestigations: `The necessity of conducting investigations.`,
   ddDisputes: `The relevance of your Personal Data for ongoing or potential disputes.`,
   dataExpiration: `Once your subscription to the Services ends or expires, we will either delete your Personal Data related to your use of the Services or retain it in a form that cannot be directly linked to you, unless any of the above conditions apply.`,
-  specificData: `Additionally, specific usage data will be deleted if you have not accessed the Services for a period of two years. However, for areas of gftme.one intended for infrequent use (e.g., once per year), Personal Data linked to your gftme.one profile will only be deleted upon your request or based on the retention criteria outlined above.`,
+  specificData: `Additionally, specific usage data will be deleted if you have not accessed the Services for a period of two years. However, for areas of myTop.gift intended for infrequent use (e.g., once per year), Personal Data linked to your myTop.gift profile will only be deleted upon your request or based on the retention criteria outlined above.`,
   dataTransfers: `International data transfers`,
   dtIntro: `Your Personal Data may be processed by us or our service providers in countries outside the EU/EEA.`,
   dtListIntro: `When transferring Personal Data to locations outside the EU or European Economic Area (EEA), we ensure that appropriate legal safeguards are in place, such as:`,
@@ -44,7 +44,7 @@ let privacyPolicy = {
   dtOther: `Any other valid transfer mechanism compliant with GDPR Chapter V.`,
   yourRights: `Your rights`,
   rightsIntro:
-    "{'We request that you keep your Personal Data accurate and up to date. You can make corrections by updating your gftme.one profile. If you need to review, delete, or revise the Personal Data we hold about you and cannot do so through your profile, please contact us at info@gftme.one with your specific request. Note that we may retain an anonymized version of such data'}",
+    "{'We request that you keep your Personal Data accurate and up to date. You can make corrections by updating your myTop.gift profile. If you need to review, delete, or revise the Personal Data we hold about you and cannot do so through your profile, please contact us at info@myTop.gift with your specific request. Note that we may retain an anonymized version of such data'}",
   rightsSecurity: `You are responsible for keeping your profile and login details (including your password) secure. Any activities conducted under your profile and login credentials are your responsibility. If you create a profile, ensure you do not share your login information with others.`,
   rightsListIntro: `In compliance with applicable laws, you have specific rights regarding the Personal Data we hold about you in connection with the Services. These include:`,
   rightsAccess: `Right to Access: You can request insight into the Personal Data we hold to ensure it is processed in accordance with data protection laws.`,
@@ -57,18 +57,18 @@ let privacyPolicy = {
   rightWithdraw: `Right to Withdraw Consent: You can withdraw your consent at any time. However, this does not affect the legality of processing conducted before your withdrawal.`,
   rightComplaint: `Right to Lodge a Complaint: If you are dissatisfied with how we handle your Personal Data, you can file a complaint with your national data protection authority.`,
   externalSources: `External sources`,
-  esLinks: `Our platform may contain links to external websites outside of our control, such as those operated by our advertisers and gftme.one business partners.`,
+  esLinks: `Our platform may contain links to external websites outside of our control, such as those operated by our advertisers and myTop.gift business partners.`,
   ppAplies: `This Privacy Policy applies solely to how we handle the Personal Data and Usage Data collected through our Services.`,
-  accessExternal: `When you access external websites, gftme.one is no longer the data controller for your Personal Data. Be aware that these external sites may have their own privacy policies concerning the collection, use, and disclosure of your Personal Data, including credit card details if you make a purchase. We do not control or take responsibility for the privacy practices of such third-party websites. We recommend reviewing their privacy policies directly.`,
+  accessExternal: `When you access external websites, myTop.gift is no longer the data controller for your Personal Data. Be aware that these external sites may have their own privacy policies concerning the collection, use, and disclosure of your Personal Data, including credit card details if you make a purchase. We do not control or take responsibility for the privacy practices of such third-party websites. We recommend reviewing their privacy policies directly.`,
   esLiability: `Regardless of the statements in this section, we are not liable for the actions or policies of external websites, and by using our Services, you waive any claims against us regarding the processing, use, or disclosure of your Personal Data by these third parties.`,
   changes: `Changes`,
   ppChanges: `We reserve the right to update this Privacy Policy at any time. If material changes are made, the revised policy will be published in the "Privacy" section of our Site, with the date of the updates indicated at the top of the page. We encourage you to review this Privacy Policy periodically to stay informed about any changes.`,
   security: `Security`,
   platformSecurity: `Providing Personal Data is your choice. To safeguard your data, we and our third-party partners have implemented physical, electronic, and managerial measures to prevent unauthorized access, maintain data security, and ensure proper use of the Personal Data collected through the Services.`,
   securityContact:
-    "{'If you believe your Personal Data is being misused by us or any third party, please notify us immediately by email at info@gftme.one'}",
+    "{'If you believe your Personal Data is being misused by us or any third party, please notify us immediately by email at info@mytop.gift'}",
   generalInquiries:
-    "{'For general inquiries about this Privacy Policy, please contact us at info@gftme.one'}",
+    "{'For general inquiries about this Privacy Policy, please contact us at info@mytop.gift'}",
 };
 
 export default privacyPolicy;

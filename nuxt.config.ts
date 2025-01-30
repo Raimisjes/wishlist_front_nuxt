@@ -6,15 +6,21 @@ export default defineNuxtConfig({
   devtools: { enabled: false },
   app: {
     head: {
+      charset: 'utf-8',
+      viewport: 'width=device-width, initial-scale=1',
       link: [
         {
           rel: 'stylesheet',
           href: 'https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap',
         },
       ],
-      title: 'gftme.one',
       script: [
-        { src: 'https://cdn-cookieyes.com/client_data/2de31b287f52e239c90e7fa0/script.js', async: false, defer: false, id: 'cookieyes' },
+        {
+          src: 'https://cdn-cookieyes.com/client_data/2de31b287f52e239c90e7fa0/script.js',
+          async: false,
+          defer: false,
+          id: 'cookieyes',
+        },
       ],
     },
     pageTransition: { name: 'fade', mode: 'out-in' },
@@ -77,6 +83,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       API_URL: process.env.NUXT_API_URL,
+      PROJECT_NAME: process.env.NUXT_PROJECT_NAME,
     },
   },
   experimental: { appManifest: false },
