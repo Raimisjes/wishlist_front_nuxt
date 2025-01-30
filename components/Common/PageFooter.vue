@@ -1,14 +1,20 @@
 <script lang="ts" setup>
+import { useRuntimeConfig } from 'nuxt/app';
 import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
+const config = useRuntimeConfig();
 </script>
 
 <template>
   <footer>
     <div class="left">
-      <a aria-label="Instagram" href="#"><v-icon>mdi-instagram</v-icon></a>
-      <a aria-label="Facebook" href="#"><v-icon>mdi-facebook</v-icon></a>
+      <a aria-label="Instagram" :href="config.public.INSTAGRAM_LINK as string"
+        ><v-icon>mdi-instagram</v-icon></a
+      >
+      <!-- <a aria-label="Facebook" href=""
+        ><v-icon>mdi-facebook</v-icon></a
+      > -->
     </div>
     <div class="right">
       <NuxtLink
