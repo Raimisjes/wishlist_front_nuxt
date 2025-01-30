@@ -4,14 +4,20 @@ import { useRoute, useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import { useI18n } from 'vue-i18n';
 import { useUserPageStore } from '@/stores/userPage';
-import { navigateTo } from 'nuxt/app';
+import { navigateTo, useRuntimeConfig } from 'nuxt/app';
 import 'vue3-carousel/carousel.css';
 import { Carousel, Slide, Navigation } from 'vue3-carousel';
 import type { Wishlist } from '@/types/wishlist.types';
+import { useSeoMeta } from 'nuxt/app';
 
 const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
+const config = useRuntimeConfig();
+
+useSeoMeta({
+  title: `${route.params.username} | ${config.public.PROJECT_NAME}`,
+});
 
 const userPageStore = useUserPageStore();
 const { state: userPageState } = storeToRefs(userPageStore);
@@ -38,7 +44,13 @@ function viewWishlist(wishlist: Wishlist) {
 }
 
 onMounted(async () => {
-  await userPageStore.getUserData(route.params.username);
+  const userFound = await userPageStore.getUserData(route.params.username);
+
+  if (!userFound) {
+    useSeoMeta({
+      title: `${t(userPageState.value.page.error)} | ${config.public.PROJECT_NAME}`,
+    });
+  }
 });
 
 onUnmounted(() => {
