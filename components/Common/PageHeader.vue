@@ -18,7 +18,7 @@ const logout = async function (e: Event): Promise<void> {
       to="/"
       :aria-label="$t('components.header.homepage')"
       class="homepage-link"
-      ><img src="@/assets/images/site-logo.png" alt="Logo"
+      ><CommonLogo
     /></NuxtLink>
     <div class="buttons-holder" v-if="!userState.authenticated">
       <v-btn
@@ -84,9 +84,8 @@ header {
   .homepage-link {
     display: flex;
 
-    img {
-      max-height: 50px;
-      width: 100%;
+    svg {
+      max-height: 32px;
     }
   }
 

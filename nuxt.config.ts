@@ -9,6 +9,7 @@ export default defineNuxtConfig({
       charset: 'utf-8',
       viewport: 'width=device-width, initial-scale=1',
       link: [
+        { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
         {
           rel: 'stylesheet',
           href: 'https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap',
