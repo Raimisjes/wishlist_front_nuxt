@@ -62,6 +62,7 @@ watch(viewSocialsDialog, (newValue) => {
 
 <template>
   <div class="social-networks-block">
+    <h5>{{ $t('pages.settings.socialNetworks') }}:</h5>
     <v-icon
       @click="selectSocialNetwork(network)"
       v-for="network of userState.socialNetworks"
@@ -135,6 +136,9 @@ watch(viewSocialsDialog, (newValue) => {
 .social-networks-block {
   margin: 0 0 15px 0;
 
+  > h5 {
+    margin: 0 0 5px 0;
+  }
   > .v-icon {
     margin-right: 8px;
 

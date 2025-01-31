@@ -27,11 +27,16 @@ function copyLink(value: string): void {
     </div>
   </div>
   <div class="copy-link">
-    {{ config.public.PROJECT_NAME }}/@{{ userState.username
-    }}<v-icon
-      @click="copyLink(`${config.public.PROJECT_NAME}/@${userState.username}`)"
-      >mdi-content-copy</v-icon
-    >
+    <h5>{{ $t('pages.settings.personalPage') }}:</h5>
+    <div>
+      {{ config.public.PROJECT_NAME }}/@{{ userState.username
+      }}<v-icon
+        @click="
+          copyLink(`${config.public.PROJECT_NAME}/@${userState.username}`)
+        "
+        >mdi-content-copy</v-icon
+      >
+    </div>
   </div>
 </template>
 
@@ -67,13 +72,18 @@ function copyLink(value: string): void {
   }
 }
 .copy-link {
-  font-size: 13px;
   margin: 0 0 15px 0;
-  display: flex;
-  align-items: center;
-  font-weight: 500;
-  color: $text_color_light;
 
+  > h5 {
+    margin: 0 0 5px 0;
+  }
+  > div {
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    font-weight: 500;
+    color: $text_color_light;
+  }
   .v-icon {
     cursor: pointer;
     margin-left: 5px;

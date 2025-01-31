@@ -52,7 +52,8 @@
       "changePassSuccess": "The password has been changed successfully.",
       "enablePublicView": "Enable view on my page",
       "editSocialNetworkSuccess": "Social network link info has been changed successfully.",
-      "linkCopied": "The link has been copied to the clipboard."
+      "linkCopied": "The link has been copied to the clipboard.",
+      "personalPage": "Personal page"
     },
     "login": {
       "forgotPassword": "Forgot password?"
