@@ -9,7 +9,7 @@ export default defineNuxtConfig({
       charset: 'utf-8',
       viewport: 'width=device-width, initial-scale=1',
       link: [
-        { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
+        { rel: 'icon', type: 'image/png', href: '/favicon.png' },
         {
           rel: 'stylesheet',
           href: 'https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap',
@@ -17,10 +17,7 @@ export default defineNuxtConfig({
       ],
       script: [
         {
-          src: 'https://cdn-cookieyes.com/client_data/2de31b287f52e239c90e7fa0/script.js',
-          async: false,
-          defer: false,
-          id: 'cookieyes',
+          src: 'https://cookiechimp.com/widget/qDGtRY8.js',
         },
       ],
     },
@@ -85,6 +82,7 @@ export default defineNuxtConfig({
     public: {
       API_URL: process.env.NUXT_API_URL,
       PROJECT_NAME: process.env.NUXT_PROJECT_NAME,
+      INSTAGRAM_LINK: process.env.NUXT_INSTAGRAM_LINK,
     },
   },
   experimental: { appManifest: false },
