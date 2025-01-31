@@ -1,10 +1,19 @@
 <script lang="ts" setup>
 import { useUserStore } from '@/stores/user';
+import { useUIStore } from '@/stores/ui';
 import { storeToRefs } from 'pinia';
+import { useRuntimeConfig } from 'nuxt/app';
+
+const config = useRuntimeConfig();
 
 const userStore = useUserStore();
 
 const { state: userState } = storeToRefs(userStore);
+
+function copyLink(value: string): void {
+  navigator.clipboard.writeText(value);
+  useUIStore().showSnackbar('pages.settings.linkCopied', 2000);
+}
 </script>
 
 <template>
@@ -16,6 +25,13 @@ const { state: userState } = storeToRefs(userStore);
         {{ userState.email }}
       </h6>
     </div>
+  </div>
+  <div class="copy-link">
+    {{ config.public.PROJECT_NAME }}/@{{ userState.username
+    }}<v-icon
+      @click="copyLink(`${config.public.PROJECT_NAME}/@${userState.username}`)"
+      >mdi-content-copy</v-icon
+    >
   </div>
 </template>
 
@@ -47,6 +63,25 @@ const { state: userState } = storeToRefs(userStore);
 
     .email {
       font-size: 13px;
+    }
+  }
+}
+.copy-link {
+  font-size: 13px;
+  margin: 0 0 15px 0;
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+  color: $text_color_light;
+
+  .v-icon {
+    cursor: pointer;
+    margin-left: 5px;
+    font-size: 16px;
+    transition: all 0.2s ease-in-out;
+
+    &:hover {
+      color: $primary;
     }
   }
 }

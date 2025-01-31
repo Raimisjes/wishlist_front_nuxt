@@ -127,6 +127,8 @@ header {
     color: #000;
     text-decoration: none;
     cursor: pointer;
+    display: flex;
+    align-items: center;
 
     .v-icon {
       margin-right: 8px;
