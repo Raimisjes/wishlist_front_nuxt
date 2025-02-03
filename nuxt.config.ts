@@ -19,6 +19,17 @@ export default defineNuxtConfig({
         {
           src: '//cdn.cookie-script.com/s/92b7332bce2928699fe10b24cb33acc4.js',
         },
+        {
+          src: 'https://www.googletagmanager.com/gtag/js?id=G-GT76WQLL6E',
+        },
+        {
+          innerHTML: `window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-GT76WQLL6E');`,
+          type: 'text/javascript',
+        },
       ],
     },
     pageTransition: { name: 'fade', mode: 'out-in' },
