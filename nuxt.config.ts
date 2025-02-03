@@ -17,7 +17,7 @@ export default defineNuxtConfig({
       ],
       script: [
         {
-          //src: 'https://cookiechimp.com/widget/qDGtRY8.js',
+          src: '//cdn.cookie-script.com/s/92b7332bce2928699fe10b24cb33acc4.js',
         },
       ],
     },
