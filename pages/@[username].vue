@@ -180,6 +180,18 @@ onUnmounted(() => {
             >
               {{ $t('pages.usersPublic.nothingToShow') }}
             </h4>
+            <br />
+            <amp-ad
+              width="100vw"
+              height="320"
+              type="adsense"
+              data-ad-client="ca-pub-9785024283629309"
+              data-ad-slot="1444413370"
+              data-auto-format="rspv"
+              data-full-width=""
+            >
+              <div overflow=""></div>
+            </amp-ad>
           </div>
         </div>
       </div>
