@@ -21,12 +21,12 @@ export default defineNuxtConfig({
         },
         {
           'data-cookiecategory': 'performance',
-          'data-cookiescript': 'acepted',
+          'data-cookiescript': 'accepted',
           src: 'https://www.googletagmanager.com/gtag/js?id=G-GT76WQLL6E',
         },
         {
           'data-cookiecategory': 'performance',
-          'data-cookiescript': 'acepted',
+          'data-cookiescript': 'accepted',
           innerHTML: `window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
