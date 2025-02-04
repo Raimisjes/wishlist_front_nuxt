@@ -20,9 +20,13 @@ export default defineNuxtConfig({
           src: '//cdn.cookie-script.com/s/92b7332bce2928699fe10b24cb33acc4.js',
         },
         {
+          'data-cookiecategory': 'performance',
+          'data-cookiescript': 'acepted',
           src: 'https://www.googletagmanager.com/gtag/js?id=G-GT76WQLL6E',
         },
         {
+          'data-cookiecategory': 'performance',
+          'data-cookiescript': 'acepted',
           innerHTML: `window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
