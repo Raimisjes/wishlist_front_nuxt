@@ -10,9 +10,9 @@ export default defineNuxtConfig({
       viewport: 'width=device-width, initial-scale=1',
       meta: [
         {
-          name:'google-adsense-account',
-          content: 'ca-pub-9785024283629309'
-        }
+          name: 'google-adsense-account',
+          content: 'ca-pub-9785024283629309',
+        },
       ],
       link: [
         { rel: 'icon', type: 'image/png', href: '/favicon.png' },
@@ -39,6 +39,13 @@ export default defineNuxtConfig({
 
   gtag('config', 'G-GT76WQLL6E');`,
           type: 'text/javascript',
+        },
+        {
+          async: true,
+          'data-cookiecategory': 'targeting',
+          'data-cookiescript': 'accepted',
+          'custom-element': 'amp-ad',
+          src: 'https://cdn.ampproject.org/v0/amp-ad-0.1.js',
         },
       ],
     },
