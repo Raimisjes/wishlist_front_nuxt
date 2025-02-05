@@ -149,6 +149,10 @@ onUnmounted(() => {
         }
         h3 {
           margin: 0 0 15px 0;
+
+          @media screen and (max-width: 600px) {
+            text-align: center;
+          }
         }
       }
     }

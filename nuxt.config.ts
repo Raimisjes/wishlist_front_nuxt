@@ -114,4 +114,9 @@ export default defineNuxtConfig({
     },
   },
   experimental: { appManifest: false },
+  vue: {
+    compilerOptions: {
+      isCustomElement: (tag) => ['amp-ad'].includes(tag),
+    },
+  },
 });
