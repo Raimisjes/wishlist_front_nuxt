@@ -9,6 +9,11 @@ import 'vue3-carousel/carousel.css';
 import { Carousel, Slide, Navigation } from 'vue3-carousel';
 import type { Wishlist } from '@/types/wishlist.types';
 import { useSeoMeta } from 'nuxt/app';
+import { register } from 'swiper/element/bundle';
+import 'swiper/scss/navigation';
+import 'swiper/css';
+
+register();
 
 const { t } = useI18n();
 const route = useRoute();
@@ -22,17 +27,24 @@ useSeoMeta({
 const userPageStore = useUserPageStore();
 const { state: userPageState } = storeToRefs(userPageStore);
 
-const carouselConfig = {
-  itemsToShow: 1,
-  gap: 20,
-  wrapAround: true,
+const swiperOptions = {
+  slidesPerView: 1,
+  loop: true,
+  navigation: {
+    nextEl: '.swiper-button-next',
+    prevEl: '.swiper-button-prev',
+  },
   breakpoints: {
-    750: {
-      itemsToShow: 3,
+    320: {
+      slidesPerView: 1,
     },
-    600: {
-      itemsToShow: 2,
-      snapAlign: 'start',
+    480: {
+      slidesPerView: 2,
+      spaceBetween: 20,
+    },
+    750: {
+      slidesPerView: 3,
+      spaceBetween: 20,
     },
   },
 };
@@ -99,37 +111,41 @@ onUnmounted(() => {
                   })
                 "
               ></h3>
-              <Carousel v-bind="carouselConfig">
-                <Slide
-                  v-for="listing in userPageState.newListings"
-                  :key="listing.title"
-                >
-                  <div class="wish-item">
-                    <img
-                      src="@/assets/images/gift-placeholder.png"
-                      v-if="!listing?.photo"
-                    />
-                    <img v-else :src="listing?.photo" />
-                    <div class="info">
-                      <h5
-                        @click="
-                          navigateTo(listing.url, {
-                            external: true,
-                            open: {
-                              target: '_blank',
-                            },
-                          })
-                        "
-                      >
-                        {{ listing?.title }}
-                      </h5>
+              <div
+                class="wishes-carousel"
+                v-if="userPageState.newListings.length > 0"
+              >
+                <div class="swiper-button-prev"></div>
+                <div class="swiper-button-next"></div>
+                <swiper-container v-bind="swiperOptions">
+                  <swiper-slide
+                    v-for="listing in userPageState.newListings"
+                    :key="listing.title"
+                  >
+                    <div class="wish-item">
+                      <img
+                        src="@/assets/images/gift-placeholder.png"
+                        v-if="!listing?.photo"
+                      />
+                      <img v-else :src="listing?.photo" />
+                      <div class="info">
+                        <h5
+                          @click="
+                            navigateTo(listing.url, {
+                              external: true,
+                              open: {
+                                target: '_blank',
+                              },
+                            })
+                          "
+                        >
+                          {{ listing?.title }}
+                        </h5>
+                      </div>
                     </div>
-                  </div>
-                </Slide>
-                <template #addons>
-                  <Navigation />
-                </template>
-              </Carousel>
+                  </swiper-slide>
+                </swiper-container>
+              </div>
             </div>
             <div
               class="user-wishlists"
@@ -184,18 +200,6 @@ onUnmounted(() => {
         </div>
       </div>
     </div>
-    <br />
-    <amp-ad
-      width="100vw"
-      height="320"
-      type="adsense"
-      data-ad-client="ca-pub-9785024283629309"
-      data-ad-slot="1444413370"
-      data-auto-format="rspv"
-      data-full-width=""
-    >
-      <div overflow=""></div>
-    </amp-ad>
   </main>
 </template>
 
@@ -243,19 +247,33 @@ onUnmounted(() => {
         grid-template-columns: auto;
         gap: 0;
 
-        ::v-deep(h3) {
-          > span {
-            color: $primary;
+        .wishes-carousel {
+          max-width: 100%;
+          position: relative;
+
+          swiper-slide {
+            padding: 5px 0;
+            margin: auto;
+
+            .wish-item {
+              max-width: 230px;
+              margin: 0 auto;
+            }
           }
-        }
-        h3 {
-          margin: 0 0 15px 0;
-        }
-        .wish-item {
-          max-width: 260px;
-        }
-        ::v-deep(.carousel__viewport) {
-          padding: 5px 0;
+          .swiper-button-prev,
+          .swiper-button-next {
+            color: $primary;
+
+            &:after {
+              font-size: 30px;
+            }
+          }
+          .swiper-button-prev {
+            left: -18px;
+          }
+          .swiper-button-next {
+            right: -18px;
+          }
         }
       }
       .user-wishlists {

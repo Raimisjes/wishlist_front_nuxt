@@ -4,6 +4,7 @@ import { useRuntimeConfig } from 'nuxt/app';
 import { getInitialState } from '@/stores/state/homepageState';
 import type { HomepageState } from '@/stores/state/homepageState';
 import { useApiService } from '@/composables/useApiService';
+import { useUIStore } from '@/stores/ui';
 
 export const useHomepageStore = defineStore(
   'homepage',
@@ -43,6 +44,34 @@ export const useHomepageStore = defineStore(
       }
     }
 
+    async function getNewListings() {
+      state.page.error = '';
+
+      let getListingsDataSuccess = false;
+
+      try {
+        const response = await apiFetch<Promise<any>>(
+          `${config.public.API_URL}/listing/getnew`,
+          {
+            method: 'get',
+            timeout: 10000,
+            retry: 0,
+          },
+          false,
+        );
+
+        if (response.status) {
+          getListingsDataSuccess = response.status;
+          state.newListings = response.data;
+        }
+      } catch (error) {
+        useUIStore().showSnackbar(formatApiError(error), 4000);
+      } finally {
+        state.page.isLoading = false;
+        return getListingsDataSuccess;
+      }
+    }
+
     function clearStore() {
       Object.assign(state, getInitialState());
     }
@@ -50,6 +79,7 @@ export const useHomepageStore = defineStore(
     return {
       state,
       checkUsername,
+      getNewListings,
       clearStore,
     };
   },

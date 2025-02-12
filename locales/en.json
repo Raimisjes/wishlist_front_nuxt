@@ -24,7 +24,8 @@
     "index": {
       "slogan": "Let your friends know exactly what would make you smile!",
       "usernameCheckPrefix": "mytop.gift/",
-      "usernameCheckPlaceholder": "username"
+      "usernameCheckPlaceholder": "username",
+      "newListingsTitle": "Our users' latest gift ideas"
     },
     "error": {
       "title": "Sorry, the page you are looking for, could not be found"

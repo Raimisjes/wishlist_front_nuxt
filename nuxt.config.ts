@@ -34,10 +34,10 @@ export default defineNuxtConfig({
           'data-cookiecategory': 'performance',
           'data-cookiescript': 'accepted',
           innerHTML: `window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
 
-  gtag('config', 'G-GT76WQLL6E');`,
+      gtag('config', 'G-GT76WQLL6E');`,
           type: 'text/javascript',
         },
         {
@@ -116,7 +116,8 @@ export default defineNuxtConfig({
   experimental: { appManifest: false },
   vue: {
     compilerOptions: {
-      isCustomElement: (tag) => ['amp-ad'].includes(tag),
+      isCustomElement: (tag) =>
+        ['amp-ad', 'swiper-container', 'swiper-slide'].includes(tag),
     },
   },
 });
