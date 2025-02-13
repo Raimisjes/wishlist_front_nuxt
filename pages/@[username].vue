@@ -5,8 +5,6 @@ import { storeToRefs } from 'pinia';
 import { useI18n } from 'vue-i18n';
 import { useUserPageStore } from '@/stores/userPage';
 import { navigateTo, useRuntimeConfig } from 'nuxt/app';
-import 'vue3-carousel/carousel.css';
-import { Carousel, Slide, Navigation } from 'vue3-carousel';
 import type { Wishlist } from '@/types/wishlist.types';
 import { useSeoMeta } from 'nuxt/app';
 import { register } from 'swiper/element/bundle';
@@ -173,11 +171,16 @@ onUnmounted(() => {
                     height="220"
                     hide-delimiter-background
                   >
-                    <v-carousel-item
-                      v-for="photo of wishlist.photos"
-                      :src="photo"
-                      cover
-                    ></v-carousel-item>
+                    <template
+                      v-for="(photo, index) in wishlist?.photos || []"
+                      :key="index"
+                    >
+                      <v-carousel-item
+                        v-if="photo"
+                        :src="photo"
+                        cover
+                      ></v-carousel-item>
+                    </template>
                   </v-carousel>
                   <div class="info">
                     <h5 @click="viewWishlist(wishlist)">
@@ -263,6 +266,8 @@ onUnmounted(() => {
           .swiper-button-prev,
           .swiper-button-next {
             color: $primary;
+            opacity: 0;
+            transition: all 0.3s ease-in-out;
 
             &:after {
               font-size: 30px;
@@ -273,6 +278,12 @@ onUnmounted(() => {
           }
           .swiper-button-next {
             right: -18px;
+          }
+          &:hover {
+            .swiper-button-prev,
+            .swiper-button-next {
+              opacity: 1;
+            }
           }
         }
       }

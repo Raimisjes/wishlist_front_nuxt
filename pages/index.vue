@@ -248,6 +248,8 @@ main {
         .swiper-button-prev,
         .swiper-button-next {
           color: $primary;
+          opacity: 0;
+          transition: all 0.3s ease-in-out;
 
           &:after {
             font-size: 30px;
@@ -258,6 +260,12 @@ main {
         }
         .swiper-button-next {
           right: -18px;
+        }
+        &:hover {
+          .swiper-button-prev,
+          .swiper-button-next {
+            opacity: 1;
+          }
         }
       }
       @media screen and (max-width: 600px) {

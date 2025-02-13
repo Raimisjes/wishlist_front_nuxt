@@ -124,11 +124,16 @@ onUnmounted(() => {
             height="220"
             hide-delimiter-background
           >
-            <v-carousel-item
-              v-for="photo of wishlist.photos"
-              :src="photo"
-              cover
-            ></v-carousel-item>
+            <template
+              v-for="(photo, index) in wishlist?.photos || []"
+              :key="index"
+            >
+              <v-carousel-item
+                v-if="photo"
+                :src="photo"
+                cover
+              ></v-carousel-item>
+            </template>
           </v-carousel>
           <div class="info">
             <span class="chip">
