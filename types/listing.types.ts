@@ -5,4 +5,5 @@ export interface Listing {
   wishlistId: string;
   photo: string;
   url: string;
+  status: string;
 }

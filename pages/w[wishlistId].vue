@@ -71,6 +71,7 @@ onUnmounted(() => {
                 <div
                   class="wish-item"
                   v-for="listing of userPageState.currentWishlist.listings"
+                  @click="openUrl(listing.url)"
                 >
                   <img
                     src="@/assets/images/gift-placeholder.png"
@@ -78,7 +79,7 @@ onUnmounted(() => {
                   />
                   <img v-else :src="listing?.photo" />
                   <div class="info">
-                    <h5 @click="openUrl(listing.url)">
+                    <h5>
                       {{ listing.title }}
                     </h5>
                   </div>

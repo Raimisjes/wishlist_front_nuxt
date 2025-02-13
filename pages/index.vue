@@ -134,23 +134,24 @@ onUnmounted(() => {
               v-for="listing in homepageStore.state.newListings"
               :key="listing.title"
             >
-              <div class="wish-item">
+              <div
+                class="wish-item"
+                @click="
+                  navigateTo(listing.url, {
+                    external: true,
+                    open: {
+                      target: '_blank',
+                    },
+                  })
+                "
+              >
                 <img
                   src="@/assets/images/gift-placeholder.png"
                   v-if="!listing?.photo"
                 />
                 <img v-else :src="listing?.photo" />
                 <div class="info">
-                  <h5
-                    @click="
-                      navigateTo(listing.url, {
-                        external: true,
-                        open: {
-                          target: '_blank',
-                        },
-                      })
-                    "
-                  >
+                  <h5>
                     {{ listing?.title }}
                   </h5>
                 </div>

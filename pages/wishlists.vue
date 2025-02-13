@@ -99,7 +99,11 @@ onUnmounted(() => {
             </div>
           </v-card>
         </v-dialog>
-        <div class="wishlist-item" v-for="wishlist of wishlistsState.wishlists">
+        <div
+          class="wishlist-item"
+          v-for="wishlist of wishlistsState.wishlists"
+          @click="viewWishlist(wishlist)"
+        >
           <UIElementsActionButton
             :class="'edit-button'"
             :icon="'mdi-pencil'"
@@ -139,7 +143,7 @@ onUnmounted(() => {
             <span class="chip">
               {{ $t(`words.${wishlist.availabilityStatus}`) }}
             </span>
-            <h5 @click="viewWishlist(wishlist)">{{ wishlist.title }}</h5>
+            <h5>{{ wishlist.title }}</h5>
           </div>
         </div>
       </div>

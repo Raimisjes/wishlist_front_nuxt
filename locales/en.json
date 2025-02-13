@@ -94,7 +94,8 @@
       "giftDescription": "Gift description",
       "addWishSuccess": "Wish has been created successully.",
       "removeListingSuccess": "Wish has been successully removed.",
-      "editListingSuccess": "Wish has been saved successully."
+      "editListingSuccess": "Wish has been saved successully.",
+      "claimListingSuccess": "Wish has been claimed successully. Congratulations!"
     },
     "usersPublic": {
       "nothingToShow": "Nothing to show"
@@ -125,7 +126,8 @@
     "private": "Private",
     "submit": "Submit",
     "wishes": "Wishes",
-    "and": "and"
+    "and": "and",
+    "claim": "Claim"
   },
   "errors": {
     "undefined": "Unexpected error. Try again later.",
@@ -194,6 +196,7 @@
     "socialNetworkURLPlaceholder": "{network} profile link",
     "removeWishlist": "Are you sure you want to remove <span>{wishlist}</span>?",
     "removeListing": "Are you sure you want to remove <span>{listing}</span> wish?",
+    "claimListing": "Are you sure you want to claim <span>{listing}</span> wish?",
     "newListingsTitle": "<span>{username}'s</span> recent picks",
     "userWishlists": "<span>{username}'s</span> wishlists"
   },

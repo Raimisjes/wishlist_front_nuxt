@@ -26,10 +26,13 @@
   transition: all 0.2s ease-in-out;
   background: white;
   position: relative;
+  cursor: pointer;
 
+  &.claimed {
+    opacity: 0.5;
+  }
   &.add-new {
     height: 150px;
-    cursor: pointer;
 
     h5 {
       color: $text_color_light;
@@ -40,7 +43,7 @@
     }
   }
   .remove-button,
-    .edit-button {
+    .edit-button, .claim-button {
       position: absolute;
       top: 18px;
       opacity: 0;
@@ -48,12 +51,20 @@
       --v-btn-height: 30px;
       z-index: 1;
       cursor: pointer;
+
+      @media screen and (max-width: 600px) {
+        opacity: 1;
+      }
     }
   .remove-button {
     right: 18px;
   }
   .edit-button {
     right: 54px;
+  }
+  .claim-button {
+    right: 90px;
+    color: #FFF;
   }
   .v-carousel,
   > img {
@@ -87,7 +98,6 @@
       width: 100%;
       margin: 5px 0 0 0;
       word-break: break-word;
-      cursor: pointer;
     }
     .chip {
       font-size: 11px;
@@ -103,7 +113,7 @@
     transform: translateY(-5px);
 
     .remove-button,
-    .edit-button {
+    .edit-button, .claim-button {
       opacity: 1;
     }
   }

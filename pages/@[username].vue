@@ -120,23 +120,24 @@ onUnmounted(() => {
                     v-for="listing in userPageState.newListings"
                     :key="listing.title"
                   >
-                    <div class="wish-item">
+                    <div
+                      class="wish-item"
+                      @click="
+                        navigateTo(listing.url, {
+                          external: true,
+                          open: {
+                            target: '_blank',
+                          },
+                        })
+                      "
+                    >
                       <img
                         src="@/assets/images/gift-placeholder.png"
                         v-if="!listing?.photo"
                       />
                       <img v-else :src="listing?.photo" />
                       <div class="info">
-                        <h5
-                          @click="
-                            navigateTo(listing.url, {
-                              external: true,
-                              open: {
-                                target: '_blank',
-                              },
-                            })
-                          "
-                        >
+                        <h5>
                           {{ listing?.title }}
                         </h5>
                       </div>
@@ -160,6 +161,7 @@ onUnmounted(() => {
                 <div
                   class="wishlist-item"
                   v-for="wishlist of userPageState.wishlists"
+                  @click="viewWishlist(wishlist)"
                 >
                   <img
                     src="@/assets/images/gift-placeholder.png"
@@ -183,7 +185,7 @@ onUnmounted(() => {
                     </template>
                   </v-carousel>
                   <div class="info">
-                    <h5 @click="viewWishlist(wishlist)">
+                    <h5>
                       {{ wishlist.title }}
                     </h5>
                   </div>
