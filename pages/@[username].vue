@@ -1,11 +1,11 @@
 <script lang="ts" setup>
 import { onMounted, onUnmounted } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { useRoute } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import { useI18n } from 'vue-i18n';
 import { useUserPageStore } from '@/stores/userPage';
 import { navigateTo, useRuntimeConfig } from 'nuxt/app';
-import type { Wishlist } from '@/types/wishlist.types';
+
 import { useSeoMeta } from 'nuxt/app';
 import { register } from 'swiper/element/bundle';
 import 'swiper/scss/navigation';
@@ -15,7 +15,6 @@ register();
 
 const { t } = useI18n();
 const route = useRoute();
-const router = useRouter();
 const config = useRuntimeConfig();
 
 useSeoMeta({
@@ -46,12 +45,6 @@ const swiperOptions = {
     },
   },
 };
-
-function viewWishlist(wishlist: Wishlist) {
-  router.push({
-    path: `/w${wishlist._id}`,
-  });
-}
 
 onMounted(async () => {
   const userFound = await userPageStore.getUserData(route.params.username);
@@ -158,38 +151,11 @@ onUnmounted(() => {
                 "
               ></h3>
               <div class="wishlists-holder">
-                <div
-                  class="wishlist-item"
+                <CommonWishlistCard
+                  :wishlist="wishlist"
+                  :edit-rights="false"
                   v-for="wishlist of userPageState.wishlists"
-                  @click="viewWishlist(wishlist)"
-                >
-                  <img
-                    src="@/assets/images/gift-placeholder.png"
-                    v-if="!wishlist.photos?.length"
-                  />
-                  <v-carousel
-                    v-else
-                    :show-arrows="false"
-                    height="220"
-                    hide-delimiter-background
-                  >
-                    <template
-                      v-for="(photo, index) in wishlist?.photos || []"
-                      :key="index"
-                    >
-                      <v-carousel-item
-                        v-if="photo"
-                        :src="photo"
-                        cover
-                      ></v-carousel-item>
-                    </template>
-                  </v-carousel>
-                  <div class="info">
-                    <h5>
-                      {{ wishlist.title }}
-                    </h5>
-                  </div>
-                </div>
+                />
               </div>
             </div>
             <h4
@@ -251,7 +217,15 @@ onUnmounted(() => {
         column-count: auto;
         grid-template-columns: auto;
         gap: 0;
+        margin: 0 0 15px 0;
 
+        ::v-deep(h3) {
+          margin: 0 0 15px 0;
+
+          > span {
+            color: $primary;
+          }
+        }
         .wishes-carousel {
           max-width: 100%;
           position: relative;
