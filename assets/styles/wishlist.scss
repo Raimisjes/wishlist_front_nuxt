@@ -11,9 +11,10 @@
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 20px;
 }
-.wishlist-card, .wish-item {
+.wishlist-card, .wish-card {
   min-height: 150px;
-  max-width: 100%;
+  max-width: 250px;
+  width: 100%;
   margin: 0 0 15px 0;
   display: flex;
   flex-flow: column nowrap;
@@ -139,7 +140,7 @@
     column-count: 2;
     gap: 10px;
 
-    .wishlist-item, .wish-item {
+    .wishlist-card, .wish-card {
       padding: 7px;
       max-width: 230px;
       width: 100%;

@@ -38,29 +38,6 @@ function formFill(listing: Listing): void {
   myWishlistState.value.form.photo = listing.photo;
 }
 
-function openUrl(url: string) {
-  window.open(url, '_blank', 'noopener,noreferrer');
-}
-
-function openConfirmationDialog(listing: Listing, action: 'remove' | 'claim') {
-  if (action === 'remove') {
-    useUIStore().openConfirmationDialog(
-      t('phrases.removeListing', {
-        listing: `${listing.title}`,
-      }),
-      () => myWishlistStore.removeListing(listing._id),
-    );
-  }
-  if (action === 'claim') {
-    useUIStore().openConfirmationDialog(
-      t('phrases.claimListing', {
-        listing: `${listing.title}`,
-      }),
-      () => myWishlistStore.claimListing(listing._id),
-    );
-  }
-}
-
 watch(viewSaveWishDialog, (newValue) => {
   if (!newValue) {
     myWishlistStore.clearForm();
@@ -108,7 +85,7 @@ onUnmounted(() => {
       </p>
       <CommonSpinner v-if="myWishlistState.page?.isLoading" />
       <div class="wish-holder" v-else>
-        <div class="wish-item add-new" @click="openModal('add')">
+        <div class="wish-card add-new" @click="openModal('add')">
           <v-icon color="primary" :size="50">mdi-plus-circle</v-icon>
           <h5>{{ $t('pages.myWishlist.addNewWish') }}</h5>
         </div>
@@ -131,48 +108,13 @@ onUnmounted(() => {
             </div>
           </v-card>
         </v-dialog>
-        <div
-          class="wishlist-item"
-          :class="{ claimed: listing.status === 'claimed' }"
-          v-if="myWishlistState.currentWishlist.listings?.length > 0"
+        <CommonWishCard
           v-for="listing of myWishlistState.currentWishlist.listings"
-          @click="openUrl(listing.url)"
-        >
-          <UIElementsActionButton
-            v-if="listing.status !== 'claimed'"
-            :class="'claim-button'"
-            :icon="'mdi-check'"
-            :title="$t('words.claim')"
-            :color="'claim'"
-            @click="() => openConfirmationDialog(listing, 'claim')"
-          />
-          <UIElementsActionButton
-            v-if="listing.status !== 'claimed'"
-            :class="'edit-button'"
-            :icon="'mdi-pencil'"
-            :title="$t('words.edit')"
-            :color="'primary'"
-            @click="openModal('edit', listing)"
-          />
-          <UIElementsActionButton
-            v-if="listing.status !== 'claimed'"
-            :class="'remove-button'"
-            :icon="'mdi-delete'"
-            :title="$t('words.remove')"
-            :color="'remove'"
-            @click="() => openConfirmationDialog(listing, 'remove')"
-          />
-          <img
-            src="@/assets/images/gift-placeholder.png"
-            v-if="!listing?.photo"
-          />
-          <img v-else :src="listing?.photo" />
-          <div class="info">
-            <h5>
-              {{ listing?.title }}
-            </h5>
-          </div>
-        </div>
+          :key="listing.id"
+          :listing="listing"
+          :edit-rights="true"
+          @openEditModal="openModal('edit', listing)"
+        />
       </div>
     </div>
   </main>

@@ -13,10 +13,6 @@ const router = useRouter();
 const userPageStore = useUserPageStore();
 const { state: userPageState } = storeToRefs(userPageStore);
 
-function openUrl(url: string) {
-  window.open(url, '_blank', 'noopener,noreferrer');
-}
-
 onMounted(async () => {
   await userPageStore.getWishlistData(route.params.wishlistId);
 });
@@ -68,22 +64,12 @@ onUnmounted(() => {
             >
               <h3>{{ userPageState.currentWishlist.title }}</h3>
               <div class="wish-holder">
-                <div
-                  class="wish-item"
+                <CommonWishCard
                   v-for="listing of userPageState.currentWishlist.listings"
-                  @click="openUrl(listing.url)"
-                >
-                  <img
-                    src="@/assets/images/gift-placeholder.png"
-                    v-if="!listing?.photo"
-                  />
-                  <img v-else :src="listing?.photo" />
-                  <div class="info">
-                    <h5>
-                      {{ listing.title }}
-                    </h5>
-                  </div>
-                </div>
+                  :key="listing.id"
+                  :listing="listing"
+                  :edit-rights="false"
+                />
               </div>
             </div>
             <h4
