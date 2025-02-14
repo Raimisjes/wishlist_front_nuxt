@@ -76,6 +76,7 @@ export default defineNuxtConfig({
               primary: '#00B565',
               error: '#d12323',
               remove: '#d53636',
+              claim: '#00afb5',
             },
           },
         },
