@@ -1,12 +1,18 @@
 <script lang="ts" setup>
 import { useI18n } from 'vue-i18n';
-import { useTemplateRef, onUnmounted } from 'vue';
+import { useTemplateRef, onMounted, onUnmounted } from 'vue';
 import { useHomepageStore } from '@/stores/homepage';
 import { useRegistrationStore } from '@/stores/registration';
 import { useUserStore } from '@/stores/user';
 import { useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import { createValidationRules } from '~/composables/validationRules';
+import { navigateTo } from 'nuxt/app';
+import { register } from 'swiper/element/bundle';
+import 'swiper/scss/navigation';
+import 'swiper/css';
+
+register();
 
 const router = useRouter();
 const { t } = useI18n();
@@ -20,6 +26,27 @@ const userStore = useUserStore();
 const { state: homepageState } = storeToRefs(homepageStore);
 
 const usernameCheckFormEl = useTemplateRef('usernameCheckFormEl');
+
+const swiperOptions = {
+  slidesPerView: 1,
+  loop: true,
+  navigation: {
+    nextEl: '.swiper-button-next',
+    prevEl: '.swiper-button-prev',
+  },
+  breakpoints: {
+    320: {
+      slidesPerView: 1,
+    },
+    480: {
+      slidesPerView: 2,
+      spaceBetween: 20,
+    },
+    750: {
+      slidesPerView: 1,
+    },
+  },
+};
 
 function submitForm() {
   if (!usernameCheckFormEl.value?.isValid) return;
@@ -37,14 +64,18 @@ function goRegister() {
   router.push('/registration');
 }
 
+onMounted(async () => {
+  await homepageStore.getNewListings();
+});
+
 onUnmounted(() => {
   homepageStore.clearStore();
 });
 </script>
 
 <template>
-  <main>
-    <div class="left-side">
+  <main class="homepage">
+    <div class="hero-title">
       <h1 v-html="$t('pages.index.slogan')"></h1>
       <Transition name="fade">
         <v-form
@@ -88,19 +119,48 @@ onUnmounted(() => {
         </v-form>
       </Transition>
     </div>
-    <!-- <div class="hero-image-holder"></div> -->
+    <div class="new-wishes-block content-holder user-page">
+      <CommonSpinner v-if="homepageStore.state.page?.isLoading" />
+      <div class="new-wishes-holder" v-else>
+        <h3 id="title">{{ $t('pages.index.newListingsTitle') }}</h3>
+        <div
+          class="wishes-carousel"
+          v-if="homepageStore.state.newListings.length > 0"
+        >
+          <div class="swiper-button-prev"></div>
+          <div class="swiper-button-next"></div>
+          <swiper-container v-bind="swiperOptions">
+            <swiper-slide
+              v-for="listing in homepageStore.state.newListings"
+              :key="listing.title"
+            >
+              <CommonWishCard :listing="listing" :edit-rights="false" />
+            </swiper-slide>
+          </swiper-container>
+        </div>
+      </div>
+    </div>
   </main>
 </template>
 
 <style lang="scss" scoped>
 main {
-  .left-side {
+  &.homepage {
+    @media screen and (max-width: 750px) {
+      flex-flow: column wrap;
+
+      .new-wishes-block {
+        max-width: 100%;
+      }
+    }
+  }
+  .hero-title {
     padding: 0 30px 0 0;
 
     h1 {
       font-size: 70px;
       font-weight: 700;
-      margin: 0 0 30px 0;
+      margin: 15px 0;
       color: var(--text-color);
       line-height: 1.5;
     }
@@ -110,7 +170,7 @@ main {
       flex-flow: row nowrap;
       justify-content: space-between;
       align-items: flex-start;
-      height: 110px;
+      height: 120px;
 
       .v-input {
         width: 100%;
@@ -134,34 +194,83 @@ main {
     }
   }
 
-  .hero-image-holder {
-    min-width: 400px;
-    height: 400px;
-    background-image: url(@/assets/images/hero-image.png);
-    background-size: contain;
-    background-position: center;
-    background-repeat: no-repeat;
+  .new-wishes-block {
+    display: flex;
+    min-height: 200px;
+    max-width: 350px;
+    padding: 20px 40px;
+    margin: 10px 0 20px 0;
+
+    .spinner-holder {
+      min-height: auto;
+    }
+    .new-wishes-holder {
+      display: block;
+      width: 100%;
+
+      > h3 {
+        text-align: center;
+        margin: 0 0 15px 0;
+      }
+      .wishes-carousel {
+        max-width: 100%;
+        position: relative;
+
+        swiper-slide {
+          padding: 5px 0;
+          align-self: center;
+
+          .wish-card {
+            margin: 0 auto;
+          }
+        }
+        .swiper-button-prev,
+        .swiper-button-next {
+          color: $primary;
+          opacity: 0;
+          transition: all 0.3s ease-in-out;
+
+          &:after {
+            font-size: 30px;
+          }
+        }
+        .swiper-button-prev {
+          left: -18px;
+        }
+        .swiper-button-next {
+          right: -18px;
+        }
+        &:hover {
+          .swiper-button-prev,
+          .swiper-button-next {
+            opacity: 1;
+          }
+        }
+      }
+      @media screen and (max-width: 600px) {
+        margin: auto;
+      }
+    }
+    @media screen and (max-width: 600px) {
+      padding: 20px;
+    }
   }
 
   @media screen and (max-width: 960px) {
-    .left-side {
+    .hero-title {
       h1 {
         font-size: 50px;
       }
-    }
-
-    .hero-image-holder {
-      min-width: 300px;
-      height: 300px;
     }
   }
 
   @media screen and (max-width: 750px) {
     flex-flow: column-reverse nowrap;
 
-    .left-side {
+    .hero-title {
       padding: 0;
       max-width: 350px;
+      margin: 0 0 20px 0;
 
       h1 {
         font-size: 32px;
@@ -182,13 +291,6 @@ main {
           }
         }
       }
-    }
-  }
-
-  @media screen and (max-width: 450px) {
-    .hero-image-holder {
-      min-width: 250px;
-      height: 250px;
     }
   }
 }

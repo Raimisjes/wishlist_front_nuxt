@@ -41,7 +41,7 @@ function handleOnClick() {
     :title="props.title"
     :aria-label="props.title"
     :color="props.color"
-    @click="handleOnClick()"
+    @click.stop="handleOnClick()"
     density="comfortable"
   ></v-btn>
 </template>

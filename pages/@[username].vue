@@ -1,18 +1,20 @@
 <script lang="ts" setup>
 import { onMounted, onUnmounted } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { useRoute } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import { useI18n } from 'vue-i18n';
 import { useUserPageStore } from '@/stores/userPage';
 import { navigateTo, useRuntimeConfig } from 'nuxt/app';
-import 'vue3-carousel/carousel.css';
-import { Carousel, Slide, Navigation } from 'vue3-carousel';
-import type { Wishlist } from '@/types/wishlist.types';
+
 import { useSeoMeta } from 'nuxt/app';
+import { register } from 'swiper/element/bundle';
+import 'swiper/scss/navigation';
+import 'swiper/css';
+
+register();
 
 const { t } = useI18n();
 const route = useRoute();
-const router = useRouter();
 const config = useRuntimeConfig();
 
 useSeoMeta({
@@ -22,26 +24,27 @@ useSeoMeta({
 const userPageStore = useUserPageStore();
 const { state: userPageState } = storeToRefs(userPageStore);
 
-const carouselConfig = {
-  itemsToShow: 1,
-  gap: 20,
-  wrapAround: true,
+const swiperOptions = {
+  slidesPerView: 1,
+  loop: true,
+  navigation: {
+    nextEl: '.swiper-button-next',
+    prevEl: '.swiper-button-prev',
+  },
   breakpoints: {
-    750: {
-      itemsToShow: 3,
+    320: {
+      slidesPerView: 1,
     },
-    600: {
-      itemsToShow: 2,
-      snapAlign: 'start',
+    480: {
+      slidesPerView: 2,
+      spaceBetween: 20,
+    },
+    750: {
+      slidesPerView: 3,
+      spaceBetween: 20,
     },
   },
 };
-
-function viewWishlist(wishlist: Wishlist) {
-  router.push({
-    path: `/w${wishlist._id}`,
-  });
-}
 
 onMounted(async () => {
   const userFound = await userPageStore.getUserData(route.params.username);
@@ -99,37 +102,21 @@ onUnmounted(() => {
                   })
                 "
               ></h3>
-              <Carousel v-bind="carouselConfig">
-                <Slide
-                  v-for="listing in userPageState.newListings"
-                  :key="listing.title"
-                >
-                  <div class="wish-item">
-                    <img
-                      src="@/assets/images/gift-placeholder.png"
-                      v-if="!listing?.photo"
-                    />
-                    <img v-else :src="listing?.photo" />
-                    <div class="info">
-                      <h5
-                        @click="
-                          navigateTo(listing.url, {
-                            external: true,
-                            open: {
-                              target: '_blank',
-                            },
-                          })
-                        "
-                      >
-                        {{ listing?.title }}
-                      </h5>
-                    </div>
-                  </div>
-                </Slide>
-                <template #addons>
-                  <Navigation />
-                </template>
-              </Carousel>
+              <div
+                class="wishes-carousel"
+                v-if="userPageState.newListings.length > 0"
+              >
+                <div class="swiper-button-prev"></div>
+                <div class="swiper-button-next"></div>
+                <swiper-container v-bind="swiperOptions">
+                  <swiper-slide
+                    v-for="listing in userPageState.newListings"
+                    :key="listing.title"
+                  >
+                    <CommonWishCard :listing="listing" :edit-rights="false" />
+                  </swiper-slide>
+                </swiper-container>
+              </div>
             </div>
             <div
               class="user-wishlists"
@@ -143,32 +130,11 @@ onUnmounted(() => {
                 "
               ></h3>
               <div class="wishlists-holder">
-                <div
-                  class="wishlist-item"
+                <CommonWishlistCard
+                  :wishlist="wishlist"
+                  :edit-rights="false"
                   v-for="wishlist of userPageState.wishlists"
-                >
-                  <img
-                    src="@/assets/images/gift-placeholder.png"
-                    v-if="!wishlist.photos?.length"
-                  />
-                  <v-carousel
-                    v-else
-                    :show-arrows="false"
-                    height="220"
-                    hide-delimiter-background
-                  >
-                    <v-carousel-item
-                      v-for="photo of wishlist.photos"
-                      :src="photo"
-                      cover
-                    ></v-carousel-item>
-                  </v-carousel>
-                  <div class="info">
-                    <h5 @click="viewWishlist(wishlist)">
-                      {{ wishlist.title }}
-                    </h5>
-                  </div>
-                </div>
+                />
               </div>
             </div>
             <h4
@@ -180,18 +146,6 @@ onUnmounted(() => {
             >
               {{ $t('pages.usersPublic.nothingToShow') }}
             </h4>
-            <br />
-            <amp-ad
-              width="100vw"
-              height="320"
-              type="adsense"
-              data-ad-client="ca-pub-9785024283629309"
-              data-ad-slot="1444413370"
-              data-auto-format="rspv"
-              data-full-width=""
-            >
-              <div overflow=""></div>
-            </amp-ad>
           </div>
         </div>
       </div>
@@ -242,20 +196,48 @@ onUnmounted(() => {
         column-count: auto;
         grid-template-columns: auto;
         gap: 0;
+        margin: 0 0 15px 0;
 
         ::v-deep(h3) {
+          margin: 0 0 15px 0;
+
           > span {
             color: $primary;
           }
         }
-        h3 {
-          margin: 0 0 15px 0;
-        }
-        .wish-item {
-          max-width: 260px;
-        }
-        ::v-deep(.carousel__viewport) {
-          padding: 5px 0;
+        .wishes-carousel {
+          max-width: 100%;
+          position: relative;
+
+          swiper-slide {
+            padding: 5px 0;
+
+            .wish-card {
+              margin: 0 auto;
+            }
+          }
+          .swiper-button-prev,
+          .swiper-button-next {
+            color: $primary;
+            opacity: 0;
+            transition: all 0.3s ease-in-out;
+
+            &:after {
+              font-size: 30px;
+            }
+          }
+          .swiper-button-prev {
+            left: -18px;
+          }
+          .swiper-button-next {
+            right: -18px;
+          }
+          &:hover {
+            .swiper-button-prev,
+            .swiper-button-next {
+              opacity: 1;
+            }
+          }
         }
       }
       .user-wishlists {

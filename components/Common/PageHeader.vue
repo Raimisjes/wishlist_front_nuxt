@@ -111,8 +111,8 @@ header {
 
   @media screen and (max-width: 600px) {
     .homepage-link {
-      img {
-        max-height: 35px;
+      svg {
+        max-height: 24px;
       }
     }
   }

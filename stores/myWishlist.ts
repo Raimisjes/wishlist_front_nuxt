@@ -171,6 +171,43 @@ export const useMyWishlistStore = defineStore(
       }
     }
 
+    async function claimListing(listingId: string) {
+      let claimListingSuccess = false;
+
+      try {
+        const response = await apiFetch<Promise<any>>(
+          `${config.public.API_URL}/listing/claim`,
+          {
+            method: 'post',
+            body: {
+              listingId,
+              ownerId: useUserStore().state.id,
+            },
+            timeout: 10000,
+            retryStatusCodes: [401],
+            retryDelay: 500,
+            retry: 0,
+          },
+          true,
+        );
+
+        if (response.status) {
+          claimListingSuccess = response.status;
+          const index = state.currentWishlist.listings.findIndex(
+            (item) => item._id === listingId,
+          );
+          if (index !== -1) {
+            state.currentWishlist.listings[index].status = 'claimed';
+          }
+          useUIStore().showSnackbar('pages.myWishlist.claimListingSuccess');
+        }
+      } catch (error) {
+        useUIStore().showSnackbar(formatApiError(error), 4000);
+      } finally {
+        return claimListingSuccess;
+      }
+    }
+
     async function getWishlistData(wishlistId: string) {
       state.page.error = '';
 
@@ -222,6 +259,7 @@ export const useMyWishlistStore = defineStore(
       addListing,
       editListing,
       removeListing,
+      claimListing,
       getWishlistData,
       clearStore,
       clearForm,

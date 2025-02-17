@@ -1,5 +1,6 @@
 import type { SocialNetwork } from '@/types/socialNetwork.types';
 import type { Wishlist } from '@/types/wishlist.types';
+import type { Listing } from '@/types/listing.types';
 
 export interface UserPageState {
   username: string;
@@ -9,8 +10,8 @@ export interface UserPageState {
     youtube: SocialNetwork;
     tiktok: SocialNetwork;
   };
-  wishlists: [];
-  newListings: [];
+  wishlists: Wishlist[];
+  newListings: Listing[];
   currentWishlist: Wishlist;
   page: {
     isLoading: boolean;

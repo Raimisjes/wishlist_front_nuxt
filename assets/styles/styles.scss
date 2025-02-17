@@ -9,6 +9,9 @@ html {
     body {
         background-color: #f2fbf2;
     }
+    * {
+      box-sizing: border-box;
+    }
 }
 
 .form-holder {
@@ -129,11 +132,10 @@ main {
     .title-with-back-button {
       padding-right: 65px;
     }
-    @media screen and (max-width: 600px) {
-      max-width: calc(100vw - 80px);
+    @media screen and (max-width: 830px) {
+      max-width: 100%;
     }
     @media screen and (max-width: 600px) {
-      max-width: calc(100vw - 40px);
       padding: 20px;
     }
   }

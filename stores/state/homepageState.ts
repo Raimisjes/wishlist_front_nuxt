@@ -1,3 +1,5 @@
+import type { Listing } from '@/types/listing.types';
+
 export interface HomepageState {
   usernameCheck: {
     form: {
@@ -6,6 +8,11 @@ export interface HomepageState {
       error: string;
     };
     usernameExists: null | boolean;
+  };
+  newListings: Listing[];
+  page: {
+    isLoading: boolean;
+    error: string;
   };
 }
 
@@ -18,6 +25,11 @@ export function getInitialState(): HomepageState {
         error: '',
       },
       usernameExists: null,
+    },
+    newListings: [],
+    page: {
+      isLoading: true,
+      error: '',
     },
   };
 }
