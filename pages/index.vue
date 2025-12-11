@@ -77,6 +77,7 @@ onUnmounted(() => {
   <main class="homepage">
     <div class="hero-title">
       <h1 v-html="$t('pages.index.slogan')"></h1>
+      <h4>{{ $t('pages.index.subSlogan') }}</h4>
       <Transition name="fade">
         <v-form
           @submit.prevent="submitForm()"
@@ -102,20 +103,14 @@ onUnmounted(() => {
             :on-input="() => onInputUsername()"
             :validate-on="'lazy'"
           />
-          <Transition name="fade">
-            <div
-              class="button-holder"
-              v-if="homepageState.usernameCheck.usernameExists == false"
-              mode="in-out"
-            >
-              <UIElementsButton
-                :btn-type="'button'"
-                :title="$t('words.signup')"
-                :btn-size="'small'"
-                :on-click="() => goRegister()"
-              />
-            </div>
-          </Transition>
+          <div class="button-holder">
+            <UIElementsButton
+              :btn-type="'button'"
+              :title="$t('words.signup')"
+              :btn-size="'small'"
+              :on-click="() => goRegister()"
+            />
+          </div>
         </v-form>
       </Transition>
     </div>
@@ -164,7 +159,10 @@ main {
       color: var(--text-color);
       line-height: 1.5;
     }
-
+    h4 {
+      font-size: 24px;
+      font-weight: 400;
+    }
     form {
       display: flex;
       flex-flow: row nowrap;
@@ -274,6 +272,10 @@ main {
 
       h1 {
         font-size: 32px;
+        text-align: center;
+      }
+      h4 {
+        font-size: 17px;
         text-align: center;
       }
       form {
