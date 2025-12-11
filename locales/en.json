@@ -23,8 +23,9 @@
   "pages": {
     "index": {
       "slogan": "Let your friends know exactly what would make you smile!",
+      "subSlogan": "Don’t Wait, Create Your personal wishlist page. Join Us!",
       "usernameCheckPrefix": "mytop.gift/",
-      "usernameCheckPlaceholder": "username",
+      "usernameCheckPlaceholder": "sillyBee65",
       "newListingsTitle": "Our users' latest gift ideas"
     },
     "error": {
